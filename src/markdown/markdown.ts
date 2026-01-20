@@ -66,11 +66,9 @@ const createCustomRenderer = (headings: Heading[]) => {
     const text = this.parser.parseInline(tokens);
     const isInternal = !href.startsWith('http') && href.endsWith('.md');
 
-    // 内部链接也处理中文编码
-    const processedHref = isInternal ? encodeURI(href) : href;
     return isInternal
-      ? `<a href="${processedHref}" class="internal-link">${text}</a>`
-      : `<a href="${processedHref}" target="_blank" rel="noopener">${text}</a>`;
+      ? `<a href="${href}" class="internal-link">${text}</a>`
+      : `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
   };
 
   return renderer;
@@ -168,27 +166,4 @@ export function clearMarkdownCache(): void {
   console.log('Markdown缓存已清除');
 }
 
-export async function preloadMarkdown(files: string[]): Promise<void> {
-  const promises = files.map(async (file) => {
-    try {
-      const url = file.startsWith('/') ? file : `/docs/${file}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.warn(`预加载失败（${response.status}）: ${url}`);
-        return;
-      }
-
-      const text = await response.text();
-      const headings: Heading[] = [];
-      const renderer = createCustomRenderer(headings);
-      const html = await marked.parse(text, { renderer });
-      markdownCache.set(file, { html, headings });
-      console.log(`预加载完成: ${file}`);
-    } catch (error) {
-      console.warn(`预加载失败: ${file}`, error);
-    }
-  });
-
-  await Promise.allSettled(promises);
-}
     
