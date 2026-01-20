@@ -37,7 +37,7 @@ npm create vite@latest
 npx vite dev
 
 打包项目
-
+npx vite build
 
 安装marked
 npm install marked
