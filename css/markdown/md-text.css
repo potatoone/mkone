@@ -1,0 +1,55 @@
+/* ==============================================
+   文本元素
+============================================== */
+
+
+/* 段落和列表项样式 */
+#markdown-container p,
+#markdown-container li,
+#markdown-container ul,
+#markdown-container ol {
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+  font-size: 1.2rem; /* 标准字体大小，可根据需求调整 */
+}
+
+/* 链接样式 */
+#markdown-container a {
+  color: var(--accent-m); /* 使用中等强调色 */
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+/* 链接悬停样式 */
+#markdown-container a:hover {
+  color: var(--accent-l); /* 使用深色强调色 */
+  text-decoration: underline;
+}
+
+
+
+/* ==============================================
+   列表
+============================================== */
+#markdown-container ul,
+#markdown-container ol {
+  padding-left: 2em;
+  margin-bottom: 16px;
+}
+
+#markdown-container ul {
+  list-style-type: disc;
+}
+
+#markdown-container ol {
+  list-style-type: decimal;
+}
+
+#markdown-container li > p {
+  margin-top: 16px;
+  color: var(--text-primary); /* 使用主文字色 */
+}
+
+#markdown-container p {
+  color: var(--text-primary); /* 使用主文字色 */
+}

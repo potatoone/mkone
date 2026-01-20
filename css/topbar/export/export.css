@@ -1,0 +1,108 @@
+
+/* 导出菜单容器样式（合并并优化） */
+.export-panel {
+  position: fixed; display: none;
+  top: 50px; right: 10px;
+  width: 180px;
+  padding: 6px 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-s);
+  box-shadow: 0 0 10px var(--shadow-1); 
+  border-radius: 2px;
+}
+
+/* 菜单显示状态 */
+.export-panel.show {
+  display: block;
+  animation: menuFadeIn 0.2s ease-out;
+}
+
+/* 菜单项基础样式 */
+.export-panel .menu-item {
+  width: 100%;
+  padding: 10px 16px; /* 上下稍宽，方便点击 */
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary); /* 使用主题文字色 */
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 图标与文字间距 */
+  font-family: var(--body-font);
+}
+
+/* 菜单项hover效果 */
+.export-panel .menu-item:hover {
+  background-color: var(--hover-s); /* 使用主题悬浮色 */
+}
+
+/* 菜单项图标（用CSS绘制简单图标） */
+.export-panel .menu-item::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  /* 统一设置圆形样式 */
+  border-radius: 50%;
+  background-color: var(--text-primary); /* 使用主题文字色作为背景色 */
+  color: var(--bg-secondary); /* 使用主题背景色作为文字颜色 */
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 16px;
+}
+
+/* 复制Markdown图标 */
+#copyMarkdownBtn::before {
+  background-color: var(--text-muted);
+  content: 'C';
+}
+
+/* 导出HTML图标 */
+#exportHtmlBtn::before {
+  background-color: var(--text-muted);
+  content: 'D';
+}
+
+/* 打印图标 */
+#printBtn::before {
+  background-color: var(--text-muted);
+  content: 'P';
+}
+
+/* 菜单项分隔线（可选，用于区分不同功能组） */
+.export-panel .divider {
+  height: 1px;
+  background: var(--border-s); /* 使用主题边框色 */
+  margin: 4px 0;
+}
+
+/* 动画效果 */
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 适配深色模式 */
+html[data-theme$="-dark"] .export-panel {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); /* 深色模式下阴影更深 */
+  background: var(--bg-primary); /* 使用深色主题背景色 */
+  border-color: var(--border-s); /* 使用深色主题边框色 */
+}
+
+/* 禁用状态菜单项 */
+.export-panel .menu-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: transparent;
+  color: var(--text-muted); /* 使用主题静音文字色 */
+}

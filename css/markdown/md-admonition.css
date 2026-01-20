@@ -1,0 +1,118 @@
+:root {
+  /* 主题色变量，方便后续调整 */
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-danger: #f44336;
+  --color-note: #2196f3;
+
+  --bg-success: #4caf4f2b;
+  --bg-warning: #ff99002b;
+  --bg-danger: #f443362b;
+  --bg-note: #2196f32b;
+
+  --icon-size: 1.5em;
+  --icon-left: 0.6em;
+  --icon-top: 50%;
+}
+
+:root[theme-dark] {
+  /* 主题色变量，方便后续调整 */
+  --color-success: #44b948;
+  --color-warning: #ff9800;
+  --color-danger: #f44336;
+  --color-note: #2196f3;
+
+  --bg-success: #44b9486d;
+  --bg-warning: #f6ac366d;
+  --bg-danger: #f443366d;
+  --bg-note: #2195f36d;
+
+  --icon-size: 1.5em;
+  --icon-left: 0.6em;
+  --icon-top: 50%;
+}
+
+.admonition {
+  position: relative;
+  border-left: 6px solid var(--color-note);
+  padding: 0.5em 1em 0.5em 3em; /* 左侧给图标留位置 */
+  margin: 1rem 0;
+  border-radius: 1px;
+}
+
+/* 圆形背景 */
+.admonition::before {
+  content: "";
+  position: absolute;
+  left: var(--icon-left);
+  top: var(--icon-top);
+  transform: translateY(-50%);
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 5%;
+}
+
+/* 图标 */
+.admonition::after {
+  content: "";
+  position: absolute;
+  left: var(--icon-left);
+  top: var(--icon-top);
+  transform: translateY(-50%);
+  width: var(--icon-size);
+  height: var(--icon-size);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 75%;
+  pointer-events: none;
+}
+
+
+/* success */
+.admonition.success {
+  border-color: var(--color-success);
+  background: var(--bg-success);
+}
+.admonition.success::before {
+  background: var(--color-success);
+}
+.admonition.success::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 13 L10 18 L19 7' stroke='white' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+}
+
+/* note */
+.admonition.note {
+  border-color: var(--color-note);
+  background: var(--bg-note);
+}
+.admonition.note::before {
+  background: var(--color-note);
+}
+.admonition.note::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='10' y='5' width='4' height='4' fill='white'/%3E%3Crect x='10' y='12' width='4' height='10' fill='white'/%3E%3C/svg%3E");
+}
+
+/* warning */
+.admonition.warning {
+  border-color: var(--color-warning);
+  background: var(--bg-warning);
+}
+.admonition.warning::before {
+  background: var(--color-warning);
+}
+.admonition.warning::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='10' y='16' width='4' height='4' fill='white'/%3E%3Crect x='10' y='3' width='4' height='10' fill='white'/%3E%3C/svg%3E");
+}
+
+/* danger */
+.admonition.danger {
+  border-color: var(--color-danger);
+  background: var(--bg-danger);
+}
+.admonition.danger::before {
+  background: var(--color-danger);
+}
+.admonition.danger::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 6l12 12M18 6l-12 12' stroke='white' stroke-width='3'/%3E%3C/svg%3E");
+}
+

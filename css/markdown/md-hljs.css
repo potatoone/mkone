@@ -1,0 +1,212 @@
+/* 2. 浅色模式变量（通过 data-theme="light" 触发） */
+:root {
+  /* 浅色背景与选择色 */
+  --hljs-bg: #f8f8f8;
+  --hljs-selection: #e0e0e0;
+
+  /* 调整为适合浅色背景的高亮色 */
+  --hljs-title: #7c3aed;    /* 深紫色 */
+  --hljs-number: #ea580c;   /* 深橙色 */
+  --hljs-string: #166534;   /* 深绿色 */
+  --hljs-attribute: #c026d3;/* 深粉色 */
+  --hljs-keyword: #059669;  /* 青绿色 */
+  --hljs-subst: #db2777;    /* 深玫红 */
+  --hljs-type: #d97706;     /* 琥珀色 */
+}
+
+/* 1. 定义代码高亮主题变量（默认深色模式） */
+:root[theme-dark] {
+  /* 背景与选择色 */
+  --hljs-bg: #000000;
+  --hljs-selection: #373b41;
+
+  /* 语法高亮色 */
+  --hljs-title: #d175ff;    /* 标题/名称 */
+  --hljs-number: #ff9d3b;   /* 数字/符号 */
+  --hljs-string: #e5ff00;   /* 字符串 */
+  --hljs-attribute: #bb10ef;/* 属性/代码 */
+  --hljs-keyword: #50edff;  /* 关键字 */
+  --hljs-subst: #ff1f9e;    /* 变量/替换 */
+  --hljs-type: #f47a23;     /* 类型/内置对象 */
+}
+
+
+
+/* 3. 使用变量替换硬编码颜色 */
+.hljs {
+  background: var(--hljs-bg); /* 使用背景变量 */
+  color: var(--text-primary); /* 复用主文字色变量 */
+}
+
+/* 选择文本样式 */
+.hljs::selection,
+.hljs span::selection {
+  background: var(--shadow-2); /* 复用阴影变量 */
+}
+
+.hljs::-moz-selection,
+.hljs span::-moz-selection {
+  background: var(--hljs-selection); /* 使用选择色变量 */
+}
+
+/* 标题/名称 */
+.hljs-title,
+.hljs-name {
+  color: var(--hljs-title);
+}
+
+/* 数字/符号/链接 */
+.hljs-number,
+.hljs-symbol,
+.hljs-literal,
+.hljs-deletion,
+.hljs-link {
+ color: var(--hljs-number);
+}
+
+/* 字符串/正则 */
+.hljs-string,
+.hljs-doctag,
+.hljs-addition,
+.hljs-regexp,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: var(--hljs-string);
+}
+
+/* 属性/代码 */
+.hljs-attribute,
+.hljs-code,
+.hljs-selector-id,
+.hljs-attr {
+ color: var(--hljs-attribute);
+}
+
+/* 关键字/标签 */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-bullet,
+.hljs-tag,
+.hljs-template-tag {
+ color: var(--hljs-keyword);
+}
+
+/* 变量/替换 */
+.hljs-subst,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-variable-language,
+.hljs-variable-constant {
+  color: var(--hljs-subst);
+}
+
+/* 类型/内置对象 */
+.hljs-type,
+.hljs-built_in,
+.hljs-quote,
+.hljs-section,
+.hljs-selector-class,
+.hljs-params {
+  color: var(--hljs-type);
+}
+
+/*color: fg_comment*/
+.hljs-comment,
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: var(--text-muted);
+}
+
+/* 新增官方推荐的高亮属性支持 */
+.hljs-operator {
+  color: var(--hljs-keyword);
+}
+.hljs-punctuation {
+  color: var(--hljs-keyword);
+}
+.hljs-property {
+  color: var(--hljs-attribute);
+}
+.hljs-params {
+  color: var(--hljs-type);
+}
+.hljs-bullet {
+  color: var(--hljs-keyword);
+}
+.hljs-char {
+  color: var(--hljs-string);
+}
+.hljs-escape {
+  color: var(--hljs-string);
+}
+.hljs-variable-language {
+  color: var(--hljs-subst);
+}
+.hljs-variable-constant {
+  color: var(--hljs-subst);
+  font-weight: bold;
+}
+.hljs-title-function,
+.hljs-title-function-invoke {
+  color: var(--hljs-title);
+}
+.hljs-title-class,
+.hljs-title-class-inherited {
+  color: var(--hljs-title);
+  font-style: italic;
+}
+.hljs-section {
+  color: var(--hljs-type);
+}
+.hljs-tag {
+  color: var(--hljs-keyword);
+}
+.hljs-attr {
+  color: var(--hljs-attribute);
+}
+.hljs-formula {
+  color: var(--hljs-number);
+}
+.hljs-link {
+  color: var(--hljs-number);
+  text-decoration: underline;
+}
+.hljs-strong {
+  font-weight: bold;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-template-tag {
+  color: var(--hljs-keyword);
+}
+.hljs-template-variable {
+  color: var(--hljs-subst);
+}
+.hljs-addition {
+  background: #e6ffed;
+  color: #22863a;
+}
+.hljs-deletion {
+  background: #ffeef0;
+  color: #b31d28;
+}
+.hljs-meta {
+  color: var(--text-muted);
+}
+.hljs-meta-prompt {
+  color: var(--hljs-keyword);
+}
+.hljs-meta-string {
+  color: var(--hljs-string);
+}
+/* 支持嵌套 scope 的样式 */
+.hljs-title.class_ {
+  font-style: italic;
+}
+.hljs-title.function_ {
+  font-weight: bold;
+}
+.hljs-title.class_.other__ {
+  color: #2196f3;
+}

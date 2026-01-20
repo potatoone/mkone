@@ -1,0 +1,49 @@
+/* 基础样式：重置默认样式 */
+.page-title {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--text-primary); /* 使用主文字色 */
+}
+
+/* PC 端样式（屏幕宽度 ≥ 768px）：纯字体展示 */
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary); /* 使用主文字色 */
+    text-align: left;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+  }
+}
+
+/* 移动端样式（屏幕宽度 < 1100px） */
+@media (max-width: 1100px) {
+  .page-title {
+    /* 按钮基础样式 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 6px;
+    border-radius: 1px;
+    background-color: var(--bg-secondary); /* 使用次要背景色 */
+    color: var(--text-secondary); /* 使用次要文字色 */
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .page-title:hover {
+    color: var(--bg-primary); /* 使用主文字色 */
+    background-color: var(--active-m); /* 使用中等激活色 */
+  }
+
+}

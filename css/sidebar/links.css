@@ -1,0 +1,28 @@
+/* 链接容器 */
+.sidebar-links {
+  padding: 15px;
+  font-size: 16px;
+}
+
+/* 链接区分隔线 */
+.sidebar-links-sep {
+  width: 100%;
+  border: none;
+  border-top: 2px solid var(--border-m); /* 使用中等边框色 */
+  margin-bottom: 10px;
+}
+
+/* 链接项样式 */
+.sidebar-links a {
+  display: block;
+  color: var(--text-secondary); /* 使用次要文字色 */
+  padding: 6px 0 6px 10px;
+  text-decoration: none;
+  font-size: 0.7em;
+  transition: color 0.2s;
+}
+
+/* 链接项悬停颜色 */
+.sidebar-links a:hover {
+  color: var(--accent-m); /* 使用中等强调色 */
+}

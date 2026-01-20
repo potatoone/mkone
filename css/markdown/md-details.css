@@ -1,0 +1,63 @@
+
+
+/* ==============================================
+   详情块 (Details/Summary 折叠面板)
+   分离标签(summary)和内容样式
+============================================== */
+
+/* 外层容器基础样式 */
+#markdown-container details {
+  margin: 1em 0;
+  border: 2px solid var(--text-muted); /* 容器边框 */
+}
+
+/* 标签样式 (summary) */
+#markdown-container summary {
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+  outline: none; 
+  padding: 0.8em 1em; /* 标签内边距 */
+  color: var(--text-secondary); /* 标签文字色 */
+  position: relative; /* 用于自定义箭头 */
+  transition: background 0.2s; /* 悬停过渡效果 */
+}
+
+/* 内容区域样式 */
+#markdown-container details > div,
+#markdown-container details > p,
+#markdown-container details > ul,
+#markdown-container details > ol {
+  margin: 1rem;
+}
+
+#markdown-container details:hover {
+  border-color: var(--accent-l); /* 标签边框 */
+}
+#markdown-container summary:hover {
+  background: var(--accent-l); /* 深色一点的背景 */
+  color: #fff; /* 标签文字色 */
+}
+#markdown-container details[open] summary {
+  background: var(--accent-l); /* 深色一点的背景 */
+  color: #fff; /* 标签文字色 */
+}
+#markdown-container details[open] {
+  border: 2px solid var(--accent-l); /* 标签边框 */
+}
+
+/* 隐藏原生三角标 */
+#markdown-container summary::marker {
+  content: none;
+  display: none;
+}
+/* 自定义三角标 */
+#markdown-container summary::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 0.5em;
+  transition: transform 0.3s ease;
+}
+#markdown-container details[open] summary::before {
+  transform: rotate(90deg);
+}

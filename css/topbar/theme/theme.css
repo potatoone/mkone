@@ -1,0 +1,117 @@
+/* 主题面板样式（默认隐藏） */
+.theme-panel {
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  width: 240px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-s);
+  box-shadow: 0 0 10px var(--shadow-1); 
+  border-radius: 2px;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s;
+}
+
+.theme-panel.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 夜间模式选项容器 */
+.theme-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-m); /* 使用中等边框色 */
+}
+
+/* 选项文字 */
+.theme-option span {
+  color: var(--text-primary); /* 使用主文字色 */
+  font-size: 14px;
+}
+
+/* 主题颜色选择区 */
+.theme-colors {
+  padding-top: 10px;
+}
+
+.colors-title {
+  display: block;
+  color: var(--text-primary); /* 使用主文字色 */
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.color-palette {
+  display: flex;
+  gap: 10px;
+}
+
+.color-item {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border-m); /* 使用中等边框色 */
+  transition: all 0.2s ease;
+}
+
+.color-item.active {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 2px var(--accent-m); /* 使用中等强调色 */
+}
+
+/* 自动模式复选框 */
+.auto-toggle {
+  display: inline-flex;
+  align-items: center;
+}
+
+.auto-toggle input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--border-m); /* 使用中等边框色 */
+  border-radius: 10px;
+  margin-right: 4px;
+  position: relative;
+}
+
+.auto-toggle input:checked {
+  background-color: var(--accent-m); /* 使用中等强调色 */
+  border-color: var(--accent-m); /* 使用中等强调色 */
+}
+
+.auto-toggle input:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0.5px;
+  width: 3px;
+  height: 5px;
+  border: solid var(--bg-muted); /* 使用静音背景色 */
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  transform-origin: left top;
+}
+
+.auto-toggle span {
+  color: var(--text-secondary); /* 使用次要文字色 */
+  font-size: 12px;
+  user-select: none;
+}
+
+.auto-toggle input:checked + span {
+  color: var(--text-primary); /* 使用主文字色 */
+}
+
+.android-switch input:disabled + .switch-track {
+  opacity: 0.4;
+}

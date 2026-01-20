@@ -1,0 +1,68 @@
+.layout-btn {
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+
+.layout-btn:hover {
+  background-color: var(--hover-s); /* 使用浅色悬浮色 */
+}
+
+.layout-btn::before,
+.layout-btn::after,
+.layout-btn i {
+  content: '';
+  position: absolute;
+  width: 2px; /* 竖线厚度保持2px */
+  background-color: var(--text-muted); /* 使用静音文字色 */
+  top: 25%;
+  left: 46%;
+  transform-origin: center bottom;
+  transition: 0.3s;
+}
+
+/* 左斜线 */
+.layout-btn::before {
+  height: 15px; /* 斜线高度保持不变 */
+  transform: translate(0%, -90%) rotate(155deg) translateX(0);
+}
+
+/* 右斜线 */
+.layout-btn::after {
+  height: 15px; /* 斜线高度保持不变 */
+  transform: translate(0%, -90%) rotate(-155deg) translateX(0);
+}
+
+/* 中间横线（关键修改：缩短高度，旋转后变为水平宽度） */
+.layout-btn i {
+  height: 7px; /* 原15px → 缩短为10px，旋转后水平宽度变为10px */
+  width: 2px;
+  transform-origin: center;
+  transform: translate(0%, 90%) rotate(90deg); /* 旋转90度后，高度变为水平长度 */
+}
+
+/* 悬停时横线旋转（不影响宽度） */
+.layout-btn:hover i {
+  height: 15px; /* 原15px → 缩短为10px，旋转后水平宽度变为10px */
+  width: 2px;
+  transform-origin: center;
+  transform: translate(0%, 0%) rotate(90deg); /* 旋转90度后，高度变为水平长度 */
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}
+
+/* 悬浮时箭头方向调整（保持原有逻辑） */
+.layout-btn:hover::before {
+  transform: translate(0%, -100%) rotate(180deg) translateX(0);
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}
+
+.layout-btn:hover::after {
+  transform: translate(0%, -100%) rotate(-180deg) translateX(0);
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}

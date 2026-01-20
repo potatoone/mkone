@@ -1,0 +1,26 @@
+.topbar {
+  height: 40px;
+  background: var(--bg-primary); /* 使用主背景色 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  z-index: 2;
+  user-select: none; /* 禁用文本选择 */
+  border-bottom: 0.1px solid var(--border-m); /* 使用中等边框色 */
+}
+
+.topbar .left,
+.topbar .right {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.topbar button {
+  background: none;
+  border: none;
+  font-size: 10px;
+  color: var(--text-primary); /* 使用主文字色 */
+  cursor: pointer;
+}

@@ -1,0 +1,63 @@
+.search-btn {
+    width: 30px; /* 固定按钮宽度 */
+    height: 30px; /* 固定按钮高度 */
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+/* 放大镜圆圈 */
+.search-btn::before {
+    content: '';
+    position: absolute;
+    top: 43%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--text-muted); /* 使用静音文字色 */
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition: 0.2s;
+}
+
+/* 放大镜手柄 */
+.search-btn::after {
+    content: '';
+    position: absolute;
+    top: 55%;
+    left: 55%;
+    width: 8px;
+    height: 2px;
+    background-color: var(--text-muted); /* 使用静音文字色 */
+    transform: rotate(43deg);
+    transform-origin: left center;
+    transition: 0.2s;
+}
+
+/* 悬浮效果 */
+.search-btn:hover {
+    background-color: var(--hover-s); /* 使用浅色悬浮色 */
+}
+
+.search-btn:hover::before {
+    top: 43%;
+    left: 47%;
+    width: 11px;
+    height: 11px;
+    transition: 0.2s;
+    border-color: var(--accent-m); /* 使用中等强调色 */
+}
+
+.search-btn:hover::after {
+    transform: rotate(75deg);
+    top: 55%;
+    left: 52%;
+    width: 6px;
+    height: 2px;
+    transition: 0.2s;
+    background-color: var(--accent-m); /* 使用中等强调色 */
+}

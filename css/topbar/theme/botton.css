@@ -1,0 +1,104 @@
+
+/* 主题按钮 - 核心样式（微软风格四色方块按钮） */
+.theme-btn {
+  width: 30px; /* 固定按钮宽度 */
+  height: 30px; /* 固定按钮高度 */
+  border-radius: 50%;
+  border: none;                  /* 无边框 */
+  background: var(--hover-s);       /* 背景使用基础背景色 */
+  cursor: pointer;               /* 鼠标悬停时显示手型 */
+  position: relative;            /* 相对定位，用于内部方块绝对定位 */
+  padding: 0;                    /* 清除内边距 */
+}
+
+/* 按钮悬停效果 */
+.theme-btn:hover {
+  background-color: var(--hover-s); /* 悬停时显示浅灰色背景 */
+}
+
+/* 四方格布局参考容器（仅用于定位，不显示） */
+.theme-btn::before {
+  content: '';                   /* 伪元素内容为空 */
+  position: absolute;            /* 绝对定位，相对于按钮中心 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 居中对齐 */
+  display: grid;                 /* 网格布局，2x2排列 */
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/* 左上角方块（红色边框） */
+.theme-btn::after {
+  box-sizing: border-box;        /* 边框计入尺寸计算 */
+  content: '';                   /* 伪元素内容为空 */
+  position: absolute;            /* 绝对定位，相对于按钮 */
+  top: 50%;
+  left: 50%;
+  width: 7.5px;                    /* 方块尺寸9x9px */
+  height: 7.5px;
+  border: solid 1.9px var(--hover-l); /* 红色边框，使用微软红色变量 */
+  border-radius: 0 3px 0 3px;    /* 右下角圆角，增强设计感 */
+  transform: translate(-110%, -110%); /* 定位到左上角（向左上偏移） */
+  transition: all 0.2s ease;     /* 过渡动画，与按钮保持一致 */
+}
+
+/* 右上角方块（绿色边框）- 第一个span子元素 */
+.theme-btn span:nth-child(1) {
+  position: absolute;            /* 绝对定位，相对于按钮 */
+  top: 50%;
+  left: 50%;
+  width: 7.5px;                    /* 方块尺寸9x9px */
+  height: 7.5px;
+  border: solid 1.9px var(--text-muted); /* 绿色边框 */
+  border-radius: 3px 0 3px 0;    /* 左下角圆角 */
+  transform: translate(10%, -110%);  /* 定位到右上角（向右上偏移） */
+  transition: all 0.2s ease;
+}
+
+/* 左下角方块（蓝色边框）- 第二个span子元素 */
+.theme-btn span:nth-child(2) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7.5px;                    /* 方块尺寸9x9px */
+  height: 7.5px;
+  border: solid 1.9px var(--text-muted); /* 蓝色边框 */
+  border-radius: 3px 0 3px 0;    /* 右下角圆角 */
+  transform: translate(-110%, 10%);  /* 定位到左下角（向左下偏移） */
+  transition: all 0.2s ease;
+}
+
+/* 右下角方块（黄色边框）- 第三个span子元素 */
+.theme-btn span:nth-child(3) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7.5px;                    /* 方块尺寸9x9px */
+  height: 7.5px;
+  border: solid 1.9px var(--text-muted); /* 黄色边框 */
+  border-radius: 0 3px 0 3px;    /* 右下角圆角 */
+  transform: translate(10%, 10%);    /* 定位到右下角（向右下偏移） */
+  transition: all 0.2s ease;
+}
+
+/* 悬停动画：四个方块向中心聚集并轻微放大 */
+.theme-btn:hover::after {
+  /* 左上角方块：向右下移动，靠近中心，放大1.1倍 */
+  transform: translate(-100%, -100%) scale(1.1);
+}
+
+.theme-btn:hover span:nth-child(1) {
+  /* 右上角方块：向左下移动，靠近中心，放大1.1倍 */
+  transform: translate(-10%, -100%) scale(1.1);
+}
+
+.theme-btn:hover span:nth-child(2) {
+  /* 左下角方块：向右上移动，靠近中心，放大1.1倍 */
+  transform: translate(-100%, -10%) scale(1.1);
+}
+
+.theme-btn:hover span:nth-child(3) {
+  /* 右下角方块：向左上移动，靠近中心，放大1.1倍 */
+  transform: translate(-10%, -10%) scale(1.1);
+}

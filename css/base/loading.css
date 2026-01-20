@@ -1,0 +1,25 @@
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30rem;
+  font-size: 1.6rem;
+  color: var(--text-secondary); /* 使用 color.css 中的次要文字色变量 */
+}
+
+.loading::before {
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--border-s); /* 使用 color.css 中的浅边框色变量 */
+  border-top: 2px solid var(--accent-m); /* 使用 color.css 中的中等强调色变量 */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

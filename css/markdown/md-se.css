@@ -1,0 +1,64 @@
+
+/* ==============================================
+   图片
+============================================== */
+#markdown-container img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: var(--bg-primary); /* 使用主背景色 */
+  border-radius: 3px;
+  margin: 16px 0;
+}
+
+
+
+
+
+
+/* ==============================================
+   特殊元素（任务列表等）
+============================================== */
+#markdown-container ul.task-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#markdown-container ul.task-list li {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary); /* 使用主文字色 */
+}
+
+#markdown-container ul.task-list input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==============================================
+   引用块 (Blockquote)
+============================================== */
+#markdown-container blockquote {
+  margin: 0;
+  border-left: 3px solid var(--border-m, #ddd); /* 左侧边框（使用边框变量） */
+  background-color: var(--bg-muted, #f5f5f5); /* 次背景色 */
+  color: var(--text-muted, #666); /* 次要文字色 */
+}
+#markdown-container blockquote p {
+  padding: 7px 7px 7px 10px;
+}
+

@@ -1,0 +1,67 @@
+.export-btn {
+  width: 30px; /* 固定按钮宽度 */
+  height: 30px; /* 固定按钮高度 */
+  border-radius: 50%;
+  margin-right: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+
+/* 按钮悬停效果 */
+.export-btn:hover {
+  background-color: var(--hover-s); /* 悬停时显示浅灰色背景 */
+}
+
+/* 包含三条线的容器，控制整体旋转 */
+.export-btn::before,
+.export-btn::after,
+.export-btn i {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 16px;
+  background-color: currentColor;
+  top: 25%;
+  left: 46%;
+  transform-origin: center bottom;
+  transition: 0.3s;
+  color: var(--text-muted);
+}
+
+.export-btn i {
+  transform-origin: center;
+  transition: 0.3s;
+}
+
+/* 左斜线 */
+.export-btn::before {
+  height: 10px;
+  transform: translate(-7%, 53%) rotate(-45deg) translateX(0px);
+}
+
+/* 右斜线 */
+.export-btn::after {
+  height: 10px;
+  transform: translate(7%, 53%) rotate(45deg) translateX(0px);
+}
+
+/* 中间竖线不动 */
+.export-btn:hover i {
+  display: block;
+  transform: translate(0%, 0%)  rotate(180deg);
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}
+
+/* 悬浮时整体翻转箭头方向 */
+.export-btn:hover::before {
+  transform: translate(7%, -93%) rotate(135deg) translateX(0);
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}
+
+.export-btn:hover::after {
+  transform: translate(-7%, -93%) rotate(-135deg) translateX(0);
+  background-color: var(--accent-m); /* 悬停时使用中等强调色 */
+}

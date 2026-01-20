@@ -1,0 +1,91 @@
+/* 5. 搜索区域样式保持不变（流式元素，随整体滚动） */
+#search-area {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  background-color: var(--bg-primary); /* 使用主背景色变量 */
+  /* 显示/隐藏动画 */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s;
+  user-select: none; /* 禁用文本选择 */
+  padding: 10px 0 0 0; margin-bottom: 10px;
+}
+
+
+#search-area.show {
+  display: flex; /* 显示时使用flex布局 */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.search-bar {
+  display: flex; height: 45px;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 5px 5px 15px;
+  background: var(--bg-secondary); /* 使用次背景色变量 */
+  border: 1px solid var(--border-s); /* 使用小尺寸边框色变量 */
+  border-radius: 2px; /* 硬朗直角 */
+}
+
+/* 按钮样式调整（硬朗方形） */
+.search-bar button {
+  width: 30px; height: 30px; border: none;
+  font-size: 20px; /* 图标略缩小 */
+  cursor: pointer;
+  color: var(--hover-s); /* 使用中尺寸强调色变量 */
+  background: var(--accent-s); /* 使用小尺寸悬浮色变量 */
+  border-radius: 2px; /* 方形圆角 */
+  transition: all 0.2s;
+}
+
+.search-bar button:hover {
+  color: var(--hover-l); /* 使用中尺寸强调色变量 */
+  background: var(--accent-l); /* 使用小尺寸悬浮色变量 */
+}
+
+.search-bar button.hidden {
+  display: none;
+}
+
+.search-bar #searchInput {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--text-primary); /* 使用主文字色变量 */
+  outline: none;
+  line-height: 1; /* 固定行高（与输入框高度匹配） */
+  font-family: var(--body-font);
+}
+
+/* 输入框占位符样式 */
+.search-bar #searchInput::placeholder {
+  color: var(--text-muted); /* 使用柔和文字色变量 */
+}
+
+#searchResultInfo {
+  display: block;
+  margin-top: 6px; /* 减小垂直间距 */
+  font-size: 14px; font-weight: 700;
+  color: var(--text-tertiary); /* 使用第三级文字色变量 */
+  white-space: nowrap;
+}
+
+/* 搜索高亮 */
+.search-highlight {
+  background-color: var(--accent-s); /* 使用小尺寸强调色变量 */
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+  .search-bar {
+    padding: 5px 5px 5px 10px;
+    border-radius: 1px; /* 移动端直角 */
+  }
+}
+

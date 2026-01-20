@@ -1,0 +1,75 @@
+.sidebar-toggle {
+  position: absolute;
+  bottom: 10%;
+  right: -16px; /* PC端保持原位置（侧边栏右侧） */
+  width: 32px;
+  height: 32px;
+  background: var(--bg-muted); /* 使用静音背景色 */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-m); /* 使用中等边框色 */
+  z-index: 10;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    right: -35px;
+    opacity: 0.3;
+  }
+}
+
+/* 以下样式保持不变 */
+/* 按钮hover效果 */
+.sidebar-toggle:hover {
+  background: var(--hover-l); /* 使用深悬浮色 */
+}
+
+.sidebar-toggle:hover span,
+.sidebar-toggle:hover span::before,
+.sidebar-toggle:hover span::after {
+  background: var(--text-primary); /* 使用主文字色 */
+}
+
+.sidebar-toggle span,
+.sidebar-toggle span::before,
+.sidebar-toggle span::after {
+  display: block;
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background: var(--text-primary); /* 使用主文字色 */
+  transition: all 0.3s;
+  content: '';
+}
+
+.sidebar-toggle span {
+  position: relative;
+  top: 0;
+}
+
+.sidebar-toggle span::before {
+  content: '';
+  top: -6px;
+  left: 0;
+}
+
+.sidebar-toggle span::after {
+  content: '';
+  top: 6px;
+  left: 0;
+}
+
+.sidebar.expanded .sidebar-toggle span {
+  background: transparent;
+}
+.sidebar.expanded .sidebar-toggle span::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+.sidebar.expanded .sidebar-toggle span::after {
+  transform: rotate(-45deg);
+  top: 0;
+}

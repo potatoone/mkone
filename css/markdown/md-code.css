@@ -1,0 +1,71 @@
+
+
+/* ==============================================
+   代码块
+============================================== */
+#markdown-container pre {
+  padding: 16px;
+  overflow: auto;
+  line-height: 1.45;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary); /* 使用次背景色 */
+  border-radius: 1px;
+  margin-bottom: 16px;
+}
+
+#markdown-container code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 1.2rem;
+  background-color: var(--bg-secondary); /* 使用静音背景色 */
+  border-radius: 3px;
+}
+
+#markdown-container pre code {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+
+
+
+
+/* 复制按钮基础样式 */
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  background: var(--bg-primary);
+  border: none;
+  border-radius: 1px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+/* 成功状态样式（保持不变） */
+.code-copy-btn.success {
+  color: #fff;
+  background: #16d686;
+}
+
+/* 鼠标交互（保持不变） */
+#markdown-container pre:hover .code-copy-btn {
+  opacity: 1;
+}
+
+/* 成功状态 */
+.code-copy-btn.success {
+  color: #fff;
+  background: #16d686;
+}
+
+/* 鼠标交互 */
+#markdown-container pre:hover .code-copy-btn {
+  opacity: 1;
+}

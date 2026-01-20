@@ -1,0 +1,103 @@
+.arrow-btn {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  transform-origin: center;
+  font-family: var(--body-font);
+}
+
+/* 左单尖括号 */
+.left-arrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  /* 让箭头位置居中 */
+  transform: translate(-50%, -50%) rotate(-45deg);
+  /* 使箭头居中，并旋转 */
+  border: solid var(--text-muted); /* 使用静音文字色 */
+  border-width: 2px 0 0 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  transition: 0.2s;
+}
+
+/* 右单尖括号 */
+.right-arrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  /* 让箭头位置居中 */
+  transform: translate(-50%, -50%) rotate(45deg);
+  /* 使箭头居中，并旋转 */
+  border: solid var(--text-muted); /* 使用静音文字色 */
+  border-width: 2px 2px 0 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  transition: 0.2s;
+}
+
+/* 左单尖括号 */
+.left-arrow:hover::before {
+  top: 50%;
+  left: 55%;
+  /* 让箭头位置居中 */
+  transform: translate(-50%, -50%) rotate(-75deg);
+  /* 使箭头居中，并旋转 */
+  border: solid var(--accent-m); /* 使用中等强调色 */
+  border-width: 2px 0 0 2px;
+  width: 6px;
+  height: 7px;
+  transition: 0.2s;
+}
+
+/* 右单尖括号 */
+.right-arrow:hover::before {
+  top: 50%;
+  left: 45%;
+  /* 让箭头位置居中 */
+  transform: translate(-50%, -50%) rotate(75deg);
+  /* 使箭头居中，并旋转 */
+  border: solid var(--accent-m); /* 使用中等强调色 */
+  border-width: 2px 2px 0 0;
+  width: 6px;
+  height: 7px;
+  transition: 0.2s;
+}
+
+/* 按钮悬浮效果 */
+.arrow-btn:hover {
+  transform: scale(1);
+  /* 保持按钮大小不变 */
+  background-color: var(--hover-s); /* 使用浅色悬浮色 */
+  /* 背景色改变 */
+}
+
+/* 增加按钮的颜色变化 */
+.arrow-btn:hover::before {
+  border-color: var(--accent-m); /* 使用中等强调色 */
+  /* 改变箭头颜色（可以是任何颜色） */
+}
+
+/* 自定义提示框 */
+.arrow-btn:hover::after {
+  content: attr(data-tooltip);
+  position: relative;
+  transform: translateX(-50%);
+  background-color: var(--bg-tertiary); /* 使用三级背景色 */
+  color: var(--text-primary); /* 使用主文字色 */
+  padding: 5px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+  top: 40px;
+  pointer-events: none;
+}

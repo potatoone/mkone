@@ -1,0 +1,16 @@
+
+/* 打印样式 */
+@media print {
+  .topbar,
+  .sidebar,
+  .theme-panel,
+  .export-panel,
+  .search-box {
+    display: none !important;
+  }
+  
+  #markdown-container {
+    margin: 0;
+    padding: 20px;
+  }
+}

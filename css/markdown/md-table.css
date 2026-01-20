@@ -1,0 +1,33 @@
+
+/* ==============================================
+   表格
+============================================== */
+#markdown-container table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 16px;
+  border-collapse: collapse;
+}
+
+#markdown-container th,
+#markdown-container td {
+  padding: 6px 13px;
+  border: 1px solid var(--border-m); /* 使用中等边框色 */
+}
+
+#markdown-container th {
+  font-weight: 600;
+  background-color: var(--bg-secondary); /* 使用次背景色 */
+  color: var(--text-primary); /* 使用主文字色 */
+}
+
+#markdown-container tr {
+  color: var(--text-primary);
+  background-color: var(--bg-primary); /* 使用主背景色 */
+  border-top: 1px solid var(--border-m); /* 使用中等边框色 */
+}
+
+#markdown-container tr:nth-child(even) {
+  background-color: var(--bg-secondary); /* 使用次背景色 */
+}

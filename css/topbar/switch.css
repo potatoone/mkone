@@ -1,0 +1,43 @@
+
+/* 安卓风格开关容器 */
+.android-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.android-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* 开关轨道 */
+.switch-track {
+  position: absolute;
+  inset: 0;
+  background-color: var(--text-secondary); /* 使用次要文字色 */
+  border-radius: 1px;
+  transition: .3s;
+}
+
+.switch-track:before {
+  position: absolute;
+  content: "";
+  width: 18px;
+  height: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--bg-muted); /* 使用静音背景色 */
+  border-radius: 1%;
+  transition: .3s;
+}
+
+input:checked + .switch-track {
+  background-color: var(--active-m); /* 使用中等激活色 */
+}
+
+input:checked + .switch-track:before {
+  transform: translateX(18px);
+}

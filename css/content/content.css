@@ -1,0 +1,36 @@
+/* 4. 外层容器样式保持不变 */
+.content {
+  display: flex;
+  box-sizing: border-box;
+  overflow-x: auto; /* 防止窄窗口下内容挤压 */
+}
+
+.content-wrapper {
+  width: 100%;
+  padding: var(--wrapper-padding);
+  overflow-y: auto;
+  max-height: calc(100vh - 40px); /* 减去顶栏高度 */
+}
+
+/* 滚动条整体宽度 */
+.content-wrapper::-webkit-scrollbar {
+  width: 12px; /* 垂直滚动条宽度 */
+}
+
+#markdown-container {
+  flex: 1; /* 占据剩余空间 */
+  border-radius: 3px;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: visible; /* 改为visible，跟随父容器滚动 */
+}
+
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    padding: var(--wrapper-padding);
+  }
+  .content-wrapper::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+

@@ -1,0 +1,88 @@
+* {
+  font-family: var(--body-font);
+}
+
+/* ==============================================
+   标题样式（悬浮显示#号）
+============================================== */
+#markdown-container h1,
+#markdown-container h2,
+#markdown-container h3,
+#markdown-container h4,
+#markdown-container h5,
+#markdown-container h6 {
+  margin: 15px 0 0 0;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text-primary);
+  scroll-margin-top: 40px;
+  position: relative; /* 用于定位#号 */
+  transition: padding-left 0.2s; /* 平滑过渡 */
+}
+
+/* 默认隐藏#号 */
+#markdown-container h1::before,
+#markdown-container h2::before,
+#markdown-container h3::before,
+#markdown-container h4::before,
+#markdown-container h5::before,
+#markdown-container h6::before {
+  content: "#";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  color: var(--accent-m); /* #号颜色（建议用主题色） */
+  font-weight: normal;
+  opacity: 0; /* 默认透明 */
+  transition: opacity 0.2s; /* 淡入淡出效果 */
+  pointer-events: none; /* 避免#号干扰鼠标事件 */
+}
+
+/* 鼠标悬浮时显示#号 */
+#markdown-container h1:hover::before,
+#markdown-container h2:hover::before,
+#markdown-container h3:hover::before,
+#markdown-container h4:hover::before,
+#markdown-container h5:hover::before,
+#markdown-container h6:hover::before {
+  opacity: 0.8; /* 显示#号（可调整透明度） */
+}
+
+/* 可选：悬浮时轻微增加左内边距，让#号更明显 */
+#markdown-container h1:hover,
+#markdown-container h2:hover,
+#markdown-container h3:hover,
+#markdown-container h4:hover,
+#markdown-container h5:hover,
+#markdown-container h6:hover {
+  padding-left: 6px;
+}
+
+
+
+#markdown-container h1 {
+  font-size: 3.2rem;
+}
+
+#markdown-container h2 {
+  font-size: 2.7rem;
+}
+
+#markdown-container h3 {
+  font-size: 2.2rem;
+}
+
+#markdown-container h4 {
+  font-size: 1.7rem;
+  color: var(--text-secondary); /* 使用次文字色 */
+}
+
+#markdown-container h5 {
+  font-size: 1.2rem;
+  color: var(--text-secondary); /* 使用次文字色 */
+}
+
+#markdown-container h6 {
+  font-size: 1rem;
+  color: var(--text-secondary); /* 使用次文字色 */
+}

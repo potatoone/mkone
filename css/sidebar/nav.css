@@ -1,0 +1,149 @@
+/* 根级目录（一级目录）样式 */
+.root-dir {
+  margin: 0 0 0 10px;
+  padding: 0 0 0 10px;
+}
+
+/* 根级文件（一级文件）样式 */
+.root-file {
+  font-size: 15px;
+  margin: 0 0 0 20px;
+  padding: 5px 0;
+  font-weight: 600;
+  color: var(--text-primary); /* 使用主文字色 */
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 30px;
+}
+
+/* 根级子文件（一级目录下的次级文件）样式 */
+.root-sub-file {
+  margin: 0;
+  padding-left: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary); /* 使用主文字色 */
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 30px;
+}
+
+/* 子级目录（二级目录）样式 */
+.group-dir {
+  margin: 0;
+  padding-left: 12px;
+}
+
+/* 子级文件（二级文件）样式 */
+.group-file {
+  margin: 0;
+  padding-left: 12px;
+}
+
+/* 最内层文件（三级及以下）样式 */
+.inner-file {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary); /* 使用次文字色 */
+  padding-left: 16px;
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+  margin: 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* 根级目录标题（带展开箭头） */
+.root-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary); /* 使用主文字色 */
+  line-height: 30px;
+  margin: 5px 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative; /* 为伪元素定位 */
+  padding-right: 16px; /* 留出箭头空间 */
+}
+
+/* 子级目录标题 */
+.group-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary); /* 使用主文字色 */
+  line-height: 30px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative; /* 为伪元素定位 */
+  padding-right: 16px; /* 留出箭头空间 */
+}
+
+/* 最内层文件激活状态 */
+.inner-file.active {
+  color: var(--accent-m); /* 使用中等强调色 */
+}
+
+/* 侧边栏垂直指示线 */
+.sidebar-vertical-line {
+  position: absolute;
+  right: 0;
+  width: 2px;
+  height: 20px;
+  background-color: var(--accent-m); /* 使用中等强调色 */
+  transition: top 0.3s ease-in-out;
+  will-change: top;
+  pointer-events: none;
+}
+
+/* 导航项激活颜色 */
+.root-header.active, .group-header.active, .nav-file.active {
+  color: var(--accent-m); /* 使用中等强调色 */
+}
+
+/* 导航项悬停颜色 */
+.root-header:hover, .group-header:hover, .nav-file:hover {
+  color: var(--hover-l); /* 使用深悬浮色 */
+}
+
+/* 
+  核心：使用伪元素绘制箭头，避免额外 HTML 元素
+  优点：兼容性更好，不依赖嵌套层级
+*/
+.root-header::after,
+.group-header::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid var(--text-muted); /* 使用静音文字色 */
+  border-bottom: 2px solid var(--text-muted); /* 使用静音文字色 */
+  transform: translateY(-70%) rotate(45deg); /* 默认向下 */
+  transition: transform 0.2s ease;
+  -webkit-transition: transform 0.2s ease; /* 移动端兼容 */
+}
+
+/* 目录关闭时箭头旋转 */
+.root-dir:not([open]) > .root-header::after,
+.group-dir:not([open]) > .group-header::after {
+  transform: translateY(-70%) rotate(-45deg); /* 关闭时向右 */
+  -webkit-transform: translateY(-70%) rotate(-45deg);
+}
+
+/* 箭头右侧间距（通过调整 right 值实现） */
+.root-header::after,
+.group-header::after {
+  right: 20px; /* 子级箭头右移 3px（稍小一点） */
+}
