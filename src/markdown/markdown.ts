@@ -66,9 +66,11 @@ const createCustomRenderer = (headings: Heading[]) => {
     const text = this.parser.parseInline(tokens);
     const isInternal = !href.startsWith('http') && href.endsWith('.md');
 
+    // 内部链接也处理中文编码
+    const processedHref = isInternal ? encodeURI(href) : href;
     return isInternal
-      ? `<a href="${href}" class="internal-link">${text}</a>`
-      : `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
+      ? `<a href="${processedHref}" class="internal-link">${text}</a>`
+      : `<a href="${processedHref}" target="_blank" rel="noopener">${text}</a>`;
   };
 
   return renderer;
