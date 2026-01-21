@@ -16,11 +16,6 @@ const CONFIG = {
     min: 5,
     max: 15
   },
-  padding: {
-    small: '1rem 3rem 2rem 3rem',
-    medium: '2rem 6rem 3rem 6rem',
-    large: '2rem 12rem 4rem 12rem'
-  },
   storageKeys: {
     fontSize: 'user-font-size',
     selectedFont: 'user-selected-font',
@@ -135,10 +130,11 @@ export function setupLayout(
     localStorage.setItem(CONFIG.storageKeys.fontSize, clamped.toString());
   }
 
-  // 内边距控制（原有逻辑不变）
+  // 内边距控制
   function setPadding(preset: PaddingPreset) {
     currentPadding = preset;
-    html.style.setProperty('--wrapper-padding', CONFIG.padding[preset]);
+    html.classList.remove('padding-small', 'padding-medium', 'padding-large');
+    html.classList.add(`padding-${preset}`);
     paddingBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.padding === preset));
     localStorage.setItem(CONFIG.storageKeys.selectedPadding, preset);
   }

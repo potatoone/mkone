@@ -97,7 +97,7 @@ export function buildNavTree(paths: string[]): void {
         return fileNode;
       });
   
-      // 新增：group目录的完整路径（基于root的完整路径拼接）
+      // group目录的完整路径（基于root的完整路径拼接）
       const groupFullPath = `${rootFullPath}/${groupName}`; // 如 "docs/02-进阶/01-第一个"
   
       const groupDir: NavDir = {
@@ -105,7 +105,7 @@ export function buildNavTree(paths: string[]): void {
         title: groupTitle,
         order: groupOrder,
         children: groupChildren,
-        path: groupFullPath // 改为完整路径（关键）
+        path: groupFullPath
       };
       children.push(groupDir);
     });

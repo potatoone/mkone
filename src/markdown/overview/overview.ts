@@ -32,7 +32,7 @@ const collectAllFiles = (items: (NavDir | NavFile)[]): { title: string; file: st
 // 加载元数据（简化错误处理）
 const loadMetadata = async (file: string): Promise<{ time?: string; desc?: string } | null> => {
   try {
-    const url = file.startsWith('/') ? file : `/docs/${file}`;
+    const url = file.startsWith('./') ? file : `./docs/${file}`;
     const res = await fetch(url);
     return res.ok ? parseFrontMatter(await res.text()).metadata : null;
   } catch (err) {
@@ -40,8 +40,6 @@ const loadMetadata = async (file: string): Promise<{ time?: string; desc?: strin
     return null;
   }
 };
-
-
 
 // 排序逻辑（简化比较器）
 const sortItems = (items: OverviewItem[], { type, asc }: SortState): OverviewItem[] => {

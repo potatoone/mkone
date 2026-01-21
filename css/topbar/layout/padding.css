@@ -1,0 +1,37 @@
+/* 内容边距 */
+:root {
+  /* 桌面端 padding 预设 */
+  --padding-small-desk: 1rem 3rem 2rem 3rem;
+  --padding-medium-desk: 2rem 6rem 3rem 6rem;
+  --padding-large-desk: 2rem 12rem 4rem 12rem;
+  
+  /* 移动端 padding 预设 */
+  --padding-small-mob: 1rem 3rem 2rem 3rem;
+  --padding-medium-mob: 2rem 4rem 3rem 4rem;
+  --padding-large-mob: 2rem 5rem 4rem 5rem;
+}
+
+/* 默认边距 */
+html.padding-small {
+  --wrapper-padding: var(--padding-small-desk);
+}
+html.padding-medium {
+  --wrapper-padding: var(--padding-medium-desk);
+}
+html.padding-large {
+  --wrapper-padding: var(--padding-large-desk);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  html.padding-small {
+    --wrapper-padding: var(--padding-small-mob);
+  }
+  html.padding-medium {
+    --wrapper-padding: var(--padding-medium-mob);
+  }
+  html.padding-large {
+    --wrapper-padding: var(--padding-large-mob);
+  }
+}
+

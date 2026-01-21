@@ -129,7 +129,7 @@ export async function renderMarkdown(file: string): Promise<Heading[]> {
       return cached.headings;
     }
 
-    requestUrl = file.startsWith('/') ? file : `/docs/${file}`;
+    requestUrl = file.startsWith('./') ? file : `./docs/${file}`;
     console.log(`📡 开始请求文件: ${requestUrl}`);
 
     const response = await fetch(requestUrl);
