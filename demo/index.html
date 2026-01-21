@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mkone</title>
+    <link rel="icon" href="/assets/icon-Cvyi-sRo.svg" type="image/x-icon"> <!-- 网站图标 --> <!-- 主样式表 -->
+    <script type="module" crossorigin src="/assets/index-BuUKTpxc.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CuYPIHSC.css">
+  </head>
+
+  <body>
+
+    <div class="app">
+      <aside class="sidebar">
+        <div class="sidebar-toggle" id="sidebar-toggle"><span></span></div>
+        <!-- 侧边栏切换按钮 -->
+        <div class="sidebar-inner">
+          <div class="sidebar-title">MK ONE</div> <!-- 侧边栏标题 -->
+          <nav class="sidebar-nav" id="sidebar-nav"></nav> <!-- 导航菜单 -->
+          <div class="sidebar-links" id="sidebar-links"></div> <!-- 链接区域 -->
+        </div>
+      </aside>
+
+      <div class="main-panel">
+
+        <div class="topbar">
+
+          <div class="left">
+            <button id="backBtn" data-tooltip class="arrow-btn left-arrow"></button> <!-- 上一页按钮 -->
+            <button id="forwardBtn" data-tooltip class="arrow-btn right-arrow"></button> <!-- 下一页按钮 -->
+            <button id="searchBtn" class="search-btn" title="搜索"></button> <!-- 搜索按钮 -->
+          </div>
+
+          <div class="right">
+
+            <button id="layoutBtn" class="layout-btn" title="布局"><i></i></button> <!-- 布局按钮 -->
+            <div id="layoutPanel" class="layout-panel"> <!-- 布局面板 -->
+
+              <div class="font-size-section"> <!-- 字体大小调节区域 -->
+                <div class="font-size-controls">
+                  <span class="section-title">字体大小</span>
+                  <button id="decreaseFontSize" class="font-size-btn decrease"></button> <!-- 减小字体按钮 -->
+                  <span id="currentFontSize" class="current-font-size">10</span> <!-- 字体大小显示 -->
+                  <button id="increaseFontSize" class="font-size-btn increase"></button> <!-- 增大字体按钮 -->
+                </div>
+              </div>
+
+              <div class="font-select-section"> <!-- 字体选择区域 -->
+                <span class="section-title">选择字体</span>
+                <div id="fontSelect" class="font-select"> <!-- 自定义下拉容器 -->
+                  <div class="dropdown-trigger"> <!-- 下拉触发器 -->
+                    <span class="selected-text">默认字体</span> <!-- 选中字体显示 -->
+                    <i class="dropdown-arrow"></i> <!-- 下拉箭头 -->
+                  </div>
+                  <div class="dropdown-menu"></div> <!-- 下拉菜单（动态填充） -->
+                </div>
+              </div>
+
+              <div class="nav-toggle-section"> <!-- 页内导航开关区域 -->
+                <span class="section-title">隐藏页内导航</span>
+                <label class="android-switch">
+                  <input type="checkbox" id="navToggleSwitch" />
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+              
+              <div class="padding-section"> <!-- 边距调节区域 -->
+                <span class="section-title">内容边距</span>
+                <div class="padding-controls"> <!-- 边距控制按钮组 -->
+                  <button class="padding-btn active" data-padding="small"></button>
+                  <button class="padding-btn" data-padding="medium"></button>
+                  <button class="padding-btn" data-padding="large"></button>
+                </div>
+              </div>
+
+            </div>
+
+            <button id="exportBtn" class="export-btn" title="导出"><i></i></button> <!-- 导出按钮 -->
+            <div id="exportPanel" class="export-panel"> <!-- 导出面板 -->
+              <button id="copyMarkdownBtn" class="menu-item">复制 Markdown</button> <!-- 复制Markdown按钮 -->
+              <button id="exportHtmlBtn" class="menu-item">导出 HTML</button> <!-- 导出HTML按钮 -->
+              <button id="printBtn" class="menu-item">打印</button> <!-- 打印按钮 -->
+            </div>
+
+            <button class="theme-btn" id="themeBtn" title="切换主题">
+              <span></span><span></span><span></span>
+            </button><!-- 主题按钮 -->
+            <div class="theme-panel" id="themePanel"> <!-- 主题面板 -->
+              <div class="theme-option"> <!-- 夜间模式选项 -->
+                <span>夜间模式</span>
+                <label class="auto-toggle">
+                  <input type="checkbox" id="autoModeSwitch" checked />
+                  <span>AUTO</span>
+                </label>
+                <label class="android-switch">
+                  <input type="checkbox" id="nightModeSwitch" />
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+              <div class="theme-colors"> <!-- 主题颜色选择 -->
+                <span class="colors-title">主题颜色</span>
+                <div class="color-palette" id="colorOptions"></div>
+                <!-- 颜色选项 -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <main class="content">
+          <div class="content-wrapper"> <!-- 文档内容与页内导航的容器 -->
+
+            <div id="search-area">
+              <div class="search-bar">
+                <input id="searchInput" type="text" placeholder="Search in this document ...">
+                <button id="searchCloseBtn">×</button>
+              </div>
+              <span id="searchResultInfo"></span>
+            </div>
+            <div id="status" class="status">Loading Documents ...</div> <!-- 加载、错误状态容器 -->
+            <div id="overview"></div> <!-- 文件夹总览容器 -->
+            <div id="markdown-container"></div>
+          </div>
+          <nav id="pageNav"><div class="nav-title">On This Page</div></nav> <!-- 页内导航栏 -->
+        </main>
+
+      </div>
+
+    </div>
+ <!-- 主脚本 -->
+
+  </body>
+
+</html>

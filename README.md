@@ -15,7 +15,7 @@ mkone/
 │   ├── README.md
 │   ├── guide.md
 │   └── about.md            # Markdown 文档
-├── dist/                   # 编译输出目录
+├── demo/dist/                   # 编译输出目录
 │   └── main.js
 ├── tsconfig.json           # TypeScript 配置
 ├── package.json            # 依赖配置
@@ -39,8 +39,8 @@ npm install marked
 npm install marked-highlight
 
 运行开发环境
-npx vite dev
+npm run dev
 
 打包项目
-npx vite build
+npm run build
 
