@@ -33,13 +33,14 @@ npx tsc --init
 安装构建工具 vite
 npm create vite@latest
 
+安装marked
+npm install marked
+安装marked代码高亮
+npm install marked-highlight
+
 运行开发环境
 npx vite dev
 
 打包项目
 npx vite build
 
-安装marked
-npm install marked
-安装marked代码高亮
-npm install marked-highlight
