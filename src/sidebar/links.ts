@@ -29,7 +29,7 @@ export async function initSidebarLinks() {
   }
 
   try {
-    const res = await fetch('./docs/config/links.json');
+    const res = await fetch('./config/links.json');
     if (!res.ok) throw new Error(`链接加载失败（状态码：${res.status}）`);
 
     const links = await res.json();

@@ -179,7 +179,7 @@ export function setupLayout(
     const localFonts: FontConfig[] = localSaved ? JSON.parse(localSaved) : [];
 
     try {
-      const response = await fetch('/docs/config/fonts.json');
+      const response = await fetch('/config/fonts.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const remoteFonts: FontConfig[] = await response.json();
       const uniqueFonts = [...remoteFonts];

@@ -1,5 +1,5 @@
 // 移除文件名前的数字前缀
-export const removeNumericPrefix = (str: string): string => str.replace(/^\d+-/, '');
+export const removeNumericPrefix = (str: string): string => str.replace(/^\d+_/, '');
 
 // 移除文件名的 .md 后缀
 export const removeMdExtension = (str: string): string => str.endsWith('.md') ? str.slice(0, -3) : str;
@@ -16,7 +16,7 @@ export const cleanTitle = (fileName: string): string => {
 
 // 解析文件名的顺序和名称
 export function parseOrderAndName(fileName: string) {
-  const match = fileName.match(/^(\d+)-(.+?)(?:\.md)?$/);
+  const match = fileName.match(/^(\d+)_(.+?)(?:\.md)?$/);
   if (match) {
     return {
       order: parseInt(match[1], 10),

@@ -1,0 +1,19 @@
+[
+  {
+    "displayName": "默认字体",
+    "cssName": "sans-serif"
+  },
+  {
+    "displayName": "微软雅黑",
+    "cssName": "Microsoft YaHei"
+  },
+  {
+    "displayName": "宋体",
+    "cssName": "SimSun"
+  },
+  {
+    "displayName": "霞骛文楷",
+    "cssName": "LXGW WenKai Screen",
+    "url": "https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css"
+  }
+]
