@@ -1,6 +1,6 @@
 # MK ONE
 ### 静态 Markdown 站点生成器
-<img width="1910" height="896" alt="mkone" src="https://github.com/user-attachments/assets/cef2fae1-0f6b-4837-bdb0-1fb60ff0385f" />
+<img width="1910" height="896" alt="mkone" src="https://github.com/user-attachments/assets/7184c497-8657-495b-8316-9fb88486bb56" />
 
 轻量静态 Markdown 站点生成工具，无需复杂配置，快速将 Markdown 文档转换为可部署的纯静态 HTML 站点。
 
