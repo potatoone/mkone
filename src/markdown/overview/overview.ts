@@ -1,7 +1,7 @@
 import { parseFrontMatter } from './viewParser';
-import { getElement } from '../../utils/utils';
+import { getElement } from '../../core/utils';
 import type { NavDir, NavFile } from '../../sidebar/navTypes';
-import { hidePageTitle } from '../../utils/pageTitle';
+import { hidePageTitle } from '../../page/pageTitle';
 
 // 简化接口定义
 interface OverviewItem {

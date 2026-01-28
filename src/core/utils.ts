@@ -1,4 +1,4 @@
-import type { DOMElements } from '../core/types';
+import type { DOMElements } from './types';
 
 // 防抖函数
 export function debounce<T extends (...args: any[]) => any>(

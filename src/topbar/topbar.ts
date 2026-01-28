@@ -3,9 +3,9 @@ import { setupTheme } from './theme';
 import { setupSearch } from './search';
 import { ExportManager } from './export';
 import { setupLayout } from './layout';
-import { PageManager } from '../utils/pageManager';
+import { PageManager } from '../page/pageManager';
 // 导入 pageTitle.ts 中的函数
-import { createAndInsertPageTitle, initPageTitleUpdater, showPageTitle } from '../utils/pageTitle';
+import { createAndInsertPageTitle, initPageTitleUpdater, showPageTitle } from '../page/pageTitle';
 
 // 封装事件处理函数，减少重复代码
 const handleClick = (callback: () => void) => (e: Event) => {

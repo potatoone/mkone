@@ -1,9 +1,9 @@
-import { getDOMElements, showError, showSuccess } from './utils/utils';
+import { getDOMElements, showError, showSuccess } from './core/utils';
 import type { DOMElements } from './core/types';
-import { PageManager } from './utils/pageManager';
+import { PageManager } from './page/pageManager';
 import { initSidebar } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';
-import { initPageNavigation } from './utils/pageNav';
+import { initPageNavigation } from './page/pageNav';
 
 const STORAGE_KEY = 'mkoneCurrentPage';
 

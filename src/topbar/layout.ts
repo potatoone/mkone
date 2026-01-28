@@ -1,4 +1,4 @@
-import { togglePageNavigation } from '../utils/pageNav';
+import { togglePageNavigation } from '../page/pageNav';
 
 // 类型定义
 interface FontConfig {

@@ -1,4 +1,4 @@
-import { debounce, getElement, showError } from '../utils/utils';
+import { debounce, getElement, showError } from '../core/utils';
 
 /**
  * Markdown 内容搜索管理器

@@ -1,11 +1,8 @@
 import { renderMarkdown } from '../markdown/markdown';
-import { showError } from './utils';
+import { showError } from '../core/utils';
 import { initPageNavigation } from './pageNav';
 import { showPageNavigation } from './pageNav';
-import { cleanTitle } from './docsParser';
-
-
-cleanTitle // 生成用于显示的干净标题
+import { cleanTitle } from '../core/docsParser';
 
 export class PageManager {
   private pages: string[] = [];  // 页面路径列表
@@ -208,7 +205,7 @@ export class PageManager {
   public getCurrentCleanedFileName(): string {
     const currentPage = this.getCurrentPage();
     const fileNameWithExt = currentPage.split('/').pop() || currentPage;
-    return fileNameWithExt.replace(/^\d+-/, '').replace(/\.md$/, '');
+    return fileNameWithExt.replace(/^\d+_/, '').replace(/\.md$/, '');
   }
 
   // 新增方法，获取所有页面路径

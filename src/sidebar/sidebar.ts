@@ -1,12 +1,12 @@
 /**
  * 侧边栏整合入口（sidebar.ts）- 优化版
  */
-import { buildNavTree, getAllPages, getNavTree } from '../utils/navTree';
+import { buildNavTree, getAllPages, getNavTree } from '../core/navTree';
 import { navRender } from './navRender';
 import { initSidebarLinks } from './links';
 import type { NavRoot } from './navTypes';
 import { renderOverView } from '../markdown/overview/overview';
-import { hidePageNavigation } from '../utils/pageNav';
+import { hidePageNavigation } from '../page/pageNav';
 
 // ------------------------------ 状态管理 ------------------------------
 // 封装侧边栏状态（避免全局变量污染）

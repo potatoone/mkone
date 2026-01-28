@@ -1,5 +1,5 @@
 import type { PanelConfig } from './types';
-import { throttle } from '../utils/utils';
+import { throttle } from './utils';
 
 // 管理面板状态、显示隐藏及事件清理
 export class stateManager {
