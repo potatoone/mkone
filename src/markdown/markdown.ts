@@ -1,13 +1,13 @@
 import { Marked, Renderer, Tokens } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import { showError, getElement } from '../utils/utils';
-import { parseFrontMatter } from './overview/viewParser';
+import { parseFrontMatter, MarkdownMetadata } from './overview/viewParser';
 import { setupCodeCopy } from './codeCopy';
-import { highlightCode } from './extentions/highlight';
-import { markedAdmonition } from './extentions/admonition'; // 导入Admonition插件
-import { markedTabs } from './extentions/tabs'; // Tabs插件（函数，需改造为返回MarkedExtension）
+import { highlightCode } from './extentions/highlight'; // 代码高亮插件
+import { markedAdmonition } from './extentions/admonition'; // Admonition插件
+import { markedTabs } from './extentions/tabs'; // Tabs插件
 
-// 1. 初始化 marked 实例
+// 初始化 marked 实例
 const marked = new Marked();
 
 marked.use(markedHighlight({
@@ -16,7 +16,7 @@ marked.use(markedHighlight({
   highlight: (code, lang) => highlightCode(code, lang) // 你的高亮逻辑
 }));
 
-// 3. 注册标签页和提示块扩展
+// 注册标签页和提示块扩展
 marked.use(markedTabs());
 marked.use(markedAdmonition());
 
@@ -26,9 +26,17 @@ export interface Heading {
   id: string;
 }
 
+// 定义 renderMarkdown 的返回结果类型
+export interface RenderMarkdownResult {
+  headings: Heading[];
+  metadata: MarkdownMetadata;
+}
+
+// markdown缓存
 interface MarkdownCacheItem {
   html: string;
   headings: Heading[];
+  metadata: MarkdownMetadata; // 缓存元数据，避免重复解析
 }
 
 const markdownCache = new Map<string, MarkdownCacheItem>();
@@ -74,7 +82,7 @@ const createCustomRenderer = (headings: Heading[]) => {
   return renderer;
 };
 
-// 错误处理、渲染逻辑等保持不变...
+// 错误处理函数返回 RenderMarkdownResult 类型，保证返回值统一
 const handleError = (
   statusContainer: HTMLElement,
   requestUrl: string,
@@ -87,10 +95,11 @@ const handleError = (
     Reason: ${error instanceof Error ? error.message : 'Unknown error'}<br>
     Path: ${requestUrl}
   `;
-  return [];
+  return { headings: [], metadata: {} } as RenderMarkdownResult;
 };
 
-export async function renderMarkdown(file: string): Promise<Heading[]> {
+// 返回类型改为 RenderMarkdownResult，携带 headings 和 metadata
+export async function renderMarkdown(file: string): Promise<RenderMarkdownResult> {
   const statusContainer = getElement('#status', HTMLElement);
   const markdownContainer = getElement('#markdown-container', HTMLElement);
   const overviewContainer = getElement('#overview', HTMLElement);
@@ -99,7 +108,8 @@ export async function renderMarkdown(file: string): Promise<Heading[]> {
     const errorMsg = '致命错误：缺少容器（#status 或 #markdown-container 或 #overview）';
     console.error(errorMsg);
     showError(errorMsg);
-    return [];
+    // 返回空结果
+    return { headings: [], metadata: {} };
   }
 
   overviewContainer.classList.add('hidden');
@@ -126,7 +136,11 @@ export async function renderMarkdown(file: string): Promise<Heading[]> {
       markdownContainer.style.display = 'block';
 
       setupCodeCopy();
-      return cached.headings;
+      // 从缓存中读取 headings 和 metadata 并返回
+      return {
+        headings: cached.headings,
+        metadata: cached.metadata
+      };
     }
 
     requestUrl = file.startsWith('./') ? file : `./docs/${file}`;
@@ -140,6 +154,7 @@ export async function renderMarkdown(file: string): Promise<Heading[]> {
     const rawText = await response.text();
     if (!rawText) throw new Error('File content is empty');
 
+    // 解析 FrontMatter
     const { metadata, content } = parseFrontMatter(rawText);
     console.log('📦 元数据:', metadata);
 
@@ -148,22 +163,31 @@ export async function renderMarkdown(file: string): Promise<Heading[]> {
 
     if (!html) throw new Error('Parsed HTML is empty');
 
-    markdownCache.set(file, { html, headings });
+    // 缓存时存入 metadata，完整保存解析结果
+    markdownCache.set(file, { 
+      html, 
+      headings, 
+      metadata // 缓存元数据
+    });
     markdownContainer.innerHTML = html;
     markdownContainer.style.display = 'block';
     console.log(`✅ 内容已渲染到 #markdown-container`);
 
     setupCodeCopy();
-    return headings;
+
+    // 返回 headings 和 metadata，供页内导航使用
+    return {
+      headings,
+      metadata
+    };
   } catch (error) {
+    // 调用返回 RenderMarkdownResult 类型的错误处理函数
     return handleError(statusContainer, requestUrl, error);
   }
 }
 
-// 其他函数（clearMarkdownCache、preloadMarkdown）保持不变
+// 清除 Markdown 缓存
 export function clearMarkdownCache(): void {
   markdownCache.clear();
   console.log('Markdown缓存已清除');
 }
-
-    

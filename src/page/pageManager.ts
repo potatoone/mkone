@@ -1,6 +1,6 @@
 import { renderMarkdown } from '../markdown/markdown';
 import { showError } from '../utils/utils';
-import { initPageNavigation } from './pageNav';
+
 import { showPageNavigation } from './pageNav';
 import { cleanTitle } from '../utils/docsParser';
 
@@ -29,8 +29,8 @@ export class PageManager {
       this.currentIndex = index;
 
       // 渲染 Markdown 并初始化页内导航
-      const headings = await renderMarkdown(fileName);
-      await initPageNavigation(fileName);
+      const renderResult = await renderMarkdown(fileName);
+      const headings = renderResult.headings;
 
       // 设置文档标题
       const mainTitle = headings.find(h => h.level === 1)?.text || cleanTitle(fileName);

@@ -2,23 +2,25 @@
    基础样式（PC 和 移动端通用）
 ============================================== */
 #pageNav {
+  position: relative; /* 核心：作为指示器的定位参考，贴合其左侧边框 */
   flex: none; /* 不换行 */
   width: 230px;
-  overflow-y: auto;
-  padding: 10px 10px 16px 16px;
-  right: 0; height: calc(100vh - 40px);
+  overflow: hidden; /* 仅隐藏水平溢出，不限制垂直方向（给子容器滚动留空间） */
+  padding: 10px 10px 56px 16px; /* 预留 .nav-navfooter 40px 高度 + 少量间距 */
+  right: 0; 
+  height: calc(100vh - 40px);
   display: block; /* 确保PC端默认显示 */
   background: var(--bg-primary);
-  border-left: 1px solid var(--border-m);
+  border-left: 1px solid var(--border-m); /* 左侧边框，指示器贴合该边框 */
+  box-sizing: border-box; /* 确保 padding 不撑宽容器，关键 */
 }
 
 /* 导航标题样式 */
 .nav-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--text-secondary); /* 注意原代码可能笔误：text-primay → text-primary */
+  color: var(--text-secondary);
   margin-bottom: 5px; /* 与下方导航项保持距离 */
-  padding-left: 5px; /* 与导航项左对齐 */
 }
 
 #pageNav::-webkit-scrollbar { width: 4px; }
@@ -29,16 +31,28 @@
 .nav-items-container {
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* 保留滚动功能 */
+  overflow-x: hidden;
+  height: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-left: 10px; /* 保持内边距，优化导航项排版 */
+}
+
+.nav-items-container::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item {
   font-size: 1.2rem;
-  margin: 5px;
+  margin: 5px 5px 5px 0; /* 保留右侧 margin，避免导航项溢出 */
   color: #333;
   text-decoration: none;
   transition: all 0.2s;
   cursor: pointer;
   color: var(--text-primary);
+  padding-left: 8px; /* 优化文字与左侧边框的间距 */
+  position: relative; /* 辅助：确保文字层级高于指示器 */
 }
 
 .level-1 { font-size: 1.4rem;color: var(--text-tertiary); }
@@ -54,18 +68,34 @@
   font-weight: bold;
 }
 
-.nav-items-container {
-  position: relative;
-}
-
+/* 贴合 #pageNav 左侧边框 */
 .nav-indicator {
   position: absolute;
-  left: -16px;
+  left: 0; 
   width: 2px;
+  height: 20px;
+  top: 60px;
   background-color: var(--accent-m);
   transition: top 0.3s ease, height 0.3s ease;
+  z-index: 2;
+  opacity: 1;
 }
 
+/* 底部 footer 样式 */
+.nav-navfooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 5px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  box-sizing: border-box;
+  height: 40px;
+  background: var(--bg-primary);
+}
 
 @media screen and (max-width: 1100px) {
   /* 移动端导航容器 */
@@ -79,5 +109,4 @@
   #pageNav.show {
     transform: translateX(0); /* 滑到可见区域 */
   }
-
 }

@@ -1,0 +1,74 @@
+.nav-navfooter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 5px;
+  /* 核心修改：改为 absolute 定位，实现底部固定 */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px;
+  box-sizing: border-box;
+  height: 40px; /* 与父容器的 padding-bottom 保持一致 */
+  background: var(--bg-primary);
+  /* 绝对定位 + left: 0; right: 0; 已充满父容器宽度，无需额外设置 width */
+}
+
+.nav-scrolltotop {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-m);
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0;
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0; /* 保持按钮固定尺寸不被挤压 */
+}
+
+.nav-scrolltotop::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 3px solid var(--text-muted);
+  border-right: 3px solid var(--text-muted);
+  transition: all 0.2s;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.nav-scrolltotop:hover {
+  border-color: var(--accent-m);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.nav-scrolltotop:hover::after {
+  border-top-color: var(--accent-m);
+  border-right-color: var(--accent-m);
+}
+
+.nav-timemark {
+  flex: 1;
+  height: 32px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-m);
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  padding: 0 8px;
+}
