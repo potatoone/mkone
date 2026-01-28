@@ -1,12 +1,14 @@
 # MK ONE
 ### 静态 Markdown 站点生成器
+<img width="1910" height="896" alt="mkone" src="https://github.com/user-attachments/assets/cef2fae1-0f6b-4837-bdb0-1fb60ff0385f" />
 
 轻量静态 Markdown 站点生成工具，无需复杂配置，快速将 Markdown 文档转换为可部署的纯静态 HTML 站点。
 
 - 使用 **数字_** 命名前缀（如 `01_指南/`、`02_快速开始.md`），自动按数字排序生成侧边栏与站点路由
-- 支持常用 Markdown 语法，提示块、代码块、标签、图片等
+- 支持常用 Markdown 语法，提示块、代码块、标签等
+- 支持目录大纲：文档描述和时间标记
 - 使用 hljs 支持代码高亮
-
+- 支持主题切换、自定义字体
 
 ## 使用教程
 
