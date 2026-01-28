@@ -6,9 +6,9 @@
   --padding-large-desk: 2rem 12rem 4rem 12rem;
   
   /* 移动端 padding 预设 */
-  --padding-small-mob: 1rem 3rem 2rem 3rem;
-  --padding-medium-mob: 2rem 4rem 3rem 4rem;
-  --padding-large-mob: 2rem 5rem 4rem 5rem;
+  --padding-small-mob: 1rem 2rem 4rem 2rem;
+  --padding-medium-mob: 1.5rem 2.5rem 4rem 2.5rem;;
+  --padding-large-mob: 2rem 4rem 4rem 4rem;
 }
 
 /* 默认边距 */
