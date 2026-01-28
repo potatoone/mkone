@@ -1,7 +1,7 @@
 /**
  * 侧边栏整合入口（sidebar.ts）- 优化版
  */
-import { buildNavTree, getAllPages, getNavTree } from '../core/navTree';
+import { buildNavTree, getAllPages, getNavTree } from '../utils/navTree';
 import { navRender } from './navRender';
 import { initSidebarLinks } from './links';
 import type { NavRoot } from './navTypes';

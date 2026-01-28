@@ -1,4 +1,4 @@
-import { setupState } from '../core/stateManager';
+import { setupState } from '../utils/stateManager';
 import { setupTheme } from './theme';
 import { setupSearch } from './search';
 import { ExportManager } from './export';

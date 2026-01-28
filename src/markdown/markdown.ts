@@ -1,6 +1,6 @@
 import { Marked, Renderer, Tokens } from 'marked';
 import { markedHighlight } from 'marked-highlight';
-import { showError, getElement } from '../core/utils';
+import { showError, getElement } from '../utils/utils';
 import { parseFrontMatter } from './overview/viewParser';
 import { setupCodeCopy } from './codeCopy';
 import { highlightCode } from './extentions/highlight';

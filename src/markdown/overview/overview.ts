@@ -1,5 +1,5 @@
 import { parseFrontMatter } from './viewParser';
-import { getElement } from '../../core/utils';
+import { getElement } from '../../utils/utils';
 import type { NavDir, NavFile } from '../../sidebar/navTypes';
 import { hidePageTitle } from '../../page/pageTitle';
 

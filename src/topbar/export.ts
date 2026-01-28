@@ -1,4 +1,4 @@
-import { getElement, showSuccess, showError } from '../core/utils';
+import { getElement, showSuccess, showError } from '../utils/utils';
 
 export class ExportManager {
   private exportPanel: HTMLElement;

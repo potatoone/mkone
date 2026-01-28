@@ -1,5 +1,5 @@
-import { getDOMElements, showError, showSuccess } from './core/utils';
-import type { DOMElements } from './core/types';
+import { getDOMElements, showError, showSuccess } from './utils/utils';
+import type { DOMElements } from './utils/types';
 import { PageManager } from './page/pageManager';
 import { initSidebar } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';

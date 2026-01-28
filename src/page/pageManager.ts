@@ -1,8 +1,8 @@
 import { renderMarkdown } from '../markdown/markdown';
-import { showError } from '../core/utils';
+import { showError } from '../utils/utils';
 import { initPageNavigation } from './pageNav';
 import { showPageNavigation } from './pageNav';
-import { cleanTitle } from '../core/docsParser';
+import { cleanTitle } from '../utils/docsParser';
 
 export class PageManager {
   private pages: string[] = [];  // 页面路径列表
