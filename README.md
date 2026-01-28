@@ -1,46 +1,41 @@
-mkone/
-├── index.html              # 主入口 HTML
-├── css/
-│   ├── base.css            # 基础样式
-│   ├── layout.css          # 布局样式
-│   ├── sidebar.css         # 侧边栏样式
-│   └── topbar.css          # 顶栏样式
-├── src/
-│   ├── main.ts             # 主入口
-│   ├── sidebar.ts          # 侧边栏逻辑
-│   ├── topbar.ts           # 顶栏逻辑
-│   ├── history.ts          # 历史记录逻辑
-│   └── markdown.ts         # Markdown 处理
-├── docs/
-│   ├── README.md
-│   ├── guide.md
-│   └── about.md            # Markdown 文档
-├── demo/dist/                   # 编译输出目录
-│   └── main.js
-├── tsconfig.json           # TypeScript 配置
-├── package.json            # 依赖配置
-└── vite.config.ts          # Vite 配置（如果使用 Vite）
+# MK ONE
+### 静态 Markdown 站点生成器
+
+轻量静态 Markdown 站点生成工具，无需复杂配置，快速将 Markdown 文档转换为可部署的纯静态 HTML 站点。
+
+- 使用 **数字_** 命名前缀（如 `01_指南/`、`02_快速开始.md`），自动按数字排序生成侧边栏与站点路由
+- 支持常用 Markdown 语法，提示块、代码块、标签、图片等
+- 使用 hljs 支持代码高亮
 
 
+## 使用教程
 
+建议使用 Vscode + Edge 浏览器环境
 
-安装 typescript
+安装 Node 22 版本，项目下终端执行
+
+```bash
+# 1. 全局安装 TypeScript
 npm install -g typescript
 
-初始化配置文件 tsconfig.json 可手动创建
-npx tsc --init
-
-安装构建工具 vite
+# 2. 初始化 Vite 项目
 npm create vite@latest
 
-安装marked
+# 3. 生成 tsconfig.json 配置文件
+npx tsc --init
+
+# 4. 安装 marked
 npm install marked
-安装marked代码高亮
+
+# 5. 安装 marked-highlight
 npm install marked-highlight
 
-运行开发环境
-npm run dev
+# 6. 运行开发环境
+npm run dev 或 npx vite --host 0.0.0.0
 
-打包项目
+# 7. 打包项目
 npm run build
+```
 
+注意：
+若使用 pages 部署，将 github actions 配置为 static
