@@ -77,7 +77,6 @@
   top: 60px;
   background-color: var(--accent-m);
   transition: top 0.3s ease, height 0.3s ease;
-  z-index: 2;
   opacity: 1;
 }
 

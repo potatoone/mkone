@@ -9,7 +9,7 @@ interface FontConfig {
 
 type PaddingPreset = 'small' | 'medium' | 'large';
 
-// 常量配置（仅新增导航存储键）
+// 常量配置
 const CONFIG = {
   fontSize: {
     target: 10, // 1rem = 10px
@@ -21,56 +21,73 @@ const CONFIG = {
     selectedFont: 'user-selected-font',
     selectedPadding: 'user-selected-padding',
     fontOptions: 'saved-font-options',
-    navVisible: 'mkone.nav.visible' // 新增：导航可见性存储键
+    navVisible: 'mkone.nav.visible'
   }
 } as const;
 
-// 字体加载器：处理CDN资源加载
 class FontLoader {
   private loadedUrls = new Set<string>();
 
-  async load(font: FontConfig): Promise<void> {
-    if (!font.url || this.loadedUrls.has(font.url)) return;
-    this.loadedUrls.add(font.url);
+async load(font: FontConfig) {
+  if (!font.url || this.loadedUrls.has(font.url)) return;
 
+  if (this.isCss(font.url)) {
+    await this.loadCss(font.url, font.cssName); // 👈 关键
+  } else {
+    await this.loadFontFile(font);
+    await document.fonts.load(`1em "${font.cssName}"`);
+  }
+
+  this.loadedUrls.add(font.url);
+}
+
+
+  private isCss(url: string) {
+    return url.endsWith('.css');
+  }
+
+private async loadCss(url: string, fontFamily?: string): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = url;
+
+    link.onload = () => resolve();
+    link.onerror = () => reject(new Error(`CSS 加载失败: ${url}`));
+
+    document.head.appendChild(link);
+  });
+
+  // 🔥 核心：显式等待字体可用
+  if (fontFamily && 'fonts' in document) {
     try {
-      if (font.url.endsWith('.css')) {
-        await this.loadCss(font.url);
-      } else {
-        await this.loadFontFile(font);
-      }
-    } catch (err) {
-      console.warn(`⚠️ 字体加载失败: ${font.displayName}`, err);
+      // 触发并等待该字体加载
+      await document.fonts.load(`1em "${fontFamily}"`);
+      await document.fonts.ready;
+    } catch {
+      // 忽略
     }
   }
+}
 
-  private loadCss(url: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = url;
-      link.onload = () => resolve();
-      link.onerror = () => reject(new Error(`CSS加载失败: ${url}`));
-      document.head.appendChild(link);
-    });
-  }
+
 
   private loadFontFile(font: FontConfig): Promise<void> {
     return new Promise((resolve) => {
       const ext = font.url!.split('.').pop() || '';
       const formatMap: Record<string, string> = {
-        woff2: 'woff2', woff: 'woff', ttf: 'truetype', otf: 'opentype'
+        woff2: 'woff2',
+        woff: 'woff',
+        ttf: 'truetype',
+        otf: 'opentype'
       };
-      const format = formatMap[ext] || 'opentype';
 
       const style = document.createElement('style');
       style.textContent = `
         @font-face {
           font-family: '${font.cssName}';
-          src: url('${font.url}') format('${format}');
+          src: url('${font.url}') format('${formatMap[ext] || 'opentype'}');
           font-display: swap;
-          font-weight: normal;
-          font-style: normal;
         }
       `;
       document.head.appendChild(style);
@@ -78,6 +95,7 @@ class FontLoader {
     });
   }
 }
+
 
 // 主布局控制器（仅添加导航开关相关逻辑）
 export function setupLayout(
@@ -106,7 +124,7 @@ export function setupLayout(
   // 初始化检查（保留原有逻辑）
   if (!fontTrigger || !fontSelectedText || !fontMenu) {
     console.error('❌ 字体选择器缺少关键DOM元素');
-    return { init: async () => {} };
+    return { init: async () => { } };
   }
 
   // 新增：导航状态控制函数
@@ -193,8 +211,7 @@ export function setupLayout(
     } catch (err) {
       console.warn('⚠️ 远程字体配置加载失败，使用本地缓存', err);
       fontList = localFonts.length > 0 ? localFonts : [
-        { displayName: '默认字体', cssName: 'sans-serif' },
-        { displayName: '微软雅黑', cssName: 'Microsoft YaHei' }
+        { displayName: '系统默认', cssName: 'sans-serif' }
       ];
     }
 

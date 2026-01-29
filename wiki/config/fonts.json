@@ -1,19 +1,31 @@
 [
   {
-    "displayName": "默认字体",
+    "displayName": "系统默认",
     "cssName": "sans-serif"
   },
   {
-    "displayName": "微软雅黑",
-    "cssName": "Microsoft YaHei"
+    "displayName": "霞鹜文楷",
+    "cssName": "LXGW WenKai",
+    "url": "https://fontsapi.zeoseven.com/292/main/result.css"
   },
   {
-    "displayName": "宋体",
-    "cssName": "SimSun"
+    "displayName": "MiSans",
+    "cssName": "misans",
+    "url": "https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Medium.min.css"
   },
   {
-    "displayName": "霞骛文楷",
-    "cssName": "LXGW WenKai Screen",
-    "url": "https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css"
+    "displayName": "寒蝉活宋",
+    "cssName": "ChillHuoSong_F",
+    "url": "https://fontsapi.zeoseven.com/875/main/result.css"
+  },
+  {
+    "displayName": "寒蝉半圆",
+    "cssName": "寒蝉半圆体",
+    "url": "https://fontsapi.zeoseven.com/243/main/result.css"
+  },
+  {
+    "displayName": "像素字体",
+    "cssName": "Fusion Pixel 12px M latin",
+    "url": "https://fontsapi.zeoseven.com/570/main/result.css"
   }
 ]
