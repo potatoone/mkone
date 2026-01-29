@@ -19,30 +19,24 @@ const calculateScrollProgress = () => {
   return scrollContainer.scrollTop / scrollHeight;
 };
 
-// 更新回顶按钮的水平右45度斜向高亮进度
+// 更新回顶按钮的水平上45度斜向高亮进度
 export const updateScrollProgressCircle = () => {
   const scrollToTopBtn = getEl('navScrollToTop');
   if (!scrollToTopBtn) return;
-
   const progress = calculateScrollProgress(); // 获取 0-1 之间的进度值
-  // 1. 水平右45度 = 直接使用 45deg（线性渐变方向，左下→右上）
-  // 进度百分比 = 进度值 * 100%（线性渐变使用百分比划分区域）
   const progressPercent = progress * 100;
-
-  // 2. 更新自定义属性（保留，方便后续CSS复用）
+  // 水平右135度
   scrollToTopBtn.style.setProperty(
     '--progress-deg',
-    '-45deg' // 固定为水平右45度，无需再动态计算角度
+    '135deg'
   );
   scrollToTopBtn.style.setProperty(
     '--progress-percent',
-    `${progressPercent}%` // 新增进度百分比变量，方便渐变使用
+    `${progressPercent}%`
   );
-
-  // 45度线性渐变（替换原有的锥形渐变）
   scrollToTopBtn.querySelector('.arrow')?.parentElement?.style.setProperty(
     'background',
-    `linear-gradient(-45deg, var(--active-s) ${progressPercent}%, transparent ${progressPercent}%)`
+    `linear-gradient(135deg, var(--active-s) ${progressPercent}%, transparent ${progressPercent}%)`
   );
 };
 

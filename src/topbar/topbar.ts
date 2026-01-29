@@ -2,7 +2,7 @@ import { setupState } from '../utils/stateManager';
 import { setupTheme } from './theme';
 import { setupSearch } from './search';
 import { ExportManager } from './export';
-import { setupLayout } from './layout';
+import { setupLayout } from './layout/layout';
 import { PageManager } from '../page/pageManager';
 // 导入 pageTitle.ts 中的函数
 import { createAndInsertPageTitle, initPageTitleUpdater, showPageTitle } from '../page/pageTitle';

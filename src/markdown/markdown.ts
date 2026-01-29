@@ -2,7 +2,7 @@ import { Marked, Renderer, Tokens } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import { showError, getElement } from '../utils/utils';
 import { parseFrontMatter, MarkdownMetadata } from './overview/viewParser';
-import { setupCodeCopy } from './codeCopy';
+import { setupCodeCopy } from './extentions/codeCopy';
 import { highlightCode } from './extentions/highlight'; // 代码高亮插件
 import { markedAdmonition } from './extentions/admonition'; // Admonition插件
 import { markedTabs } from './extentions/tabs'; // Tabs插件
