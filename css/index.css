@@ -24,7 +24,6 @@
 @import url('./base/toast.css');                  /* 提示框样式 */
 @import url('./base/print.css');                  /* 打印样式 */
 
-@import url('./color/color-base.css');            /* 基础色 */
 @import url('./color/color.css');                 /* 颜色浅色 */
 @import url('./color/color-dark.css');            /* 颜色深色 */
 
