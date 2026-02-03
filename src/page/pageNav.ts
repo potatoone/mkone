@@ -127,7 +127,7 @@ function generateNavigation(headings: Heading[], metadata: MarkdownMetadata) {
       <div class="nav-title">On This Page</div>
       <div class="nav-indicator"></div>
       ${headings.map(h =>
-        `<a href="#${h.id}" class="nav-item level-${h.level}" style="padding-left:${(h.level - 1) * 15}px">
+        `<a href="#${h.id}" class="nav-item level-${h.level}" style="padding-left:${(h.level - 1) * 12}px">
           ${h.text}
         </a>`).join('')}
     </div>

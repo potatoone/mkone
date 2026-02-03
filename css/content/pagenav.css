@@ -1,26 +1,24 @@
-/* ==============================================
-   基础样式（PC 和 移动端通用）
-============================================== */
+/* 页内导航栏 */
 #pageNav {
-  position: relative; /* 核心：作为指示器的定位参考，贴合其左侧边框 */
-  flex: none; /* 不换行 */
-  width: 230px;
-  overflow: hidden; /* 仅隐藏水平溢出，不限制垂直方向（给子容器滚动留空间） */
-  padding: 10px 10px 56px 16px; /* 预留 .nav-navfooter 40px 高度 + 少量间距 */
+  position: relative;
+  flex: none;
+  width: 210px;
+  overflow: hidden;
+  padding: 10px 10px 56px 16px;
   right: 0; 
   height: calc(100vh - 40px);
-  display: block; /* 确保PC端默认显示 */
+  display: block;
   background: var(--bg-primary);
-  border-left: 1px solid var(--border-m); /* 左侧边框，指示器贴合该边框 */
-  box-sizing: border-box; /* 确保 padding 不撑宽容器，关键 */
+  border-left: 1px solid var(--border-m);
+  box-sizing: border-box;
 }
 
 /* 导航标题样式 */
 .nav-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 5px; /* 与下方导航项保持距离 */
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
 }
 
 #pageNav::-webkit-scrollbar { width: 4px; }
@@ -36,7 +34,7 @@
   height: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding-left: 10px; /* 保持内边距，优化导航项排版 */
+  padding-left: 10px;
 }
 
 .nav-items-container::-webkit-scrollbar {
@@ -45,19 +43,19 @@
 
 .nav-item {
   font-size: 1.2rem;
-  margin: 5px 5px 5px 0; /* 保留右侧 margin，避免导航项溢出 */
+  margin: 5px 5px 5px 0;
   color: #333;
   text-decoration: none;
   transition: all 0.2s;
   cursor: pointer;
-  color: var(--text-primary);
-  padding-left: 8px; /* 优化文字与左侧边框的间距 */
-  position: relative; /* 辅助：确保文字层级高于指示器 */
+  font-weight: 400;
+  padding-left: 8px;
+  position: relative; 
 }
 
-.level-1 { font-size: 1.4rem;color: var(--text-tertiary); }
-.level-2 { font-size: 1.2rem;color: var(--text-tertiary); }
-.level-3 { font-size: 1rem;color: var(--text-tertiary); }
+.level-1 { font-size: 1.12rem;color: var(--text-muted); } 
+.level-2 { font-size: 1.1rem;color: var(--text-muted); }
+.level-3 { font-size: 1.1rem;color: var(--text-muted); }
 
 .nav-item:hover {
   color: var(--accent-m);

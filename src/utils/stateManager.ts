@@ -52,7 +52,6 @@ export class stateManager {
     if (!wasVisible) {
       panel.classList.add('show'); // 仅在原本隐藏时显示
     }
-    console.log(`面板 ${panel.id} 状态：${wasVisible ? '隐藏' : '显示'}`);
   }
 
   // 关闭所有面板

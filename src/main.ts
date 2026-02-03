@@ -31,7 +31,6 @@ class MkoneApp {
       await this.loadInitialPage();
 
       showSuccess('Done');
-      console.log('加载完成');
     } catch (error) {
       console.error('应用初始化失败:', error);
       showError('应用初始化失败，请刷新页面重试');
@@ -64,7 +63,6 @@ class MkoneApp {
 
     this.pages = allPages;
     this.pageManager.setPages(allPages);
-    console.log('所有页面列表:', this.pages);
 
     if (this.pages.length === 0) throw new Error('未检测到任何Markdown页面');
   }

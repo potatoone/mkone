@@ -170,8 +170,6 @@ export function setupLayout(
 
     // 绑定事件
     bindEvents();
-
-    console.log('✅ 布局初始化完成');
   }
 
   return { init };

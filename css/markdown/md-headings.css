@@ -29,7 +29,7 @@
 #markdown-container h6::before {
   content: "#";
   position: absolute;
-  left: -16px;
+  left: -0.6em;
   top: 0;
   color: var(--accent-m); /* #号颜色（建议用主题色） */
   font-weight: normal;

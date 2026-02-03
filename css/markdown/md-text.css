@@ -11,6 +11,7 @@
   color: var(--text-primary);
   overflow-wrap: break-word;
   font-size: 1.2rem; /* 标准字体大小，可根据需求调整 */
+  line-height: 1.5;
 }
 
 /* 链接样式 */
@@ -28,9 +29,7 @@
 
 
 
-/* ==============================================
-   列表
-============================================== */
+/* 列表 */
 #markdown-container ul,
 #markdown-container ol {
   padding-left: 2em;

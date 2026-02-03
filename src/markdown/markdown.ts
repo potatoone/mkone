@@ -121,15 +121,12 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
   markdownContainer.innerHTML = '';
   overviewContainer.innerHTML = '';
 
-  console.log('✅ 找到内容容器 #markdown-container 和 #overview');
-
   let requestUrl: string = '未知路径';
   const headings: Heading[] = [];
 
   try {
     if (markdownCache.has(file)) {
       const cached = markdownCache.get(file)!;
-      console.log(`✅ 从缓存加载内容: ${file}`);
       statusContainer.className = 'status';
       statusContainer.textContent = '';
       markdownContainer.innerHTML = cached.html;
@@ -144,7 +141,6 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
     }
 
     requestUrl = file.startsWith('./') ? file : `./docs/${file}`;
-    console.log(`📡 开始请求文件: ${requestUrl}`);
 
     const response = await fetch(requestUrl);
     if (!response.ok) {
@@ -156,7 +152,6 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
 
     // 解析 FrontMatter
     const { metadata, content } = parseFrontMatter(rawText);
-    console.log('📦 元数据:', metadata);
 
     const renderer = createCustomRenderer(headings);
     const html = await marked.parse(content, { renderer }); // 使用配置好的 marked 实例
@@ -171,7 +166,6 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
     });
     markdownContainer.innerHTML = html;
     markdownContainer.style.display = 'block';
-    console.log(`✅ 内容已渲染到 #markdown-container`);
 
     setupCodeCopy();
 
@@ -189,5 +183,4 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
 // 清除 Markdown 缓存
 export function clearMarkdownCache(): void {
   markdownCache.clear();
-  console.log('Markdown缓存已清除');
 }

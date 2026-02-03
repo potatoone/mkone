@@ -22,9 +22,7 @@ export function initTopbar(
   const html = document.documentElement;
   const exportManager = new ExportManager();
 
-  // 获取所有DOM元素（添加更详细的日志）
-  console.log('开始获取Topbar相关DOM元素...');
-  console.log('[initTopbar] 被调用，当前时间:', new Date().toISOString()); // 新增日志
+  // 获取所有DOM元素
   const backBtn = document.getElementById('backBtn') as HTMLButtonElement | null;
   const forwardBtn = document.getElementById('forwardBtn') as HTMLButtonElement | null;
   const searchBtn = document.getElementById('searchBtn') as HTMLButtonElement | null;
@@ -58,16 +56,6 @@ export function initTopbar(
     themePanel, exportPanel, searchArea, layoutPanel,
     decreaseFontSizeBtn, increaseFontSizeBtn, fontSizeDisplay, fontSelect
   };
-
-  const missingElements = Object.entries(requiredElements)
-    .filter(([_, element]) => !element)
-    .map(([name]) => name);
-
-  if (missingElements.length > 0) {
-    console.error('⚠️ 缺失必要的DOM元素:', missingElements);
-  } else {
-    console.log('✅ 所有必要DOM元素已成功获取');
-  }
 
   // 初始化按钮悬浮提示
   if (backBtn && forwardBtn) {
@@ -105,7 +93,6 @@ export function initTopbar(
     fontSizeDisplay && fontSelect && 
     marginBtns.length > 0
   ) {
-    console.log('开始初始化布局功能...');
     
     const layoutManager = setupLayout(
       html,
@@ -122,7 +109,6 @@ export function initTopbar(
       console.error('布局功能初始化失败:', error);
     });
     
-    console.log('✅ 布局功能初始化完成');
   } else {
     console.error('⚠️ 布局功能初始化失败：缺少必要元素');
   }
@@ -146,26 +132,21 @@ export function initTopbar(
   searchBtn?.addEventListener('click', handleClick(() => {
     onSearch(); // 第一步：调用外部传入的onSearch
     searchManager.toggle(); // 第二步：调用toggle()
-    console.log('[Topbar] 搜索按钮点击...');
   }));
 
   // 导航按钮事件绑定（点击后会自动更新提示）
   backBtn?.addEventListener('click', handleClick(() => {
-    console.log('[Topbar] 后退按钮点击');
     onBack();
   }));
 
   forwardBtn?.addEventListener('click', handleClick(() => {
-    console.log('[Topbar] 前进按钮点击');
     onForward();
   }));
 
   // 布局按钮事件绑定
   layoutBtn?.addEventListener('click', handleClick(() => {
-    console.log('[Topbar] 布局按钮点击');
   }));
 
-  console.log('✅ Topbar初始化完成');
   // 初始化页面标题更新逻辑
   if (pageTitle) {
     initPageTitleUpdater(pageTitle, pageManager);
