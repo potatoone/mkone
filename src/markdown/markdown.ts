@@ -116,7 +116,7 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
   overviewContainer.classList.remove('show');
 
   statusContainer.className = 'status loading';
-  statusContainer.textContent = 'Loading Documents ...';
+  statusContainer.textContent = 'Loading';
   markdownContainer.style.display = 'none';
   markdownContainer.innerHTML = '';
   overviewContainer.innerHTML = '';

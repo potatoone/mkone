@@ -1,0 +1,41 @@
+.search-bar button {
+  all: unset; /* 重置所有默认样式 */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px; /* 硬朗直角 */
+  color: var(--text-tertiary); /* 使用主文字色变量 */
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+  font-size: 20px; /* 图标略缩小 */
+  position: relative; /* 关键：给伪元素定位基准 */
+}
+
+/* 伪元素实现 X 号 */
+.search-bar button::before,
+.search-bar button::after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 2px;
+  background-color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+/* 第一条斜线（\） */
+.search-bar button::before {
+  transform: rotate(45deg);
+}
+
+/* 第二条斜线（/） */
+.search-bar button::after {
+  transform: rotate(-45deg);
+}
+
+.search-bar button:hover {
+  color: var(--hover-s);
+  background: var(--text-tertiary);
+}

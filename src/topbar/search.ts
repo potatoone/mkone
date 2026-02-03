@@ -1,9 +1,6 @@
 import { debounce, getElement, showError } from '../utils/utils';
 
-/**
- * Markdown 内容搜索管理器
- * 负责处理文档内搜索、高亮匹配结果及状态保存
- */
+/* Markdown 内容搜索 */
 export class MarkdownSearch {
   private searchArea: HTMLElement;
   private searchInput: HTMLInputElement;
@@ -19,29 +16,6 @@ export class MarkdownSearch {
     this.searchInput = getElement('#searchInput', HTMLInputElement)!;
     this.searchCloseBtn = getElement('#searchCloseBtn', HTMLButtonElement)!;
     this.resultInfo = getElement('#searchResultInfo', HTMLElement)!;
-  
-    // 读取本地存储的搜索状态（包含 isVisible）
-    const savedState = localStorage.getItem(SEARCH_STORAGE_KEY);
-    if (savedState) {
-      const { query, isVisible } = JSON.parse(savedState) as SearchState;
-      // 恢复输入框内容
-      this.searchInput.value = query;
-      // 恢复搜索区域显示状态
-      if (isVisible) {
-        this.searchArea.classList.add('show');
-      } else {
-        this.searchArea.classList.remove('show');
-      }
-      // 恢复关闭按钮状态（若有内容则显示）
-      if (query) {
-        this.searchCloseBtn.classList.remove('hidden');
-        this.performSearch(query);
-      }
-    } else {
-      // 无存储时默认隐藏
-      this.searchArea.classList.remove('show');
-    }
-
     this.init();
   }
 
@@ -185,7 +159,6 @@ export class MarkdownSearch {
   private clearSearch(): void {
     this.clearHighlights();
     this.resultInfo.innerHTML = '';
-    this.searchCloseBtn.classList.add('hidden');
   }
 
   // 手动控制显示

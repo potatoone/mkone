@@ -1,4 +1,9 @@
 /* 加载状态 */
+#status.status.loading {
+  display: flex; /* 加载时显示 */
+  color: var(--accent-m); /* 中性灰 */
+}
+
 .loading {
   display: flex;
   justify-content: center;

@@ -14,7 +14,7 @@
 
 /* 滚动条整体宽度 */
 .content-wrapper::-webkit-scrollbar {
-  width: 12px; /* 垂直滚动条宽度 */
+  width: 9px; /* 垂直滚动条宽度 */
 }
 
 #markdown-container {
@@ -34,3 +34,22 @@
   }
 }
 
+/* 定义滚动条的宽度和背景颜色 */
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* 定义滚动条滑块的样式 */
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-l); /* 使用 color.css 中的中等边框色变量 */
+}
+
+/* 滚动条默认透明 */
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+/* 鼠标悬停时显示滚动条滑块 */
+*:hover::-webkit-scrollbar-thumb {
+  background-color: var(--border-s); /* 使用 color.css 中的中等边框色变量 */
+}

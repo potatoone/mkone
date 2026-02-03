@@ -19,7 +19,6 @@
 @import url('./topbar/theme/botton.css');         /* 顶栏主题按钮 */
 
 @import url('./base/base.css');                   /* 基础样式 */
-@import url('./base/scrollbar.css');              /* 滚动条样式 */
 @import url('./base/loading.css');                /* 加载动画 */
 @import url('./base/toast.css');                  /* 提示框样式 */
 @import url('./base/print.css');                  /* 打印样式 */
@@ -28,15 +27,12 @@
 @import url('./color/color-dark.css');            /* 颜色深色 */
 
 @import url('./content/content.css');             /* 内容样式 */
-@import url('./content/search-area.css');         /* 搜索区样式 */
+@import url('./content/search.css');              /* 搜索区样式 */
+@import url('./content/searchclosebtn.css');      /* 搜索区关闭按钮 */
 @import url('./content/pagenav.css');             /* 页内导航 */
 @import url('./content/pagenavfooter.css');       /* 页内导航底部 */
 
-
-
 @import url('./markdown/overview.css');            /* 文件夹总览样式 */
-
-
 @import url('./markdown/md-hljs.css');            /* 代码高亮 */
 @import url('./markdown/md-headings.css');        /* 标题样式 */
 @import url('./markdown/md-text.css');            /* 文本样式 */

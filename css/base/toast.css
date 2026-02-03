@@ -9,12 +9,6 @@
   box-sizing: border-box;
 }
 
-/* 加载状态：显示并应用样式 */
-#status.status.loading {
-  display: flex; /* 加载时显示 */
-  color: #666; /* 中性灰 */
-}
-
 /* 错误状态：显示并应用样式 */
 #status.status.error {
   display: flex; /* 错误时显示 */
