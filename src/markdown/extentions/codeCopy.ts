@@ -6,16 +6,15 @@ interface CopyOptions {
 }
 
 /**
- * 为代码块添加复制功能（文字按钮版）
+ * 为代码块添加复制功能（文字按钮版）- 动态创建包裹div方案
  * @param options 配置项
  */
-export const setupCodeCopy = (options: CopyOptions = {}) => {
+export const setupCodeCopy = () => {
   const config = {
     containerSelector: '#markdown-container pre',
     buttonText: 'COPY',
     successText: 'COPIED',
     successDuration: 1500,
-    ...options
   };
 
   const init = () => {
@@ -26,18 +25,25 @@ export const setupCodeCopy = (options: CopyOptions = {}) => {
   };
 
   const addCopyButton = (block: HTMLElement) => {
-    if (block.querySelector('.code-copy-btn')) return;
+    // 检查是否已被包裹（避免重复处理）
+    if (block.parentElement?.classList.contains('code-block-wrapper')) return;
 
-    if (getComputedStyle(block).position === 'static') {
-      block.style.position = 'relative';
-    }
+    // 1. 创建包裹容器
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
 
+    // 2. 将pre移动到包裹容器中
+    block.parentNode?.insertBefore(wrapper, block);
+    wrapper.appendChild(block);
+
+    // 3. 创建复制按钮
     const button = document.createElement('button');
     button.className = 'code-copy-btn';
     button.type = 'button';
-    button.textContent = config.buttonText; // 显示文字
-    button.title = config.buttonText; // 悬停提示
+    button.textContent = config.buttonText;
+    button.title = config.buttonText;
 
+    // 4. 按钮点击事件
     button.addEventListener('click', async () => {
       try {
         await copyCode(block);
@@ -47,7 +53,8 @@ export const setupCodeCopy = (options: CopyOptions = {}) => {
       }
     });
 
-    block.appendChild(button);
+    // 5. 将按钮添加到包裹容器中（与pre平级）
+    wrapper.appendChild(button);
   };
 
   const copyCode = async (block: HTMLElement): Promise<void> => {
@@ -68,20 +75,16 @@ export const setupCodeCopy = (options: CopyOptions = {}) => {
       }
     }
 
-    // 传统方法（支持旧浏览器和沙箱环境）
-    const textarea = document.createElement('textarea');
-    textarea.value = codeContent;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-
-    try {
-      textarea.select();
-      const success = document.execCommand('copy');
-      if (!success) throw new Error('复制命令执行失败');
-    } finally {
-      document.body.removeChild(textarea);
-    }
+    // 补充传统复制方法（兜底）
+    const textArea = document.createElement('textarea');
+    textArea.value = codeContent;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    textArea.style.pointerEvents = 'none';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
   };
 
   const showSuccess = (button: HTMLButtonElement) => {
@@ -97,6 +100,7 @@ export const setupCodeCopy = (options: CopyOptions = {}) => {
     }, config.successDuration);
   };
 
+  // 页面加载完成后初始化
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

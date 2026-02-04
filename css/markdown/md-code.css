@@ -1,43 +1,45 @@
+/* 动态创建的包裹容器 */
+#markdown-container .code-block-wrapper {
+  position: relative; /* 作为按钮定位的参考 */
+  margin: 10px 0 20px 0; /* 保持原pre的间距 */
+}
 
-
-/* ==============================================
-   代码块
-============================================== */
+/* 代码块样式（移除自身margin，由包裹容器控制） */
 #markdown-container pre {
   padding: 16px;
   overflow: auto;
-  line-height: 1.45;
-  color: var(--text-primary);
-  background-color: var(--bg-secondary); /* 使用次背景色 */
-  border-radius: 1px;
-  margin-bottom: 16px;
-}
-
-#markdown-container code {
-  padding: 0.2em 0.4em;
-  margin: 0;
+  line-height: 1.4;
   font-size: 1.2rem;
-  background-color: var(--bg-secondary); /* 使用静音背景色 */
-  border-radius: 3px;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border-radius: 1px;
+  margin: 0; /* 移除margin，避免与容器间距叠加 */
 }
 
+/* 行内代码样式 */
+#markdown-container code {
+  padding: 0.1em 0.25em;
+  margin: 0.2em;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--hover-s);
+  border-radius: 1px;
+}
+
+/* 代码块内代码样式 */
 #markdown-container pre code {
   padding: 0;
-  background-color: transparent;
+  margin: 0;
   border: 0;
 }
 
-
-
-
-
-/* 复制按钮基础样式 */
+/* 复制按钮样式（相对于包裹容器定位） */
 .code-copy-btn {
   position: absolute;
   top: 8px;
   right: 8px;
   padding: 3px 8px;
-  font-size: 12px;
+  font-weight: 900;
+  font-size: 1rem;
   line-height: 1.4;
   cursor: pointer;
   background: var(--bg-primary);
@@ -45,18 +47,7 @@
   border-radius: 1px;
   opacity: 0;
   transition: all 0.2s ease;
-  color: var(--text-primary);
-}
-
-/* 成功状态样式（保持不变） */
-.code-copy-btn.success {
-  color: #fff;
-  background: #16d686;
-}
-
-/* 鼠标交互（保持不变） */
-#markdown-container pre:hover .code-copy-btn {
-  opacity: 1;
+  color: var(--hover-l);
 }
 
 /* 成功状态 */
@@ -65,7 +56,7 @@
   background: #16d686;
 }
 
-/* 鼠标交互 */
-#markdown-container pre:hover .code-copy-btn {
+/* 悬浮包裹容器时显示按钮（逻辑更简洁） */
+#markdown-container .code-block-wrapper:hover .code-copy-btn {
   opacity: 1;
 }

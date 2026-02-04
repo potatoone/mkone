@@ -18,10 +18,10 @@
 }
 
 .search-bar {
-  display: flex; height: 45px;
+  display: flex; height: 42px;
   align-items: center;
   justify-content: center;
-  padding: 5px 5px 5px 15px;
+  padding: 5px 5px 5px 10px;
   background: var(--bg-secondary); /* 使用次背景色变量 */
   border: 1px solid var(--border-s); /* 使用小尺寸边框色变量 */
   border-radius: 2px; /* 硬朗直角 */
@@ -42,7 +42,7 @@
 }
 
 .search-bar #searchInput {
-  flex-grow: 1;
+  flex: 1;
   border: none;
   background: transparent;
   font-size: 14px;

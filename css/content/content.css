@@ -2,7 +2,7 @@
 .content {
   display: flex;
   box-sizing: border-box;
-  overflow-x: auto; /* 防止窄窗口下内容挤压 */
+  overflow: auto; /* 防止窄窗口下内容挤压 */
 }
 
 .content-wrapper {
@@ -14,7 +14,7 @@
 
 /* 滚动条整体宽度 */
 .content-wrapper::-webkit-scrollbar {
-  width: 9px; /* 垂直滚动条宽度 */
+  width: 10px; /* 垂直滚动条宽度 */
 }
 
 #markdown-container {
@@ -26,9 +26,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .content-wrapper {
-    padding: var(--wrapper-padding);
-  }
   .content-wrapper::-webkit-scrollbar {
     width: 6px;
   }
@@ -36,7 +33,7 @@
 
 /* 定义滚动条的宽度和背景颜色 */
 ::-webkit-scrollbar {
-    width: 3px;
+    height: 9px;
 }
 
 /* 定义滚动条滑块的样式 */
@@ -47,9 +44,4 @@
 /* 滚动条默认透明 */
 ::-webkit-scrollbar-thumb {
   background-color: transparent;
-}
-
-/* 鼠标悬停时显示滚动条滑块 */
-*:hover::-webkit-scrollbar-thumb {
-  background-color: var(--border-s); /* 使用 color.css 中的中等边框色变量 */
 }
