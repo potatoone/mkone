@@ -1,7 +1,7 @@
 /* 动态创建的包裹容器 */
 #markdown-container .code-block-wrapper {
   position: relative; /* 作为按钮定位的参考 */
-  margin: 10px 0 20px 0; /* 保持原pre的间距 */
+  margin: 0 0 20px 0; /* 保持原pre的间距 */
 }
 
 /* 代码块样式（移除自身margin，由包裹容器控制） */
@@ -9,11 +9,11 @@
   padding: 16px;
   overflow: auto;
   line-height: 1.4;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--text-primary);
   background-color: var(--bg-secondary);
   border-radius: 1px;
-  margin: 0; /* 移除margin，避免与容器间距叠加 */
+  margin: 0;
 }
 
 /* 行内代码样式 */
@@ -48,6 +48,11 @@
   opacity: 0;
   transition: all 0.2s ease;
   color: var(--hover-l);
+}
+
+.code-copy-btn:hover {
+  background: var(--hover-s);
+  color: var(--text-primary);
 }
 
 /* 成功状态 */

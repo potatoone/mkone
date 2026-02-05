@@ -151,9 +151,10 @@ export function setupLayout(
     }
   }
 
-  // ---------------------- 初始化 ----------------------
-  async function init() {
-    // 恢复布局相关状态
+// 布局初始化 
+
+async function init() {
+    // 1. 恢复基础布局状态（字体大小、内边距等）
     const savedFontSize = localStorage.getItem(CONFIG.storageKeys.fontSize);
     const savedPadding = localStorage.getItem(CONFIG.storageKeys.selectedPadding) as PaddingPreset;
     const savedNavVisible = localStorage.getItem(CONFIG.storageKeys.navVisible);
@@ -163,14 +164,17 @@ export function setupLayout(
     setPadding(savedPadding || 'medium');
     updateNavVisibility();
 
-    // 初始化字体（加载列表 + 渲染DOM）
-    const fontList = await fontConfigManager.loadFontList();
-    renderFontOptions(fontList);
-    updateFontSelectorDisplay();
+    // 初始化并应用字体
+    await fontConfigManager.init(html); 
 
-    // 绑定事件
+    // 3. 获取列表并渲染 UI
+    const fontList = fontConfigManager.getFontList(); 
+    renderFontOptions(fontList);
+    updateFontSelectorDisplay(); // 确保文字显示的是恢复后的字体名
+
+    // 4. 绑定事件
     bindEvents();
-  }
+}
 
   return { init };
 }

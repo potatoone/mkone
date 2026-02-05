@@ -11,7 +11,7 @@
 #markdown-container h4,
 #markdown-container h5,
 #markdown-container h6 {
-  margin: 15px 0 0 0;
+  margin: 0 0 7px 0;
   font-weight: 600;
   line-height: 1.25;
   color: var(--text-primary);

@@ -172,6 +172,7 @@
   box-shadow: 0 4px 12px var(--shadow-1);
   z-index: 1;
   transition: max-height 0.3s ease;
+  scrollbar-width: none;
 }
 
 .layout-panel .font-select.open .dropdown-menu {

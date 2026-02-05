@@ -1,14 +1,14 @@
 /* 内容边距 */
 :root {
   /* 桌面端 padding 预设 */
-  --padding-small-desk: 1rem 3rem 2rem 3rem;
-  --padding-medium-desk: 2rem 6rem 3rem 6rem;
-  --padding-large-desk: 2rem 12rem 4rem 12rem;
+  --padding-small-desk: 2.5rem calc(3rem - 10px) 2rem 3rem;
+  --padding-medium-desk: 3rem calc(6rem - 10px) 3rem 6rem;
+  --padding-large-desk: 2rem calc(15rem - 10px) 4rem 15rem;
   
   /* 移动端 padding 预设 */
-  --padding-small-mob: 1rem 2rem 4rem 2rem;
-  --padding-medium-mob: 1.5rem 2.5rem 4rem 2.5rem;;
-  --padding-large-mob: 2rem 4rem 4rem 4rem;
+  --padding-small-mob: 1.5rem calc(2rem - 10px) 4rem 2rem;
+  --padding-medium-mob: 1.5rem calc(2.5rem - 10px) 4rem 2.5rem;;
+  --padding-large-mob: 2rem calc(4rem - 10px) 4rem 4rem;
 }
 
 /* 默认边距 */

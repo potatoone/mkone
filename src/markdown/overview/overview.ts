@@ -139,7 +139,7 @@ const renderOverview = (
       listContent.innerHTML = sortItems(overviewItems, sortState).map(item => `
         <div class="overview-item">
           <a href="${item.file}" class="internal-link doc-title" data-file="${item.file}">${item.title}</a>
-          <div class="doc-desc">${item.desc || '无描述'}</div>
+          <div class="doc-desc">${item.desc || 'No Description'}</div>
           <div class="doc-time">${(item.time)}</div>
         </div>
       `).join('');
@@ -162,7 +162,7 @@ export const renderOverView = async (
   const overviewItems: OverviewItem[] = [];
   for (const { title, file } of allFiles) {
     const meta = await loadMetadata(file);
-    overviewItems.push({ title, file, time: meta?.time ?? null, desc: meta?.desc || null });
+    overviewItems.push({ title, file, time: meta?.time ?? 'No Time Mark', desc: meta?.desc || null });
   }
 
   renderOverview(overviewItems, isFirstLevel, { type: 'time', asc: false }, dirDesc);
