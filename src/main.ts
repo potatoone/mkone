@@ -72,7 +72,7 @@ class MkoneApp {
       initTopbar(
         () => this.pageManager.loadPrevPage(), // 第1个参数：后退功能（对应backBtn）
         () => this.pageManager.loadNextPage(), // 第2个参数：前进功能（对应forwardBtn）
-        () => console.log('执行搜索逻辑'), // 第3个参数：搜索功能（对应searchBtn）
+        () => null, // 第3个参数：搜索功能（对应searchBtn）
         this.pageManager // 传入实例，用于更新按钮提示
       );
   }

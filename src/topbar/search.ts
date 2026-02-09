@@ -1,156 +1,145 @@
 import { debounce, getElement, showError } from '../utils/utils';
 
-/* Markdown 内容搜索 */
+// 存储键常量
+const SEARCH_STORAGE_KEY = 'mkone_search_state';
+// 补充缺失的接口定义（避免JSON序列化时报错）
+interface SearchState {
+  query: string;
+  isVisible: boolean;
+}
+
 export class MarkdownSearch {
-  private searchArea: HTMLElement;
-  private searchInput: HTMLInputElement;
-  private searchCloseBtn: HTMLButtonElement;
-  private resultInfo: HTMLElement;
-  private markdownContainer: HTMLElement;
+  private searchArea!: HTMLElement;
+  private searchInput!: HTMLInputElement;
+  private searchCloseBtn!: HTMLButtonElement;
+  private resultInfo!: HTMLElement;
+  private markdownContainer!: HTMLElement;
   private currentHighlights: HTMLElement[] = [];
 
   constructor() {
-    // 确保元素获取正确
-    this.markdownContainer = getElement('#markdown-container', HTMLElement)!;
-    this.searchArea = getElement('#search-area', HTMLElement)!;
-    this.searchInput = getElement('#searchInput', HTMLInputElement)!;
-    this.searchCloseBtn = getElement('#searchCloseBtn', HTMLButtonElement)!;
-    this.resultInfo = getElement('#searchResultInfo', HTMLElement)!;
+    // 初始化DOM元素（兼容元素不存在的情况）
+    this.markdownContainer = getElement('#markdown-container', HTMLElement) || document.createElement('div');
+    this.searchArea = getElement('#search-area', HTMLElement) || document.createElement('div');
+    this.searchInput = getElement('#searchInput', HTMLInputElement) || document.createElement('input');
+    this.searchCloseBtn = getElement('#searchCloseBtn', HTMLButtonElement) || document.createElement('button');
+    this.resultInfo = getElement('#searchResultInfo', HTMLElement) || document.createElement('div');
     this.init();
   }
 
   private init(): void {
-    this.bindEvents();
+    this.searchCloseBtn.classList.add('hidden');
     this.observeSearchAreaVisibility();
-    this.searchArea.addEventListener('click', (e) => e.stopPropagation());
+    this.bindEvents();
+    this.searchArea.addEventListener('click', e => e.stopPropagation());
   }
 
   private observeSearchAreaVisibility(): void {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach(mutation => {
-        if (mutation.attributeName === 'class') {
-          const isVisible = this.searchArea.classList.contains('show');
-          if (isVisible) {
-            this.searchInput.focus();
-          }
-        }
-      });
-    });
-  
-    observer.observe(this.searchArea, { attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(([{ attributeName }]) => {
+      if (attributeName === 'class' && this.searchArea.classList.contains('show')) {
+        this.searchInput.focus();
+      }
+    }).observe(this.searchArea, { attributes: true, attributeFilter: ['class'] });
   }
 
   private bindEvents(): void {
-    const debouncedSearch = debounce((query: string) => {
-      this.performSearch(query);
-    }, 300);
-  
-    // 初始化隐藏关闭按钮
-    this.searchCloseBtn.classList.add('hidden');
-  
-    this.searchInput.addEventListener('input', (e) => {
-      const query = (e.target as HTMLInputElement).value.trim();
-      
-      // 保存搜索内容和显示状态（始终更新，不删除）
-      const currentState: SearchState = {
-        query,
-        isVisible: this.searchArea.classList.contains('show') // 保留当前显示状态
-      };
-      localStorage.setItem(SEARCH_STORAGE_KEY, JSON.stringify(currentState));
-  
-      if (query) {
-        debouncedSearch(query);
+    const debouncedSearch = debounce((q: string) => this.performSearch(q), 300);
+    
+    this.searchInput.addEventListener('input', e => {
+      const q = (e.target as HTMLInputElement).value.trim();
+      this.saveSearchState(q);
+      if (q) {
+        debouncedSearch(q);
         this.searchCloseBtn.classList.remove('hidden');
       } else {
         this.clearSearch();
         this.searchCloseBtn.classList.add('hidden');
       }
     });
-  
-    // 关闭按钮仅清空内容，不隐藏搜索区域
+
     this.searchCloseBtn.addEventListener('click', () => {
       this.searchInput.value = '';
-      this.clearSearch(); // 清除高亮和结果信息
-      this.searchCloseBtn.classList.add('hidden'); // 隐藏关闭按钮（因内容为空）
+      this.clearSearch();
+      this.searchCloseBtn.classList.add('hidden');
     });
-  
-    this.searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        this.hide(); // ESC 键仍保留隐藏功能
-      }
+
+    this.searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') this.hide();
     });
   }
 
-  private performSearch(query: string): void {
-    if (!this.markdownContainer) {
+  private performSearch(q: string): void {
+    // 防御性检查：容器不存在直接返回
+    if (!this.markdownContainer || this.markdownContainer.tagName === 'DIV' && !this.markdownContainer.id) {
       showError('找不到内容容器');
       return;
     }
 
+    // 清空之前的高亮
     this.clearHighlights();
-
-    if (!query.trim()) {
+    
+    // 空查询直接清空结果提示
+    if (!q.trim()) {
       this.resultInfo.textContent = '';
       return;
     }
 
     try {
-      const searchRegex = new RegExp(query, 'gi');
+      // 构建正则（处理特殊字符，避免正则语法错误）
+      const safeQuery = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(safeQuery, 'gi');
       const textContent = this.markdownContainer.textContent || '';
-      const matches = textContent.match(searchRegex);
-  
+      const matches = textContent.match(regex);
+
+      // 无匹配结果
       if (!matches || matches.length === 0) {
         this.resultInfo.textContent = '未找到结果';
-        return;
+        return; // 提前终止，避免执行后续高亮逻辑
       }
-  
-      this.highlightMatches(query);
+
+      // 有匹配结果：高亮+更新提示
+      this.highlightMatches(q);
       this.resultInfo.textContent = `找到 ${matches.length} 个结果`;
-  
-    } catch (error) {
-      console.error('搜索失败:', error);
+    } catch (err) {
+      console.error('搜索失败:', err);
       showError('搜索语法错误');
     }
   }
 
-  private highlightMatches(query: string): void {
-    const walker = document.createTreeWalker(
-      this.markdownContainer,
-      NodeFilter.SHOW_TEXT,
-      null
-    );
-
-    const textNodes: Text[] = [];
-    let node: Node | null;
+  private highlightMatches(q: string): void {
+    const walker = document.createTreeWalker(this.markdownContainer, NodeFilter.SHOW_TEXT);
+    const nodes: Text[] = [];
+    let n: Node | null;
     
-    while (node = walker.nextNode()) {
-      textNodes.push(node as Text);
+    // 收集所有文本节点
+    while (n = walker.nextNode()) {
+      nodes.push(n as Text);
     }
 
-    textNodes.forEach(textNode => {
-      const text = textNode.textContent || '';
-      const regex = new RegExp(`(${query})`, 'gi');
+    // 高亮匹配的文本
+    nodes.forEach(node => {
+      const txt = node.textContent || '';
+      const safeQuery = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const reg = new RegExp(`(${safeQuery})`, 'gi');
       
-      if (regex.test(text)) {
-        const highlightedText = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+      if (reg.test(txt)) {
         const span = document.createElement('span');
-        span.innerHTML = highlightedText;
-        textNode.parentNode?.replaceChild(span, textNode);
+        span.innerHTML = txt.replace(reg, '<mark class="search-highlight">$1</mark>');
+        node.parentNode?.replaceChild(span, node);
         
-        const highlights = span.querySelectorAll('mark.search-highlight');
-        highlights.forEach(highlight => {
-          this.currentHighlights.push(highlight as HTMLElement);
+        // 收集高亮元素，方便后续清除
+        span.querySelectorAll('mark.search-highlight').forEach(hl => {
+          this.currentHighlights.push(hl as HTMLElement);
         });
       }
     });
   }
 
   private clearHighlights(): void {
-    this.currentHighlights.forEach(highlight => {
-      const parent = highlight.parentNode;
+    this.currentHighlights.forEach(hl => {
+      const parent = hl.parentNode;
       if (parent) {
-        parent.replaceChild(document.createTextNode(highlight.textContent || ''), highlight);
-        parent.normalize();
+        parent.replaceChild(document.createTextNode(hl.textContent || ''), hl);
+        parent.normalize(); // 合并相邻文本节点
       }
     });
     this.currentHighlights = [];
@@ -158,38 +147,35 @@ export class MarkdownSearch {
 
   private clearSearch(): void {
     this.clearHighlights();
-    this.resultInfo.innerHTML = '';
+    this.resultInfo.textContent = '';
   }
 
-  // 手动控制显示
+  private saveSearchState(q?: string): void {
+    try {
+      const state: SearchState = {
+        query: q || this.searchInput.value.trim(),
+        isVisible: this.searchArea.classList.contains('show')
+      };
+      localStorage.setItem(SEARCH_STORAGE_KEY, JSON.stringify(state));
+    } catch (err) {
+      console.warn('保存搜索状态失败:', err);
+    }
+  }
+
   public show(): void {
     this.searchArea.classList.add('show');
     this.searchInput.focus();
-    // 保存显示状态到本地存储
-    const currentState: SearchState = {
-      query: this.searchInput.value.trim(),
-      isVisible: true
-    };
-    localStorage.setItem(SEARCH_STORAGE_KEY, JSON.stringify(currentState));
+    this.saveSearchState();
   }
   
   public hide(): void {
     this.searchArea.classList.remove('show');
     this.clearSearch();
-    // 保存隐藏状态到本地存储
-    const currentState: SearchState = {
-      query: this.searchInput.value.trim(),
-      isVisible: false
-    };
-    localStorage.setItem(SEARCH_STORAGE_KEY, JSON.stringify(currentState));
+    this.saveSearchState();
   }
 
   public toggle(): void {
-    if (this.searchArea.classList.contains('show')) {
-      this.hide();
-    } else {
-      this.show();
-    }
+    this.searchArea.classList.contains('show') ? this.hide() : this.show();
   }
 
   public focus(): void {
@@ -201,18 +187,7 @@ export class MarkdownSearch {
   }
 }
 
-/**
- * 初始化 Markdown 搜索功能
- */
-export function setupSearch(): MarkdownSearch {
+// 初始化函数（确保全局可调用）
+export const setupSearch = (): MarkdownSearch => {
   return new MarkdownSearch();
-}
-
-// 存储键定义
-const SEARCH_STORAGE_KEY = 'mkone_search_state';
-
-// 搜索状态接口
-interface SearchState {
-  query: string;
-  isVisible: boolean;
-}
+};

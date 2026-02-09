@@ -1,6 +1,6 @@
 /* 面板通用样式（Material Design 风格） */
 .layout-panel {
-  position: fixed; display: none;
+  position: fixed;
   top: 50px; right: 10px;
   width: 220px;
   padding: 20px;
@@ -8,11 +8,16 @@
   border: 1px solid var(--border-s);
   box-shadow: 0 0 10px var(--shadow-1); 
   border-radius: 2px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s;
 }
 
 .layout-panel.show {
-  display: block;
-  animation: menuFadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 /* 面板内分区标题 */

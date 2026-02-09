@@ -7,7 +7,7 @@
   padding: 0;
   z-index: 2;
   user-select: none; /* 禁用文本选择 */
-  border-bottom: 0.1px solid var(--border-m); /* 使用中等边框色 */
+  border-bottom: 1px solid var(--border-m); /* 使用中等边框色 */
 }
 
 .topbar .left,

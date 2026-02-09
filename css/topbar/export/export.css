@@ -1,7 +1,7 @@
 
 /* 导出菜单容器样式（合并并优化） */
 .export-panel {
-  position: fixed; display: none;
+  position: fixed;
   top: 50px; right: 10px;
   width: 180px;
   padding: 6px 0;
@@ -9,12 +9,17 @@
   border: 1px solid var(--border-s);
   box-shadow: 0 0 10px var(--shadow-1); 
   border-radius: 2px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s;
 }
 
 /* 菜单显示状态 */
 .export-panel.show {
-  display: block;
-  animation: menuFadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 /* 菜单项基础样式 */
