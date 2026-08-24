@@ -17,8 +17,9 @@
 安装 Node 22 版本，项目下终端执行
 
 ```bash
-# 1. 全局安装 TypeScript
+# 1. 全局安装 TypeScript\vite
 npm install -g typescript
+npm install vite
 
 # 2. 初始化 Vite 项目
 npm create vite@latest
