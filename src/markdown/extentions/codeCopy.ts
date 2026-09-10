@@ -5,6 +5,8 @@ interface CopyOptions {
   successText?: string;
 }
 
+import { detectLanguage } from './highlight'; // 代码块自动检测语言（用于语言标记）
+
 /**
  * 为代码块添加复制功能（文字按钮版）- 动态创建包裹div方案
  * @param options 配置项
@@ -42,6 +44,18 @@ export const setupCodeCopy = () => {
     button.type = 'button';
     button.textContent = config.buttonText;
     button.title = config.buttonText;
+
+    // 3.5 添加语言标记（显式标注的语言类名优先，未标注时用高亮阶段的自动检测结果）
+    const codeEl = block.querySelector('code');
+    const codeText = codeEl?.textContent ?? '';
+    const lang = codeEl?.className.match(/language-([\w-]+)/)?.[1]
+      ?? detectLanguage(codeText);
+    if (lang) {
+      const badge = document.createElement('span');
+      badge.className = 'code-lang-badge';
+      badge.textContent = lang;
+      wrapper.appendChild(badge);
+    }
 
     // 4. 按钮点击事件
     button.addEventListener('click', async () => {

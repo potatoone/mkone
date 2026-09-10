@@ -11,7 +11,12 @@
   color: var(--text-primary);
   overflow-wrap: break-word;
   font-size: 1.2rem; /* 标准字体大小，可根据需求调整 */
-  line-height: 1.5;
+  line-height: 1.7; /* 放宽行高，提升长文阅读舒适度 */
+}
+
+/* 段落间距 */
+#markdown-container p {
+  margin: 0 0 0.75em 0;
 }
 
 /* 链接样式 */
@@ -27,13 +32,31 @@
   text-decoration: underline;
 }
 
+/* 失效链接（目标文档不存在）：提示但不可跳转 */
+#markdown-container a.link-broken {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
 
 
 /* 列表 */
 #markdown-container ul,
 #markdown-container ol {
   padding-left: 2em;
-  margin-bottom: 16px;
+  margin: 0 0 1em 0;
+}
+
+/* 列表项之间的呼吸感 */
+#markdown-container li {
+  margin: 0.25em 0;
+}
+
+/* 列表项内嵌套列表：去掉多余外边距，视觉上贴近父项 */
+#markdown-container li > ul,
+#markdown-container li > ol {
+  margin: 0.25em 0;
 }
 
 #markdown-container ul {
@@ -45,10 +68,47 @@
 }
 
 #markdown-container li > p {
-  margin-top: 16px;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
   color: var(--text-primary); /* 使用主文字色 */
 }
 
 #markdown-container p {
   color: var(--text-primary); /* 使用主文字色 */
+}
+
+/* 行内强调 */
+#markdown-container strong {
+  font-weight: 700;
+}
+
+#markdown-container del {
+  color: var(--text-muted);
+}
+
+/* 分隔线 */
+#markdown-container hr {
+  height: 1px;
+  margin: 2em 0;
+  border: none;
+  background-color: var(--border-s);
+}
+
+/* 脚注 */
+#markdown-container .footnotes {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px solid var(--border-m);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+#markdown-container .footnotes ol {
+  padding-left: 1.5em;
+  margin-bottom: 0;
+}
+
+#markdown-container sup a,
+#markdown-container .footnotes a {
+  text-decoration: none;
 }

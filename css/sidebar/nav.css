@@ -28,16 +28,27 @@
   line-height: 30px;
 }
 
-/* 子级目录（二级目录）样式 */
+/* 子级目录（二级目录）样式：容器自身不缩进，缩进统一由 depth-N 控制 */
 .group-dir {
   margin: 0;
-  padding-left: 12px;
+  padding-left: 0;
 }
 
 /* 子级文件（二级文件）样式 */
 .group-file {
   margin: 0;
-  padding-left: 12px;
+}
+
+/* 深层嵌套目录（三级及以下）：仅降级字号与颜色，不改变缩进基准 */
+.group-dir .group-dir .group-header,
+.group-dir .group-dir .root-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.group-dir .group-dir .inner-file {
+  font-size: 13px;
 }
 
 /* 最内层文件（三级及以下）样式 */
@@ -45,7 +56,6 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary); /* 使用次文字色 */
-  padding-left: 16px;
   cursor: pointer;
   height: 30px;
   line-height: 30px;
@@ -53,6 +63,28 @@
   position: relative;
   transition: color 0.2s ease;
 }
+
+/*
+  层级缩进：同一深度的「文件」与「目录标题」使用完全相同的左缩进，
+  保证三级及更深的文档与文件夹左边界对齐（每级 12px）
+*/
+.depth-1 > .group-header,
+.nav-file.depth-1 { padding-left: 12px; }
+
+.depth-2 > .group-header,
+.nav-file.depth-2 { padding-left: 24px; }
+
+.depth-3 > .group-header,
+.nav-file.depth-3 { padding-left: 36px; }
+
+.depth-4 > .group-header,
+.nav-file.depth-4 { padding-left: 48px; }
+
+.depth-5 > .group-header,
+.nav-file.depth-5 { padding-left: 60px; }
+
+.depth-6 > .group-header,
+.nav-file.depth-6 { padding-left: 72px; }
 
 /* 根级目录标题（带展开箭头） */
 .root-header {
@@ -146,4 +178,19 @@
 .root-header::after,
 .group-header::after {
   right: 20px; /* 子级箭头右移 3px（稍小一点） */
+}
+
+/*
+  文件名过长时省略显示
+  文件项高度固定（如 .inner-file 为 30px），white-space 默认换行会导致
+  第二行文字溢出并与相邻菜单项重叠，统一改为单行省略
+*/
+.root-file,
+.root-sub-file,
+.group-file,
+.inner-file {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px; /* 避免省略号贴边 */
 }

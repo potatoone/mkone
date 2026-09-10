@@ -1,4 +1,5 @@
 import type { NavRoot, NavDir, NavFile } from './navTypes';
+import { storage, STORAGE_KEYS } from '../utils/utils';
 
 // 统一移除所有激活样式
 function removeAllActiveClasses() {
@@ -68,7 +69,7 @@ export function navRender(
   // 渲染一级目录下的子文件
   function renderRootSubFile(file: NavFile): HTMLParagraphElement {
     const el = document.createElement('p');
-    el.className = 'root-sub-file nav-file';
+    el.className = 'root-sub-file nav-file depth-1';
     el.textContent = file.title;
     el.dataset.file = file.file;
     el.onclick = () => {
@@ -80,10 +81,26 @@ export function navRender(
     return el;
   }
 
-  // 渲染组目录（带箭头）
-  function renderGroupDir(dir: NavDir): HTMLDetailsElement {
+  // 渲染目录内的文件（二级及更深层级）
+  function renderInnerFile(file: NavFile, depth: number): HTMLParagraphElement {
+    const el = document.createElement('p');
+    // depth 与同级目录一致，保证文字左对齐
+    el.className = `group-file nav-file inner-file depth-${depth}`;
+    el.textContent = file.title;
+    el.dataset.file = file.file;
+    el.onclick = () => {
+      removeAllActiveClasses();
+      el.classList.add('active');
+      onLeafClick(file.file);
+      updateVerticalLinePosition(el);
+    };
+    return el;
+  }
+
+  // 渲染组目录（带箭头，支持任意深度嵌套）
+  function renderGroupDir(dir: NavDir, depth = 1): HTMLDetailsElement {
     const dirEl = document.createElement('details');
-    dirEl.className = 'group-dir';
+    dirEl.className = `group-dir depth-${depth}`;
     dirEl.open = false;
     dirEl.dataset.initial = 'true';
 
@@ -111,20 +128,13 @@ export function navRender(
     const content = document.createElement('div');
     content.className = 'group-content';
 
+    // 递归渲染：文件 → 文件项，目录 → 嵌套的可折叠目录
     dir.children.forEach(child => {
-      const el = document.createElement('p');
-      el.className = 'group-file nav-file inner-file';
-      el.textContent = child.title;
       if (child.type === 'file') {
-        el.dataset.file = child.file;
-        el.onclick = () => {
-          removeAllActiveClasses();
-          el.classList.add('active');
-          onLeafClick(child.file);
-          updateVerticalLinePosition(el);
-        };
+        content.appendChild(renderInnerFile(child, depth + 1));
+      } else {
+        content.appendChild(renderGroupDir(child, depth + 1));
       }
-      content.appendChild(el);
     });
 
     dirEl.appendChild(content);
@@ -180,7 +190,7 @@ export function navRender(
   
     root.children.forEach(child => {
       content.appendChild(
-        child.type === 'file' ? renderRootSubFile(child) : renderGroupDir(child)
+        child.type === 'file' ? renderRootSubFile(child) : renderGroupDir(child, 1)
       );
     });
   
@@ -208,9 +218,10 @@ export function navRender(
     });
 
     requestAnimationFrame(() => {
-      const currentPage = localStorage.getItem('mkoneCurrentPage');
+      const currentPage = storage.get<string>(STORAGE_KEYS.currentPage, '');
       if (currentPage) {
-        const targetEl = navContainer.querySelector(`.nav-file[data-file="${currentPage}"]`);
+        // CSS.escape 防止文件名特殊字符破坏选择器
+        const targetEl = navContainer.querySelector(`.nav-file[data-file="${CSS.escape(currentPage)}"]`);
         if (targetEl) {
           removeAllActiveClasses();
           targetEl.classList.add('active');
@@ -230,19 +241,19 @@ export function navRender(
   }, 100);
 }
 
-// 查找可见的激活元素（防止父目录折叠隐藏）
+// 查找可见的激活元素（沿祖先链向上，遇到折叠目录则用其标题代替）
 function findVisibleTarget(activeEl: HTMLElement): HTMLElement {
-  const rootDir = activeEl.closest('details.root-dir') as HTMLDetailsElement | null;
-  if (rootDir && !rootDir.open) {
-    const rootHeader = rootDir.querySelector('summary.root-header') as HTMLElement;
-    if (rootHeader) return rootHeader;
+  let result: HTMLElement = activeEl;
+
+  let node: HTMLElement | null = activeEl.parentElement;
+  while (node) {
+    if (node instanceof HTMLDetailsElement && !node.open) {
+      const summary = node.querySelector<HTMLElement>(':scope > summary');
+      // 越靠外层越优先（外层折叠时内层本身也看不见）
+      if (summary) result = summary;
+    }
+    node = node.parentElement;
   }
 
-  const groupDir = activeEl.closest('details.group-dir') as HTMLDetailsElement | null;
-  if (groupDir && !groupDir.open) {
-    const groupHeader = groupDir.querySelector('summary.group-header') as HTMLElement;
-    if (groupHeader) return groupHeader;
-  }
-
-  return activeEl;
+  return result;
 }

@@ -6,18 +6,21 @@
   display: block;
   width: 100%;
   overflow: auto;
-  margin-bottom: 16px;
+  margin: 0 0 1.25em 0;
   border-collapse: collapse;
+  border: 1px solid var(--border-m); /* 外框使用中等边框色 */
+  font-size: 1.15rem;
 }
 
 #markdown-container th,
 #markdown-container td {
-  padding: 6px 13px;
-  border: 1px solid var(--border-m); /* 使用中等边框色 */
+  padding: 8px 14px;
+  border: 1px solid var(--border-s); /* 内部网格线使用浅边框色，降低压迫感 */
 }
 
 #markdown-container th {
   font-weight: 600;
+  text-align: left;
   background-color: var(--bg-secondary); /* 使用次背景色 */
   color: var(--text-primary); /* 使用主文字色 */
 }

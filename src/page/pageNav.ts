@@ -1,8 +1,8 @@
 // pagenav.ts
 
-import { renderMarkdown } from '../markdown/markdown';
 import type { Heading, RenderMarkdownResult } from '../markdown/markdown';
 import type { MarkdownMetadata } from '../markdown/overview/viewParser';
+import { expandHeadingChain } from '../markdown/extentions/foldableHeadings'; // 标题折叠
 // 引入scrolltotop.ts中的核心方法和工具函数
 import { 
   getScrollContainer, 
@@ -22,8 +22,8 @@ const STORAGE_KEYS = {
 const getEl = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
 
 // 初始化页面导航（对外暴露的核心方法）
-export async function initPageNavigation(filePath: string) {
-  const renderResult: RenderMarkdownResult = await renderMarkdown(filePath);
+// renderResult 由调用方传入（loadPage 已渲染过），避免同一页面渲染两次
+export async function initPageNavigation(renderResult: RenderMarkdownResult) {
   const { headings, metadata } = renderResult;
   
   if (!headings.length) return;
@@ -63,6 +63,7 @@ function waitImagesLoaded(timeout = 5000): Promise<void> {
 // 导航锚点滚动（基于滚动容器）
 function scrollToHeading(id: string, cb?: () => void) {
   navLockId = id;
+  expandHeadingChain(id); // 展开目标标题所在的所有折叠区块
   waitImagesLoaded().then(() => {
     const el = document.getElementById(id);
     const scrollContainer = getScrollContainer(); // 调用scrolltotop.ts中的工具函数

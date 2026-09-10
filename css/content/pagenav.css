@@ -2,7 +2,7 @@
 #pageNav {
   position: relative;
   flex: none;
-  width: 210px;
+  width: var(--pagenav-width, 210px); /* 宽度由拖拽调整并持久化 */
   overflow: hidden;
   padding: 10px 10px 56px 16px;
   right: 0; 

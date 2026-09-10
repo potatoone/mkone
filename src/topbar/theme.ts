@@ -19,12 +19,12 @@ export function setupTheme(
 ) {
   // 调整顺序后的主题配置
   const baseThemes: Theme[] = [
-    { name: 'classic', color: '#2196f3', title: '经典主题' },
-    { name: 'gray', color: '#969696', title: '灰色主题' },
-    { name: 'book', color: '#ccb67d', title: '书本主题' },
-    { name: 'green', color: '#86efac', title: '绿色主题' },
-    { name: 'purple', color: '#c084fc', title: '紫色主题' },
-    { name: 'rose', color: '#d34c96', title: '玫红主题' }
+    { name: 'classic', color: '#2563eb', title: '经典主题' },
+    { name: 'gray', color: '#3d3d45', title: '灰色主题' },
+    { name: 'book', color: '#ea580c', title: '书本主题' },
+    { name: 'green', color: '#2d8a78', title: '绿色主题' },
+    { name: 'purple', color: '#8040c0', title: '紫色主题' },
+    { name: 'rose', color: '#b04068', title: '玫红主题' }
   ];
 
   // DOM 与状态初始化

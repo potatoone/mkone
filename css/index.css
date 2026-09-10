@@ -19,6 +19,7 @@
 @import url('./topbar/theme/botton.css');         /* 顶栏主题按钮 */
 
 @import url('./base/base.css');                   /* 基础样式 */
+@import url('./base/resize.css');                 /* 侧栏拖拽调宽 */
 @import url('./base/loading.css');                /* 加载动画 */
 @import url('./base/toast.css');                  /* 提示框样式 */
 @import url('./base/print.css');                  /* 打印样式 */
@@ -35,12 +36,14 @@
 @import url('./markdown/overview.css');            /* 文件夹总览样式 */
 @import url('./markdown/md-hljs.css');            /* 代码高亮 */
 @import url('./markdown/md-headings.css');        /* 标题样式 */
+@import url('./markdown/md-fold.css');            /* 标题折叠样式 */
 @import url('./markdown/md-text.css');            /* 文本样式 */
 @import url('./markdown/md-table.css');           /* 表格样式 */
 @import url('./markdown/md-code.css');            /* 代码样式 */
 @import url('./markdown/md-details.css');         /* 详情块样式 */
 @import url('./markdown/md-admonition.css');      /* 提示块样式 */
 @import url('./markdown/md-tabs.css');            /* 标签页样式 */
+@import url('./markdown/md-mermaid.css');         /* Mermaid图表样式 */
 @import url('./markdown/md-se.css');              /* 特殊元素 */
 
 

@@ -4,124 +4,77 @@ import { parseOrderAndName } from './docsParser';
 let navTree: NavRoot[] = [];
 let allPages: string[] = [];
 
+// 中间结构：用于把扁平的路径列表还原成任意深度的目录树
+interface TmpNode {
+  dirs: Map<string, TmpNode>;
+  files: { name: string; rel: string }[];
+}
+
+const createTmpNode = (): TmpNode => ({ dirs: new Map(), files: [] });
+
+/**
+ * 根据 md 路径列表构建导航树（支持任意目录深度）
+ * @param paths 形如 "/docs/01_入门/01_项目介绍.md" 的路径集合
+ */
 export function buildNavTree(paths: string[]): void {
   navTree = [];
   allPages = [];
 
-  // 1. 处理docs根目录直接文件（如 docs/04-test.md）
-  const rootFiles: NavRoot[] = [];
+  const root = createTmpNode();
+  const rootFiles: { name: string; rel: string }[] = [];
+
+  // 1. 把扁平路径还原成树形中间结构
   paths.forEach(path => {
-    const normalizedPath = path.replace(/^\//, ''); 
-    const parts = normalizedPath.split('/').filter(p => p);
-    if (parts.length === 2 && parts[0] === 'docs') { 
-      const fileName = parts[1]; // 保留原始文件名（含 .md 后缀）
-      const { order, name } = parseOrderAndName(fileName); // 仅处理标题，不影响路径
-      rootFiles.push({
-        type: 'file',
-        title: name, // 标题无 .md 后缀（如 "04-test"）
-        order: order,
-        file: fileName // 路径保留 .md 后缀（如 "04-test.md"）
-      });
-      allPages.push(fileName);
+    const rel = path.replace(/^\/?docs\//, ''); // "01_入门/03_使用/01_基本说明.md"
+    const parts = rel.split('/').filter(Boolean);
+    if (!parts.length) return;
+
+    const fileName = parts.pop()!;
+    if (!parts.length) {
+      // docs 根目录下的直接文件（如 docs/03_关于.md）
+      rootFiles.push({ name: fileName, rel: fileName });
+      return;
     }
+
+    let cursor = root;
+    parts.forEach(segment => {
+      if (!cursor.dirs.has(segment)) cursor.dirs.set(segment, createTmpNode());
+      cursor = cursor.dirs.get(segment)!;
+    });
+    cursor.files.push({ name: fileName, rel });
   });
 
-  // 2. 处理docs下的一级目录（如 docs/02-进阶/xxx）
-  const rootDirs: Record<string, string[]> = {};
-  paths.forEach(path => {
-    const normalizedPath = path.replace(/^\//, ''); 
-    const parts = normalizedPath.split('/').filter(p => p);
-    if (parts.length >= 3 && parts[0] === 'docs') { 
-      const rootName = parts[1]; 
-      rootDirs[rootName] = rootDirs[rootName] || [];
-      rootDirs[rootName].push(normalizedPath); // 存储标准化后的路径（如 "docs/02-进阶/01-第一个/02-test2.md"）
-    }
-  });
+  // 2. 递归转换为 NavFile / NavDir（每层按 order 排序）
+  const toFileNode = (name: string, rel: string): NavFile => {
+    const { order, name: title } = parseOrderAndName(name);
+    allPages.push(rel);
+    return { type: 'file', title, order, file: rel };
+  };
 
-  // 转换为NavRoot[]（目录节点）（修改）
-  const rootDirNodes: NavRoot[] = Object.keys(rootDirs).map(rootName => {
-    const rootPaths = rootDirs[rootName];
-    const { order, name: rootTitle } = parseOrderAndName(rootName);
-  
-    // 新增：完整路径（如 "docs/02-进阶"）
-    const rootFullPath = `docs/${rootName}`; 
-  
-    const rootFilesInDir: string[] = []; 
-    const groupDirs: Record<string, string[]> = {}; 
-  
-    rootPaths.forEach(normalizedPath => { 
-      const parts = normalizedPath.split('/').filter(p => p);
-      if (parts.length === 3) { 
-        rootFilesInDir.push(normalizedPath); 
-      } else if (parts.length >= 4) { 
-        const groupName = parts[2]; 
-        groupDirs[groupName] = groupDirs[groupName] || [];
-        groupDirs[groupName].push(normalizedPath); 
-      }
-    });
-  
-    const children: (NavDir | NavFile)[] = [];
-  
-    // 添加当前目录下的文件（root-file）
-    rootFilesInDir.forEach(normalizedPath => {
-      const parts = normalizedPath.split('/').filter(p => p);
-      const fileName = parts[2]; // "01-第一个.md"
-      const { order, name: fileTitle } = parseOrderAndName(fileName);
-      children.push({
-        type: 'file',
-        title: fileTitle,
-        file: `${rootName}/${fileName}`, // 路径："02-进阶/01-第一个.md"（正确）
-        order: order
-      });
-      allPages.push(`${rootName}/${fileName}`);
-    });
-  
-    // 添加子目录（group-dir）（修改）
-    Object.keys(groupDirs).forEach(groupName => {
-      const groupPaths = groupDirs[groupName];
-      const { order: groupOrder, name: groupTitle } = parseOrderAndName(groupName);
-  
-      // 子目录下的文件（关键修复：将文件路径添加到 allPages）
-      const groupChildren: NavFile[] = groupPaths.map(normalizedPath => {
-        const parts = normalizedPath.split('/').filter(p => p);
-        const fullRelativePath = normalizedPath.replace('docs/', ''); 
-        const fileName = parts[3]; 
-        const { order: fileOrder, name: fileTitle } = parseOrderAndName(fileName);
-        const fileNode: NavFile = {
-          type: 'file',
-          title: fileTitle,
-          file: fullRelativePath,
-          order: fileOrder
-        };
-        allPages.push(fileNode.file); 
-        return fileNode;
-      });
-  
-      // group目录的完整路径（基于root的完整路径拼接）
-      const groupFullPath = `${rootFullPath}/${groupName}`; // 如 "docs/02-进阶/01-第一个"
-  
-      const groupDir: NavDir = {
+  const toNodes = (node: TmpNode, fullPath: string): (NavDir | NavFile)[] => {
+    const nodes: (NavDir | NavFile)[] = [];
+
+    node.files.forEach(f => nodes.push(toFileNode(f.name, f.rel)));
+
+    node.dirs.forEach((child, segment) => {
+      const { order, name: title } = parseOrderAndName(segment);
+      const childPath = `${fullPath}/${segment}`;
+      nodes.push({
         type: 'dir',
-        title: groupTitle,
-        order: groupOrder,
-        children: groupChildren,
-        path: groupFullPath
-      };
-      children.push(groupDir);
+        title,
+        order,
+        path: childPath, // 如 "docs/03_技术部文档/05_技术部规范"
+        children: toNodes(child, childPath)
+      });
     });
-  
-    // 当前目录节点（修改path字段）
-    return {
-      type: 'dir',
-      title: rootTitle,
-      order: order,
-      children: children.sort((a, b) => a.order - b.order),
-      path: rootFullPath // 改为完整路径（关键）
-    };
-  });
 
-  // 合并根文件和根目录，按order排序
-  navTree = [...rootFiles, ...rootDirNodes].sort((a, b) => a.order - b.order);
+    return nodes.sort((a, b) => a.order - b.order);
+  };
+
+  navTree = [
+    ...rootFiles.map(f => toFileNode(f.name, f.rel)),
+    ...toNodes(root, 'docs')
+  ].sort((a, b) => a.order - b.order);
 }
 
 export function getNavTree(): NavRoot[] { return [...navTree]; }

@@ -1,5 +1,4 @@
-import { marked } from 'marked';
-import type { TokenizerExtension, RendererExtension, TokensList, Token } from 'marked';
+import type { TokenizerExtension, RendererExtension, TokensList } from 'marked';
 
 // 自定义 token 类型
 interface TabsToken {
@@ -7,20 +6,35 @@ interface TabsToken {
   raw: string;
   tabs: {
     title: string;
-    tokens: TokensList; // ✅ 必须是 TokensList
+    tokens: TokensList;
   }[];
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 // Tokenizer
+// 定界符使用 +++（CommonMark 中 +++ 不是任何标准语法，避免与 setext 标题 === 竞争）
 const tabsTokenizer: TokenizerExtension = {
   name: 'tabs',
   level: 'block',
   start(src) {
-    return src.match(/^===\s*tabs\s*$/m)?.index;
+    return src.match(/^\+\+\+\s*tabs\s*$/m)?.index;
   },
   tokenizer(src) {
-    const match = /^===\s*tabs\s*\n([\s\S]+?)\n===/.exec(src);
-    if (!match) return;
+    const match = /^\+\+\+\s*tabs[ \t]*\n([\s\S]+?)\n\+\+\+[ \t]*(?:\r?\n|$)/.exec(src);
+    if (!match) {
+      // 检测到开头但未闭合时给出警告，避免静默失效
+      if (/^\+\+\+\s*tabs[ \t]*(?:\r?\n|$)/.test(src)) {
+        console.warn('[mkone] 检测到 tabs 块缺少闭合 +++，该块将按普通文本解析');
+      }
+      return;
+    }
 
     const raw = match[0];
     const inner = match[1].trim();
@@ -30,7 +44,7 @@ const tabsTokenizer: TokenizerExtension = {
       const [titleLine, ...contentLines] = block.split(/\r?\n/);
       const title = titleLine.trim();
       const content = contentLines.join('\n').trim();
-      const tokens = this.lexer.blockTokens(content); // TokensList 类型
+      const tokens = this.lexer.blockTokens(content);
       return { title, tokens };
     });
 
@@ -45,15 +59,14 @@ const tabsTokenizer: TokenizerExtension = {
 // Renderer
 const tabsRenderer: RendererExtension = {
   name: 'tabs',
-  // 关键：指定 renderer 的 this 类型为 RendererThis，获取当前实例上下文
-  renderer(this: any, token) {  // 添加 this 参数
+  renderer(token) {
     const t = token as TabsToken;
 
     const headers = t.tabs.map((tab, i) =>
-      `<button class="tab-header${i === 0 ? ' active' : ''}" data-index="${i}">${tab.title}</button>`
+      `<button class="tab-header${i === 0 ? ' active' : ''}" data-index="${i}">${escapeHtml(tab.title)}</button>`
     ).join('');
 
-    // ✅ 使用当前实例的 parser，继承所有插件配置（包括高亮）
+    // 使用当前实例的 parser，继承所有插件配置（包括高亮）
     const contents = t.tabs.map((tab, i) =>
       `<div class="tab-content${i === 0 ? ' active' : ''}">${this.parser.parse(tab.tokens)}</div>`
     ).join('');
@@ -74,23 +87,30 @@ export function markedTabs() {
   };
 }
 
-document.addEventListener('click', (e: MouseEvent) => {
-  const target = e.target as HTMLElement;
-  if (target.classList.contains('tab-header')) {
-    const container = target.closest('.tab-container');
-    if (!container) return;
+// Tab 切换交互（事件委托，仅在浏览器环境初始化一次）
+let tabsInteractionBound = false;
 
-    container.querySelectorAll<HTMLElement>('.tab-header, .tab-content').forEach(el => el.classList.remove('active'));
-    target.classList.add('active');
+export function setupTabsInteraction(): void {
+  if (tabsInteractionBound) return;
+  tabsInteractionBound = true;
 
-    const idxStr = target.getAttribute('data-index');
-    if (!idxStr) return;
-    const idx = parseInt(idxStr, 10);
-    if (isNaN(idx)) return;
+  document.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('tab-header')) {
+      const container = target.closest('.tab-container');
+      if (!container) return;
 
-    const contents = container.querySelectorAll<HTMLElement>('.tab-content');
-    const content = contents[idx];
-    if (content) content.classList.add('active');
-  }
-});
+      container.querySelectorAll<HTMLElement>('.tab-header, .tab-content').forEach(el => el.classList.remove('active'));
+      target.classList.add('active');
 
+      const idxStr = target.getAttribute('data-index');
+      if (!idxStr) return;
+      const idx = parseInt(idxStr, 10);
+      if (isNaN(idx)) return;
+
+      const contents = container.querySelectorAll<HTMLElement>('.tab-content');
+      const content = contents[idx];
+      if (content) content.classList.add('active');
+    }
+  });
+}

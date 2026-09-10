@@ -1,0 +1,73 @@
+/* ==============================================
+   侧栏宽度（可拖拽调整）
+============================================== */
+
+:root {
+  --sidebar-width: 250px; /* 左侧边栏宽度 */
+  --pagenav-width: 210px; /* 右侧页内导航宽度 */
+}
+
+/* 拖拽手柄（作为 flex 子项，净宽度为 0，居中压在边界线上） */
+.resize-handle {
+  flex: none;
+  width: 6px;
+  align-self: stretch;
+  margin-left: -3px;
+  margin-right: -3px;
+  position: relative;
+  cursor: col-resize;
+  background: transparent;
+  touch-action: none; /* 触控拖拽时不触发页面滚动 */
+  z-index: 20;
+}
+
+/* 手柄指示线（默认隐藏，悬停/聚焦时显示） */
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.resize-handle:hover::after,
+.resize-handle:focus-visible::after {
+  background: var(--accent-m);
+}
+
+.resize-handle:focus-visible {
+  outline: none;
+}
+
+/* 拖拽进行中：锁定光标与文本选择，关闭宽度过渡避免跟手延迟 */
+body.is-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+body.is-resizing .sidebar,
+body.is-resizing #pageNav {
+  transition: none !important;
+}
+
+/* 侧栏收起时不提供拖拽 */
+.sidebar.collapsed .resize-handle-left {
+  display: none;
+}
+
+/* 浮层布局下（窄屏）不提供拖拽 */
+@media (max-width: 1100px) {
+  .resize-handle-right {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .resize-handle-left {
+    display: none;
+  }
+}

@@ -41,8 +41,8 @@ export const initPageTitleUpdater = (pageTitle: HTMLElement | null, pageManager:
   const originalLoadPage = pageManager.loadPage;
   pageManager.loadPage = async function(fileName) {
     try {
-      // 保留原始调用
-      await originalLoadPage.call(this, fileName);
+      // 保留原始调用（透传返回值，保持 Promise<boolean> 契约）
+      return await originalLoadPage.call(this, fileName);
     } finally {
       // 延迟执行确保内容已渲染
       setTimeout(() => {

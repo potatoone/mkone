@@ -7,6 +7,8 @@
     "strict": true,                // 开启严格类型检查
     "esModuleInterop": true,       // 允许兼容 CommonJS 模块
     "moduleResolution": "bundler", // 使用 bundler 模块解析策略（兼容 Vite）
+    "skipLibCheck": true,          // 跳过第三方 .d.ts 检查（type-fest 引用了更高版本 lib 的类型）
+    "types": ["node", "vite/client"], // 显式声明类型来源（node:test 测试 / Vite 环境变量）
     "allowJs": true,               // 允许 JS 文件被编译
     "sourceMap": true              // 生成 source map 方便调试
   },

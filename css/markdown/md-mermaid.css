@@ -1,0 +1,17 @@
+/* ==============================================
+   Mermaid 图表
+============================================== */
+#markdown-container .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1em 0 1.25em;
+  padding: 12px;
+  overflow-x: auto;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-s);
+}
+
+#markdown-container .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}

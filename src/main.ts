@@ -1,11 +1,9 @@
-import { getDOMElements, showError, showSuccess } from './utils/utils';
+import { getDOMElements, showError, showSuccess, storage, STORAGE_KEYS } from './utils/utils';
 import type { DOMElements } from './utils/types';
 import { PageManager } from './page/pageManager';
 import { initSidebar } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';
-import { initPageNavigation } from './page/pageNav';
-
-const STORAGE_KEY = 'mkoneCurrentPage';
+import { initResizeHandles } from './utils/resize';
 
 class MkoneApp {
   private pageManager: PageManager;
@@ -15,6 +13,7 @@ class MkoneApp {
   constructor() {
     this.pageManager = new PageManager();
     this.pageManager.setupInternalLinkHandling(); //内部链接处理
+    initResizeHandles(); // 左右侧栏宽度拖拽调整（含宽度恢复）
     this.init();
     this.handlePopState = this.handlePopState.bind(this);
     window.addEventListener('popstate', this.handlePopState);
@@ -39,23 +38,19 @@ class MkoneApp {
 
   private async waitForDOM(): Promise<void> {
     return new Promise(resolve => {
-      if (document.readyState === 'complete') {
+      // interactive：DOM 已解析完成（module 脚本常见状态），可直接继续
+      if (document.readyState !== 'loading') {
         resolve();
       } else {
-        // 修复类型不匹配问题
         document.addEventListener('DOMContentLoaded', () => resolve());
       }
     });
   }
 
   private async initSidebar(): Promise<void> {
+    // loadPage 内部已统一完成渲染、页内导航与状态更新
     const allPages = await initSidebar(fileName => {
-      this.pageManager.loadPage(fileName).then(() => {
-        // 确保在页面加载后调用 initPageNavigation
-        initPageNavigation(fileName).catch(err => {
-          console.error('页内导航初始化失败:', err);
-        });
-      }).catch(err => {
+      this.pageManager.loadPage(fileName).catch(err => {
         console.error('侧边栏点击加载失败:', err);
         showError(`加载页面失败: ${fileName}`);
       });
@@ -78,25 +73,14 @@ class MkoneApp {
   }
 
   private async loadInitialPage(): Promise<void> {
-    const savedPage = localStorage.getItem(STORAGE_KEY);
+    const savedPage = storage.get<string>(STORAGE_KEYS.currentPage, '');
     const targetPage = savedPage && this.pages.includes(savedPage) ? savedPage : this.pages[0];
-    await this.pageManager.loadPage(targetPage).then(() => {
-      // 确保在初始页面加载后调用 initPageNavigation
-      initPageNavigation(targetPage).catch(err => {
-        console.error('页内导航初始化失败:', err);
-      });
-    });
+    await this.pageManager.loadPage(targetPage);
   }
 
   private handlePopState(event: PopStateEvent) {
     if (event.state?.fileName) {
-      localStorage.setItem(STORAGE_KEY, event.state.fileName);
-      this.pageManager.loadPage(event.state.fileName).then(() => {
-        // 确保在历史记录页面加载后调用 initPageNavigation
-        initPageNavigation(event.state.fileName).catch(err => {
-          console.error('页内导航初始化失败:', err);
-        });
-      }).catch(err => {
+      this.pageManager.loadPage(event.state.fileName).catch(err => {
         console.error('历史记录加载失败:', err);
         showError(`加载历史页面失败: ${event.state.fileName}`);
       });

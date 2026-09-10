@@ -1,27 +1,43 @@
+/* 代码等宽字体（md-headings.css 中 * 通配字体覆盖，这里恢复） */
+#markdown-container pre,
+#markdown-container code,
+#markdown-container kbd {
+  font-family: 'Cascadia Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  font-variant-ligatures: none;
+}
+
 /* 动态创建的包裹容器 */
 #markdown-container .code-block-wrapper {
   position: relative; /* 作为按钮定位的参考 */
-  margin: 0 0 20px 0; /* 保持原pre的间距 */
+  margin: 0 0 1.25em 0; /* 保持原pre的间距 */
 }
 
 /* 代码块样式（移除自身margin，由包裹容器控制） */
 #markdown-container pre {
   padding: 16px;
   overflow: auto;
-  line-height: 1.4;
-  font-size: 1.25rem;
+  line-height: 1.6;
+  font-size: 1.15rem;
+  tab-size: 4;
   color: var(--text-primary);
   background-color: var(--bg-secondary);
+  border: 1px solid var(--border-s);
   border-radius: 1px;
   margin: 0;
 }
 
+/* 代码块滚动条更细，避免喧宾夺主 */
+#markdown-container pre::-webkit-scrollbar {
+  height: 6px;
+}
+
 /* 行内代码样式 */
 #markdown-container code {
-  padding: 0.1em 0.25em;
-  margin: 0.2em;
+  padding: 0.15em 0.4em;
+  margin: 0 0.1em;
+  font-size: 0.9em;
   background-color: var(--bg-secondary);
-  border: 1px solid var(--hover-s);
+  border: 1px solid var(--border-s);
   border-radius: 1px;
 }
 
@@ -29,7 +45,10 @@
 #markdown-container pre code {
   padding: 0;
   margin: 0;
+  font-size: inherit;
   border: 0;
+  border-radius: 0;
+  background: none;
 }
 
 /* 复制按钮样式（相对于包裹容器定位） */
@@ -43,7 +62,7 @@
   line-height: 1.4;
   cursor: pointer;
   background: var(--bg-primary);
-  border: none;
+  border: 1px solid var(--border-s);
   border-radius: 1px;
   opacity: 0;
   transition: all 0.2s ease;
@@ -59,6 +78,27 @@
 .code-copy-btn.success {
   color: #fff;
   background: #16d686;
+  border-color: transparent;
+}
+
+/* 语言标记（相对于包裹容器定位，位于右下角） */
+.code-lang-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  font-family: 'Cascadia Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-s);
+  border-radius: 1px;
+  pointer-events: none; /* 不阻挡代码区交互 */
+  user-select: none;
 }
 
 /* 悬浮包裹容器时显示按钮（逻辑更简洁） */

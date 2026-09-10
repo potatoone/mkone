@@ -66,12 +66,13 @@ export function initTopbar(
     // 这里假设页面切换后会执行回调，若没有可在loadPage后调用
     const originalLoadPage = pageManager.loadPage;
     pageManager.loadPage = async function(fileName) {
-      // 先执行原加载逻辑
-      await originalLoadPage.call(this, fileName);
+      // 先执行原加载逻辑（透传返回值，保持 Promise<boolean> 契约）
+      const ok = await originalLoadPage.call(this, fileName);
       // 页面加载完成后，更新按钮悬浮提示
       if (backBtn && forwardBtn) {
         pageManager.updateButtonTitles(backBtn, forwardBtn);
       }
+      return ok;
     };
   }
 

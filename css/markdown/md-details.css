@@ -8,7 +8,7 @@
 /* 外层容器基础样式 */
 #markdown-container details {
   margin: 1em 0;
-  border: 2px solid var(--text-muted); /* 容器边框 */
+  border: 1px solid var(--border-m); /* 容器边框 */
 }
 
 /* 标签样式 (summary) */
@@ -43,7 +43,7 @@
   color: #fff; /* 标签文字色 */
 }
 #markdown-container details[open] {
-  border: 2px solid var(--accent-l); /* 标签边框 */
+  border-color: var(--accent-l); /* 标签边框 */
 }
 
 /* 隐藏原生三角标 */

@@ -1,36 +1,42 @@
-/* 经典色主题 - 夜间模式 */
+/* 阴影色 */
+:root[theme-dark] {
+  --shadow-1: rgba(0, 0, 0, 0.2);
+  --shadow-2: rgba(0, 0, 0, 0.3);
+}
+
+/* 经典蓝主题 - 夜间模式 */
 :root[data-theme="classic"][theme-dark] {
-  /* 背景色，参考日间模式，保持层级感，颜色加深 */
-  --bg-primary: #000000; /* 主背景色设为纯黑 */
-  --bg-secondary: #121212;
-  --bg-tertiary: #212121;
-  --bg-muted: #1e1e1e;
+  /* 背景色 */
+  --bg-primary: #0c1929;
+  --bg-secondary: #162032;
+  --bg-tertiary: #1e293b;
+  --bg-muted: #1e293b;
 
-  /* 文字色，参考日间模式，保持层级感，颜色变亮 */
-  --text-primary: #ffffff; /* 主文字色设为纯白 */
-  --text-secondary: #e0e0e0;
-  --text-tertiary: #bdbdbd;
-  --text-muted: #9e9e9e;
-  
-  /* 悬浮色，参考日间模式，使用蓝色系强调交互 */
-  --hover-s: #212121;
-  --hover-m: #303030;
-  --hover-l: #424242;
+  /* 文字色 */
+  --text-primary: #e0f2fe;
+  --text-secondary: color-mix(in srgb, #e0f2fe 65%, #7dd3fc);
+  --text-tertiary: #7dd3fc;
+  --text-muted: color-mix(in srgb, #7dd3fc 65%, #0c1929);
 
-  /* 激活色，参考日间模式，保持蓝色系 */
-  --active-s: #448aff;
-  --active-m: #2196f3;
-  --active-l: #1976d2;
+  /* 悬浮色 */
+  --hover-s: #1e293b;
+  --hover-m: #334155;
+  --hover-l: color-mix(in srgb, #334155 70%, #e0f2fe);
 
-  /* 边框色，参考日间模式，保持灰色系 */
-  --border-s: #303030;
-  --border-m: #424242;
-  --border-l: #616161;
-  
-  /* 强调色，参考日间模式，保持蓝色系 */
-  --accent-s: #448aff;
-  --accent-m: #2196f3;
-  --accent-l: #1976d2;
+  /* 激活色 */
+  --active-s: #0ea5e9;
+  --active-m: #38bdf8;
+  --active-l: #7dd3fc;
+
+  /* 边框色 */
+  --border-s: #2c4060;
+  --border-m: #334155;
+  --border-l: #7dd3fc;
+
+  /* 强调色 */
+  --accent-s: #7dd3fc;
+  --accent-m: #38bdf8;
+  --accent-l: #0ea5e9;
 }
 
 /* 灰色主题 - 夜间模式 */
@@ -39,174 +45,171 @@
   --bg-primary: #18181b;
   --bg-secondary: #27272a;
   --bg-tertiary: #3f3f46;
-  --bg-muted: #27272a;
+  --bg-muted: #3f3f46;
 
   /* 文字色 */
   --text-primary: #f9fafb;
-  --text-secondary: #e5e7eb;
-  --text-tertiary: #9ca3af;
-  --text-muted: #6b7280;
-  
+  --text-secondary: color-mix(in srgb, #f9fafb 65%, #8b8b94);
+  --text-tertiary: #8b8b94;
+  --text-muted: color-mix(in srgb, #8b8b94 65%, #18181b);
+
   /* 悬浮色 */
   --hover-s: #3f3f46;
   --hover-m: #52525b;
-  --hover-l: #71717a;
+  --hover-l: color-mix(in srgb, #52525b 70%, #f9fafb);
 
   /* 激活色 */
-  --active-s: #52525b;
-  --active-m: #71717a;
-  --active-l: #a1a1aa;
+  --active-s: #6b6b74;
+  --active-m: #8b8b94;
+  --active-l: #b0b0b8;
 
   /* 边框色 */
   --border-s: #3f3f46;
   --border-m: #52525b;
   --border-l: #ffffff14;
-  
+
   /* 强调色 */
-  --accent-s: #a1a1aa;
-  --accent-m: #71717a;
-  --accent-l: #52525b;
+  --accent-s: #b0b0b8;
+  --accent-m: #8b8b94;
+  --accent-l: #6b6b74;
 }
 
-
-/* 古书色主题 - 夜间模式 */
+/* 橙色主题 - 夜间模式 */
 :root[data-theme="book"][theme-dark] {
   /* 背景色 */
-  --bg-primary: #2a2016;
-  --bg-secondary: #3a2d1e;
-  --bg-tertiary: #4a3a28;
-  --bg-muted: #32281b;
+  --bg-primary: #1a1510;
+  --bg-secondary: #261e14;
+  --bg-tertiary: #332818;
+  --bg-muted: #332818;
 
   /* 文字色 */
-  --text-primary: #e6dcb9;
-  --text-secondary: #d9c89e;
-  --text-tertiary: #ccb67d;
-  --text-muted: #bfa660;
-  
+  --text-primary: #fde8d0;
+  --text-secondary: color-mix(in srgb, #fde8d0 65%, #d99560);
+  --text-tertiary: #d99560;
+  --text-muted: color-mix(in srgb, #d99560 65%, #1a1510);
+
   /* 悬浮色 */
-  --hover-s: #4a3a28;
-  --hover-m: #5a4731;
-  --hover-l: #6a543a;
+  --hover-s: #332818;
+  --hover-m: #403020;
+  --hover-l: color-mix(in srgb, #403020 70%, #fde8d0);
 
   /* 激活色 */
-  --active-s: #5a4731;
-  --active-m: #8e6f4a;
-  --active-l: #6d5236;
+  --active-s: #7c4a20;
+  --active-m: #fb923c;
+  --active-l: #fdba74;
 
   /* 边框色 */
-  --border-s: #4a3a28;
-  --border-m: #5a4731;
-  --border-l: #8e6f4a;
-  
+  --border-s: #4a3828;
+  --border-m: #5c4838;
+  --border-l: #fb923c;
+
   /* 强调色 */
-  --accent-s: #5a4731;
-  --accent-m: #8e6f4a;
-  --accent-l: #6d5236;
+  --accent-s: #d99560;
+  --accent-m: #fb923c;
+  --accent-l: #fdba74;
 }
 
-/* 绿色主题 - 夜间模式（极致压暗） */
+/* 青绿色主题 - 夜间模式 */
 :root[data-theme="green"][theme-dark] {
   /* 背景色 */
-  --bg-primary: #031007;
-  --bg-secondary: #0a1a0d;
-  --bg-tertiary: #0e2413;
-  --bg-muted: #0a1a0d;
+  --bg-primary: #1a2e2c;
+  --bg-secondary: #243836;
+  --bg-tertiary: #2d4240;
+  --bg-muted: #2d4240;
 
   /* 文字色 */
-  --text-primary: #dcfce7;
-  --text-secondary: #bbf7d0;
-  --text-tertiary: #86efac;
-  --text-muted: #4ade80;
+  --text-primary: #d4e8e4;
+  --text-secondary: color-mix(in srgb, #d4e8e4 65%, #7ab8ad);
+  --text-tertiary: #7ab8ad;
+  --text-muted: color-mix(in srgb, #7ab8ad 65%, #1a2e2c);
 
   /* 悬浮色 */
-  --hover-s: #0e4f24;
-  --hover-m: #166534;
-  --hover-l: #16a34a;
+  --hover-s: #2d4240;
+  --hover-m: #364d4a;
+  --hover-l: color-mix(in srgb, #364d4a 70%, #d4e8e4);
 
   /* 激活色 */
-  --active-s: #166534;
-  --active-m: #16a34a;
-  --active-l: #22c55e;
+  --active-s: #4a7a70;
+  --active-m: #7ab8ad;
+  --active-l: #5a9e92;
 
   /* 边框色 */
-  --border-s: #0e4f24;
-  --border-m: #166534;
-  --border-l: #16a34a;
+  --border-s: #364d4a;
+  --border-m: #4a6a60;
+  --border-l: #7ab8ad;
 
   /* 强调色 */
-  --accent-s: #86efac;
-  --accent-m: #4ade80;
-  --accent-l: #22c55e;
+  --accent-s: #7ab8ad;
+  --accent-m: #5a9e92;
+  --accent-l: #4a8a7e;
 }
 
-
-/* 紫色主题 - 夜间模式（极致压暗） */
+/* 紫色主题 - 夜间模式 */
 :root[data-theme="purple"][theme-dark] {
   /* 背景色 */
-  --bg-primary: #17082a;
-  --bg-secondary: #24113d;
-  --bg-tertiary: #322054;
-  --bg-muted: #24113d;
+  --bg-primary: #1a1030;
+  --bg-secondary: #231840;
+  --bg-tertiary: #2d204e;
+  --bg-muted: #2d204e;
 
   /* 文字色 */
-  --text-primary: #f3e8ff;
-  --text-secondary: #e9d5ff;
-  --text-tertiary: #d8b4fe;
-  --text-muted: #c084fc;
+  --text-primary: #e8ddf0;
+  --text-secondary: color-mix(in srgb, #e8ddf0 65%, #b39ddb);
+  --text-tertiary: #b39ddb;
+  --text-muted: color-mix(in srgb, #b39ddb 65%, #1a1030);
 
   /* 悬浮色 */
-  --hover-s: #4c1d95;
-  --hover-m: #5b21b6;
-  --hover-l: #6d28d9;
+  --hover-s: #2d204e;
+  --hover-m: #382860;
+  --hover-l: color-mix(in srgb, #382860 70%, #e8ddf0);
 
   /* 激活色 */
-  --active-s: #5b21b6;
-  --active-m: #6d28d9;
-  --active-l: #7c3aed;
+  --active-s: #6a30a0;
+  --active-m: #8b5cf5;
+  --active-l: #7048e0;
 
   /* 边框色 */
-  --border-s: #4c1d95;
-  --border-m: #5b21b6;
-  --border-l: #6d28d9;
+  --border-s: #403060;
+  --border-m: #4a3870;
+  --border-l: #b39ddb;
 
   /* 强调色 */
-  --accent-s: #d8b4fe;
-  --accent-m: #a855f7;
-  --accent-l: #9333ea;
+  --accent-s: #b39ddb;
+  --accent-m: #8b5cf5;
+  --accent-l: #7048e0;
 }
 
-
-/* 玫红主题 - 夜间模式（极致压暗） */
+/* 玫红主题 - 夜间模式 */
 :root[data-theme="rose"][theme-dark] {
   /* 背景色 */
-  --bg-primary: #2e0f1a;
-  --bg-secondary: #44172d;
-  --bg-tertiary: #5a1d3d;
-  --bg-muted: #44172d;
+  --bg-primary: #281218;
+  --bg-secondary: #351820;
+  --bg-tertiary: #422028;
+  --bg-muted: #422028;
 
   /* 文字色 */
-  --text-primary: #ffe4e6;
-  --text-secondary: #fecdd3;
-  --text-tertiary: #fda4af;
-  --text-muted: #fb7185;
+  --text-primary: #fce4ec;
+  --text-secondary: color-mix(in srgb, #fce4ec 65%, #e080a0);
+  --text-tertiary: #e080a0;
+  --text-muted: color-mix(in srgb, #e080a0 65%, #281218);
 
   /* 悬浮色 */
-  --hover-s: #9f1239;
-  --hover-m: #be123c;
-  --hover-l: #e11d48;
+  --hover-s: #422028;
+  --hover-m: #502830;
+  --hover-l: color-mix(in srgb, #502830 70%, #fce4ec);
 
   /* 激活色 */
-  --active-s: #be123c;
-  --active-m: #e11d48;
-  --active-l: #f43f5e;
+  --active-s: #8a3060;
+  --active-m: #e05590;
+  --active-l: #d04080;
 
   /* 边框色 */
-  --border-s: #9f1239;
-  --border-m: #be123c;
-  --border-l: #e11d48;
+  --border-s: #552e40;
+  --border-m: #603848;
+  --border-l: #e080a0;
 
   /* 强调色 */
-  --accent-s: #fda4af;
-  --accent-m: #fb7185;
-  --accent-l: #f43f5e;
+  --accent-s: #e080a0;
+  --accent-m: #e05590;
+  --accent-l: #d04080;
 }

@@ -84,38 +84,34 @@ export class AppError extends Error {
   }
 }
 
-// 用户友好的错误提示
-export function showError(message: string, duration: number = 3000): void {
-  // 创建错误提示元素（仅保留类名，移除内联样式）
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'error-toast';
-  errorDiv.textContent = message;
+// 通用提示（错误/成功共用一套逻辑）
+function showToast(type: 'error' | 'success', message: string, duration: number): void {
+  const toast = document.createElement('div');
+  toast.className = `${type}-toast`;
+  toast.textContent = message;
 
-  document.body.appendChild(errorDiv);
+  document.body.appendChild(toast);
 
   setTimeout(() => {
-    errorDiv.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => {
-      document.body.removeChild(errorDiv);
-    }, 300);
+    toast.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
   }, duration);
+}
+
+// 用户友好的错误提示
+export function showError(message: string, duration: number = 3000): void {
+  showToast('error', message, duration);
 }
 
 // 成功提示
 export function showSuccess(message: string, duration: number = 2000): void {
-  const successDiv = document.createElement('div');
-  successDiv.className = 'success-toast';
-  successDiv.textContent = message;
-
-  document.body.appendChild(successDiv);
-
-  setTimeout(() => {
-    successDiv.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => {
-      document.body.removeChild(successDiv);
-    }, 300);
-  }, duration);
+  showToast('success', message, duration);
 }
+
+// 全局存储 key（避免多处硬编码字符串）
+export const STORAGE_KEYS = {
+  currentPage: 'mkoneCurrentPage'
+} as const;
 
 // 本地存储工具
 export const storage = {

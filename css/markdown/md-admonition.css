@@ -68,6 +68,12 @@
 }
 
 
+/* 标题行：::: note 自定义标题 */
+.admonition-title {
+  font-weight: 600;
+  margin: 0.2em 0 0.4em;
+}
+
 /* success */
 .admonition.success {
   border-color: var(--color-success);

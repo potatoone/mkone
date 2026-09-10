@@ -1,4 +1,4 @@
-import { parseFrontMatter } from './viewParser';
+import { getMetadata } from '../parser';
 import { getElement } from '../../utils/utils';
 import type { NavDir, NavFile } from '../../sidebar/navTypes';
 import { hidePageTitle } from '../../page/pageTitle';
@@ -30,16 +30,7 @@ const collectAllFiles = (items: (NavDir | NavFile)[]): { title: string; file: st
 };
 
 // 加载元数据（简化错误处理）
-const loadMetadata = async (file: string): Promise<{ time?: string; desc?: string } | null> => {
-  try {
-    const url = file.startsWith('./') ? file : `./docs/${file}`;
-    const res = await fetch(url);
-    return res.ok ? parseFrontMatter(await res.text()).metadata : null;
-  } catch (err) {
-    console.error('加载元数据失败:', file, err);
-    return null;
-  }
-};
+const loadMetadata = (file: string) => getMetadata(file);
 
 // 排序逻辑（简化比较器）
 const sortItems = (items: OverviewItem[], { type, asc }: SortState): OverviewItem[] => {
@@ -158,12 +149,13 @@ export const renderOverView = async (
   const allFiles = collectAllFiles(items);
   if (!allFiles.length) return;
 
-  // 保持文件顺序的异步处理
-  const overviewItems: OverviewItem[] = [];
-  for (const { title, file } of allFiles) {
-    const meta = await loadMetadata(file);
-    overviewItems.push({ title, file, time: meta?.time ?? 'No Time Mark', desc: meta?.desc || null });
-  }
+  // 并行请求所有元数据（结果顺序与文件顺序一致）
+  const overviewItems: OverviewItem[] = await Promise.all(
+    allFiles.map(async ({ title, file }) => {
+      const meta = await loadMetadata(file);
+      return { title, file, time: meta?.time ?? 'No Time Mark', desc: meta?.desc || null };
+    })
+  );
 
   renderOverview(overviewItems, isFirstLevel, { type: 'time', asc: false }, dirDesc);
   hidePageTitle(document.getElementById('pageTitle'));

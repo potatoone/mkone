@@ -1,8 +1,9 @@
 import { renderMarkdown } from '../markdown/markdown';
-import { showError } from '../utils/utils';
+import { showError, storage, STORAGE_KEYS } from '../utils/utils';
 
-import { showPageNavigation } from './pageNav';
+import { initPageNavigation, showPageNavigation } from './pageNav';
 import { cleanTitle } from '../utils/docsParser';
+import { expandHeadingChain } from '../markdown/extentions/foldableHeadings'; // 标题折叠
 
 export class PageManager {
   private pages: string[] = [];  // 页面路径列表
@@ -20,35 +21,80 @@ export class PageManager {
     });
   }
 
-  // 加载指定页面
-  public async loadPage(fileName: string): Promise<void> {
+  /**
+   * 把链接 href 解析为实际页面路径
+   * 依次尝试：去 docs/ 前缀 → 相对当前文档目录 → 相对 docs 根
+   * @returns 命中的页面路径；不存在时返回 null
+   */
+  public resolvePage(rawHref: string): string | null {
+    if (!rawHref) return null;
+
+    const normalized = decodeURIComponent(rawHref.split('#')[0])
+      .replace(/\\/g, '/')
+      .replace(/^\.?\//, '');
+
+    const current = this.pages[this.currentIndex] ?? '';
+    const currentDir = current.includes('/') ? current.slice(0, current.lastIndexOf('/') + 1) : '';
+    const withoutDocs = normalized.replace(/^docs\//, '');
+
+    const candidates = [
+      normalized,
+      withoutDocs,
+      currentDir && `${currentDir}${normalized}`,
+      currentDir && `${currentDir}${withoutDocs}`
+    ].filter(Boolean) as string[];
+
+    for (const candidate of candidates) {
+      if (this.pages.includes(candidate)) return candidate;
+    }
+    return null;
+  }
+
+  // 加载指定页面（统一编排：渲染 → 页内导航 → 标题/历史/侧边栏状态）
+  public async loadPage(fileNameOrHref: string): Promise<boolean> {
+    // 兼容传入完整 href（如 ./docs/xx/yy.md）的情况
+    const resolved = this.resolvePage(fileNameOrHref);
+    const fileName = resolved ?? fileNameOrHref;
+
     const index = this.pages.indexOf(fileName);
-    if (index === -1) throw new Error(`页面不存在: ${fileName}`);
+    if (index === -1) {
+      // 目标文档不存在（例如源文件已被删除/重命名）：提示但不破坏当前页面
+      console.warn('页面不存在:', fileNameOrHref);
+      showError('目标文档不存在（可能已被删除或重命名）');
+      return false;
+    }
+
+    const prevIndex = this.currentIndex;
 
     try {
       this.currentIndex = index;
 
-      // 渲染 Markdown 并初始化页内导航
+      // 渲染 Markdown 并用同一份结果初始化页内导航（避免重复渲染）
       const renderResult = await renderMarkdown(fileName);
-      const headings = renderResult.headings;
+      await initPageNavigation(renderResult);
 
       // 设置文档标题
-      const mainTitle = headings.find(h => h.level === 1)?.text || cleanTitle(fileName);
+      const mainTitle = renderResult.headings.find(h => h.level === 1)?.text || cleanTitle(fileName);
       document.title = `${mainTitle} - Mkone`;
 
       // 更新浏览器历史记录和本地存储
       this.updateHistory(fileName, index);
-      localStorage.setItem('mkoneCurrentPage', fileName);
+      storage.set(STORAGE_KEYS.currentPage, fileName);
 
-      // 更新侧边栏高亮状态
+      // 更新侧边栏高亮与竖线状态
       this.updateSidebarHighlight(fileName);
+      this.updateVerticalLinePosition(fileName);
 
       // 显示页内导航
-      showPageNavigation(); 
+      showPageNavigation();
+
+      return true;
 
     } catch (error) {
+      // 渲染失败时回滚页码，避免上一篇/下一篇错位
+      this.currentIndex = prevIndex;
       showError(`加载失败: ${error instanceof Error ? error.message : '未知错误'}`);
-      throw error;
+      return false;
     }
   }
 
@@ -57,7 +103,8 @@ export class PageManager {
     const navContainer = document.querySelector('.nav-container');
     if (!navContainer) return;
 
-    const targetEl = navContainer.querySelector(`.nav-file[data-file="${fileName}"]`) as HTMLElement;
+    // CSS.escape 防止文件名中的特殊字符破坏选择器
+    const targetEl = navContainer.querySelector(`.nav-file[data-file="${CSS.escape(fileName)}"]`) as HTMLElement;
     if (targetEl) {
       this.removeAllActiveClasses(); // 清除其他文件的高亮
       targetEl.classList.add('active'); // 高亮当前文件
@@ -70,7 +117,7 @@ export class PageManager {
     const verticalLine = document.querySelector('.sidebar-vertical-line') as HTMLElement;
     if (!navContainer || !verticalLine) return;
 
-    const targetEl = navContainer.querySelector(`.nav-file[data-file="${fileName}"]`) as HTMLElement;
+    const targetEl = navContainer.querySelector(`.nav-file[data-file="${CSS.escape(fileName)}"]`) as HTMLElement;
     if (targetEl) {
       // 获取当前文件的最终可见位置
       const visibleTarget = this.findVisibleTarget(targetEl);
@@ -115,12 +162,7 @@ export class PageManager {
   public async loadPageByOffset(offset: number, errorMsg: string): Promise<void> {
     const newIndex = this.currentIndex + offset;
     if (newIndex >= 0 && newIndex < this.pages.length) {
-      const fileName = this.pages[newIndex];
-      await this.loadPage(fileName);
-
-      // 更新高亮和竖线
-      this.updateSidebarHighlight(fileName);
-      this.updateVerticalLinePosition(fileName);
+      await this.loadPage(this.pages[newIndex]);
     } else {
       showError(errorMsg);
     }
@@ -137,23 +179,46 @@ export class PageManager {
       const href = link.getAttribute('href');
       if (!href) return;
 
-      const [file, anchor] = href.split('#');
+      const [, anchor] = href.split('#');
       e.preventDefault();
 
-      await this.loadPage(file);
+      // 先解析目标文档：不存在则提示，避免带着无效路径进入渲染流程
+      if (!this.resolvePage(href)) {
+        console.warn('文档链接无效:', href);
+        showError('目标文档不存在（可能已被删除或重命名）');
+        link.classList.add('link-broken');
+        return;
+      }
 
-      // 更新高亮和竖线
-      this.updateSidebarHighlight(file);
-      this.updateVerticalLinePosition(file);
+      const ok = await this.loadPage(href);
 
-      // 跳转锚点
-      if (anchor) {
+      // 跳转锚点（侧边栏高亮/竖线已由 loadPage 统一更新）
+      if (ok && anchor) {
         setTimeout(() => {
           const targetEl = document.getElementById(anchor);
           if (targetEl) {
+            expandHeadingChain(anchor); // 展开目标锚点所在的所有折叠区块
             targetEl.scrollIntoView({ behavior: 'smooth' });
           }
         }, 100);
+      }
+    });
+
+    // 正文页内锚点链接（#section）：展开折叠区块并平滑滚动
+    document.addEventListener('click', (e) => {
+      if (!(e.target instanceof Element)) return;
+
+      const link = e.target.closest<HTMLAnchorElement>('.anchor-link');
+      if (!link) return;
+
+      const anchor = link.getAttribute('href')?.slice(1);
+      if (!anchor) return;
+
+      e.preventDefault();
+      const targetEl = document.getElementById(anchor);
+      if (targetEl) {
+        expandHeadingChain(anchor); // 展开目标锚点所在的所有折叠区块
+        targetEl.scrollIntoView({ behavior: 'smooth' });
       }
     });
   }

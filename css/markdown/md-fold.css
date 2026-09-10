@@ -1,0 +1,54 @@
+/* ==============================================
+   Markdown 标题折叠
+============================================== */
+
+/* 可折叠标题：可点击 */
+#markdown-container .fold-toggle {
+  cursor: pointer;
+}
+
+/* 折叠箭头（替代悬浮#号，占据同一位置） */
+#markdown-container .fold-toggle::before {
+  content: '';
+  position: absolute;
+  /* 偏移与尺寸都设上限：大字号标题（h1/h2）下按 em 等比放大，
+     会超出内容区左侧的 wrapper padding 被裁切，这里限制最大值。
+     可用空间最小为移动端 2rem(20px) padding，故偏移上限取 17px */
+  left: calc(-1 * min(0.9em, 17px));
+  top: 0.65em; /* 相对文字行定位：h1/h2 的 padding-bottom 会使 50% 中点偏下 */
+  width: min(0.3em, 7px);
+  height: min(0.3em, 7px);
+  border-right: min(0.06em, 1.5px) solid currentColor;
+  border-bottom: min(0.06em, 1.5px) solid currentColor;
+  opacity: 0.6;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  transform-origin: center;
+  transform: translateY(-50%) rotate(45deg); /* 展开时箭头朝下 */
+}
+
+/* 折叠时箭头朝右 */
+#markdown-container .fold-section.collapsed > .fold-toggle::before {
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* 悬浮时箭头更明显 */
+#markdown-container .fold-toggle:hover::before {
+  opacity: 1;
+}
+
+/* 折叠状态：标题淡显提示内容已收起 */
+#markdown-container .fold-section.collapsed > .fold-toggle {
+  opacity: 0.75;
+}
+
+/* 折叠区块主体（默认展示，折叠时隐藏） */
+#markdown-container .fold-section.collapsed > .fold-body {
+  display: none;
+}
+
+/* 打印时保持内容完整展开 */
+@media print {
+  #markdown-container .fold-section.collapsed > .fold-body {
+    display: block;
+  }
+}
