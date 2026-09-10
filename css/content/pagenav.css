@@ -2,7 +2,7 @@
 #pageNav {
   position: relative;
   flex: none;
-  width: var(--pagenav-width, 210px); /* 宽度由拖拽调整并持久化 */
+  width: var(--pagenav-width, 260px); /* 宽度由拖拽调整并持久化 */
   overflow: hidden;
   padding: 10px 10px 56px 16px;
   right: 0; 
@@ -15,7 +15,7 @@
 
 /* 导航标题样式 */
 .nav-title {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--text-tertiary);
   margin-bottom: 5px;
@@ -42,7 +42,7 @@
 }
 
 .nav-item {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin: 5px 5px 5px 0;
   color: #333;
   text-decoration: none;
@@ -53,9 +53,9 @@
   position: relative; 
 }
 
-.level-1 { font-size: 1.12rem;color: var(--text-muted); } 
-.level-2 { font-size: 1.1rem;color: var(--text-muted); }
-.level-3 { font-size: 1.1rem;color: var(--text-muted); }
+.level-1 { font-size: 1.35rem;color: var(--text-muted); } 
+.level-2 { font-size: 1.3rem;color: var(--text-muted); }
+.level-3 { font-size: 1.3rem;color: var(--text-muted); }
 
 .nav-item:hover {
   color: var(--accent-m);

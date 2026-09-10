@@ -2,8 +2,21 @@ import { renderMarkdown } from '../markdown/markdown';
 import { showError, storage, STORAGE_KEYS } from '../utils/utils';
 
 import { initPageNavigation, showPageNavigation } from './pageNav';
+import { setOutlineDir } from './outlineState'; // Outline 打开状态
 import { cleanTitle } from '../utils/docsParser';
 import { expandHeadingChain } from '../markdown/extentions/foldableHeadings'; // 标题折叠
+import {
+  restoreScrollPosition,
+  saveCurrentScroll,
+  scrollToTopInstant,
+  setCurrentFile
+} from './pageScrollState'; // 阅读进度持久化
+
+/** loadPage 的可选行为 */
+interface LoadPageOptions {
+  /** 需要跳转到锚点时不恢复阅读进度（由调用方负责滚动） */
+  skipRestore?: boolean;
+}
 
 export class PageManager {
   private pages: string[] = [];  // 页面路径列表
@@ -51,7 +64,7 @@ export class PageManager {
   }
 
   // 加载指定页面（统一编排：渲染 → 页内导航 → 标题/历史/侧边栏状态）
-  public async loadPage(fileNameOrHref: string): Promise<boolean> {
+  public async loadPage(fileNameOrHref: string, options: LoadPageOptions = {}): Promise<boolean> {
     // 兼容传入完整 href（如 ./docs/xx/yy.md）的情况
     const resolved = this.resolvePage(fileNameOrHref);
     const fileName = resolved ?? fileNameOrHref;
@@ -65,6 +78,9 @@ export class PageManager {
     }
 
     const prevIndex = this.currentIndex;
+
+    // 替换正文之前先记录上一篇的阅读位置
+    saveCurrentScroll();
 
     try {
       this.currentIndex = index;
@@ -80,6 +96,7 @@ export class PageManager {
       // 更新浏览器历史记录和本地存储
       this.updateHistory(fileName, index);
       storage.set(STORAGE_KEYS.currentPage, fileName);
+      setOutlineDir(null); // 已切换到文档：清除「停留在 Outline」标记
 
       // 更新侧边栏高亮与竖线状态
       this.updateSidebarHighlight(fileName);
@@ -87,6 +104,13 @@ export class PageManager {
 
       // 显示页内导航
       showPageNavigation();
+
+      // 标记当前文档，并恢复上次的阅读进度（锚点跳转时由调用方接管滚动）
+      setCurrentFile(fileName);
+      if (!options.skipRestore) {
+        scrollToTopInstant();
+        restoreScrollPosition(fileName);
+      }
 
       return true;
 
@@ -190,7 +214,7 @@ export class PageManager {
         return;
       }
 
-      const ok = await this.loadPage(href);
+      const ok = await this.loadPage(href, { skipRestore: Boolean(anchor) });
 
       // 跳转锚点（侧边栏高亮/竖线已由 loadPage 统一更新）
       if (ok && anchor) {

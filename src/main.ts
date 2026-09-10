@@ -1,9 +1,10 @@
 import { getDOMElements, showError, showSuccess, storage, STORAGE_KEYS } from './utils/utils';
 import type { DOMElements } from './utils/types';
 import { PageManager } from './page/pageManager';
-import { initSidebar } from './sidebar/sidebar';
+import { initSidebar, restoreOutlineByTitle } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';
 import { initResizeHandles } from './utils/resize';
+import { getOutlineState } from './page/outlineState';
 
 class MkoneApp {
   private pageManager: PageManager;
@@ -73,6 +74,10 @@ class MkoneApp {
   }
 
   private async loadInitialPage(): Promise<void> {
+    // 上次停留在某个目录的 Outline：刷新后恢复到该 Outline，而不是回到文档
+    const outlineDir = getOutlineState().dirTitle;
+    if (outlineDir && restoreOutlineByTitle(outlineDir)) return;
+
     const savedPage = storage.get<string>(STORAGE_KEYS.currentPage, '');
     const targetPage = savedPage && this.pages.includes(savedPage) ? savedPage : this.pages[0];
     await this.pageManager.loadPage(targetPage);

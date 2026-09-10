@@ -3,6 +3,12 @@
 ============================================== */
 
 
+/* 正文阅读基准字号：容器内未显式设字号的元素（details 摘要、tabs 标签等）都继承此值，
+   否则会回退到根字号（布局面板中 1rem = 10px，会显得异常小） */
+#markdown-container {
+  font-size: 1.4rem;
+}
+
 /* 段落和列表项样式 */
 #markdown-container p,
 #markdown-container li,
@@ -10,7 +16,7 @@
 #markdown-container ol {
   color: var(--text-primary);
   overflow-wrap: break-word;
-  font-size: 1.2rem; /* 标准字体大小，可根据需求调整 */
+  font-size: 1.4rem; /* 标准字体大小，可根据需求调整 */
   line-height: 1.7; /* 放宽行高，提升长文阅读舒适度 */
 }
 
@@ -99,7 +105,7 @@
   margin-top: 2em;
   padding-top: 1em;
   border-top: 1px solid var(--border-m);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   color: var(--text-muted);
 }
 

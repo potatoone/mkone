@@ -1,5 +1,6 @@
 import type { NavRoot, NavDir, NavFile } from './navTypes';
 import { storage, STORAGE_KEYS } from '../utils/utils';
+import { getOutlineState } from '../page/outlineState';
 
 // 统一移除所有激活样式
 function removeAllActiveClasses() {
@@ -218,6 +219,20 @@ export function navRender(
     });
 
     requestAnimationFrame(() => {
+      // 当前停留在某个目录的 Outline：指示器指向该目录标题，而不是上一次阅读的文档
+      const outlineDir = getOutlineState().dirTitle;
+      const outlineHeader = outlineDir
+        ? Array.from(navContainer.querySelectorAll<HTMLElement>('.root-header'))
+            .find(header => header.textContent?.trim() === outlineDir) ?? null
+        : null;
+
+      if (outlineHeader) {
+        removeAllActiveClasses();
+        updateVerticalLinePosition(outlineHeader);
+        onInit?.();
+        return;
+      }
+
       const currentPage = storage.get<string>(STORAGE_KEYS.currentPage, '');
       if (currentPage) {
         // CSS.escape 防止文件名特殊字符破坏选择器

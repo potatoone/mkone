@@ -6,9 +6,16 @@
  * - 高级标题折叠时，其嵌套的低级标题及内容一并隐藏
  * - 页内导航跳转、内链锚点跳转时自动展开被折叠的祖先区块
  * - 打印时自动展开所有折叠区块，打印后恢复
+ * - 折叠状态按文档持久化（localStorage），切换页面 / 刷新后自动恢复
  */
 
+import { getCollapsedHeadingIds, setCollapsedHeadingIds } from '../../page/pageFoldState';
+
 const CONTAINER_ID = 'markdown-container';
+
+// 当前文档路径与容器（用于读写折叠状态）
+let currentFile = '';
+let foldContainer: HTMLElement | null = null;
 
 const isHeading = (el: Element): boolean => /^H[1-6]$/.test(el.tagName);
 
@@ -47,13 +54,47 @@ function wrapSection(heading: HTMLElement): void {
 }
 
 /**
+ * 设置某个折叠区块的状态（同步 class 与 aria-expanded）
+ */
+function setCollapsed(section: HTMLElement, collapsed: boolean): void {
+  section.classList.toggle('collapsed', collapsed);
+  section
+    .querySelector(':scope > .fold-toggle')
+    ?.setAttribute('aria-expanded', String(!collapsed));
+}
+
+/**
  * 切换折叠状态
  */
 function toggleSection(heading: HTMLElement): void {
   const section = heading.parentElement;
   if (!section?.classList.contains('fold-section')) return;
-  const collapsed = section.classList.toggle('collapsed');
-  heading.setAttribute('aria-expanded', String(!collapsed));
+  setCollapsed(section, !section.classList.contains('collapsed'));
+  persistState();
+}
+
+/** 收集容器内当前被折叠的标题 id */
+function collectCollapsedIds(container: HTMLElement): string[] {
+  return Array.from(container.querySelectorAll<HTMLElement>('.fold-section.collapsed'))
+    .map(section => section.querySelector<HTMLElement>(':scope > .fold-toggle')?.id ?? '')
+    .filter(Boolean);
+}
+
+/** 把当前折叠状态写入本地存储 */
+function persistState(): void {
+  if (!foldContainer || !currentFile) return;
+  setCollapsedHeadingIds(currentFile, collectCollapsedIds(foldContainer));
+}
+
+/** 恢复本文档上次的折叠状态（未记录过的标题保持展开） */
+function applySavedState(container: HTMLElement, file: string): void {
+  const saved = new Set(getCollapsedHeadingIds(file));
+  if (!saved.size) return;
+
+  container.querySelectorAll<HTMLElement>('.fold-section').forEach(section => {
+    const id = section.querySelector<HTMLElement>(':scope > .fold-toggle')?.id;
+    if (id && saved.has(id)) setCollapsed(section, true);
+  });
 }
 
 /**
@@ -92,18 +133,19 @@ function bindPrintExpand(): void {
   if (printBound) return;
   printBound = true;
 
+  // 打印期间不写存储，打印后恢复原状（含 aria-expanded）
   window.addEventListener('beforeprint', () => {
     collapsedBeforePrint.clear();
     document
       .querySelectorAll<HTMLElement>('.fold-section.collapsed')
       .forEach(section => {
         collapsedBeforePrint.add(section);
-        section.classList.remove('collapsed');
+        setCollapsed(section, false);
       });
   });
 
   window.addEventListener('afterprint', () => {
-    collapsedBeforePrint.forEach(section => section.classList.add('collapsed'));
+    collapsedBeforePrint.forEach(section => setCollapsed(section, true));
     collapsedBeforePrint.clear();
   });
 }
@@ -118,29 +160,30 @@ export function expandHeadingChain(id: string): boolean {
 
   let changed = false;
   // 若目标本身是折叠标题，其标题本身始终可见，从其所在区块的外层开始展开
-  let node: Element | null = el.classList.contains('fold-toggle')
-    ? el.closest('.fold-section')?.parentElement ?? null
+  let node: HTMLElement | null = el.classList.contains('fold-toggle')
+    ? (el.closest('.fold-section')?.parentElement as HTMLElement | null) ?? null
     : el;
 
   while (node) {
-    const section = node.closest('.fold-section');
+    const section = node.closest<HTMLElement>('.fold-section');
     if (!section) break;
     if (section.classList.contains('collapsed')) {
-      section.classList.remove('collapsed');
-      section
-        .querySelector(':scope > .fold-toggle')
-        ?.setAttribute('aria-expanded', 'true');
+      setCollapsed(section, false);
       changed = true;
     }
     node = section.parentElement;
   }
+
+  // 主动展开也视为用户可见状态，同步落盘，刷新后不会“又折回去”
+  if (changed) persistState();
   return changed;
 }
 
 /**
  * 初始化标题折叠（在 Markdown 渲染完成后调用）
+ * @param file 当前文档路径，用于读写该文档的折叠状态
  */
-export function setupFoldableHeadings(): void {
+export function setupFoldableHeadings(file = ''): void {
   const container = document.getElementById(CONTAINER_ID);
   if (!container) return;
 
@@ -148,7 +191,11 @@ export function setupFoldableHeadings(): void {
   const headings = Array.from(container.children).filter(isHeading) as HTMLElement[];
   if (!headings.length) return;
 
+  currentFile = file;
+  foldContainer = container;
+
   headings.forEach(wrapSection);
+  applySavedState(container, file); // 先恢复，再绑定交互
   bindToggleEvents(container);
   bindPrintExpand();
 }

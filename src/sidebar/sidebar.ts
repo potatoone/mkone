@@ -7,6 +7,7 @@ import { initSidebarLinks } from './links';
 import type { NavRoot } from './navTypes';
 import { renderOverView } from '../markdown/overview/overview';
 import { hidePageNavigation } from '../page/pageNav';
+import { setOutlineDir } from '../page/outlineState';
 
 // ------------------------------ 状态管理 ------------------------------
 // 封装侧边栏状态（避免全局变量污染）
@@ -78,6 +79,37 @@ function restoreSidebarState() {
   }
 }
 
+// ------------------------------ Outline（目录概览） ------------------------------
+/**
+ * 显示某个一级目录的 Outline（概览页）
+ * 同时记录「当前停留在 Outline」，以便刷新后恢复
+ */
+function showRootOverview(dir: NavRoot): void {
+  const markdownContainer = document.getElementById('markdown-container') as HTMLElement | null;
+  const overviewContainer = document.getElementById('overview') as HTMLElement | null;
+  if (!markdownContainer || !overviewContainer) return;
+
+  markdownContainer.innerHTML = ''; // 清空 Markdown 内容
+  overviewContainer.innerHTML = ''; // 清空上一次的概览内容
+  overviewContainer.classList.add('show'); // 显示一级目录概览
+
+  hidePageNavigation(); // 隐藏页内导航
+  setOutlineDir(dir.title); // 记录打开的目录
+
+  renderOverView(dir.children); // 只传入当前目录的子元素
+}
+
+/**
+ * 按目录标题恢复上次打开的 Outline（用于刷新后恢复）
+ * @returns 是否成功恢复
+ */
+export function restoreOutlineByTitle(title: string): boolean {
+  const root = getNavTree().find(item => item.type === 'dir' && item.title === title);
+  if (!root) return false;
+  showRootOverview(root);
+  return true;
+}
+
 // ------------------------------ 入口函数 ------------------------------
 /**
  * 初始化侧边栏（对外接口）
@@ -103,19 +135,7 @@ export async function initSidebar(onFileClick: (file: string) => void): Promise<
   const navTree: NavRoot[] = getNavTree();
 
   // 注意这里的 onDirClick 被用来在点击目录时渲染一级目录概览
-  navRender(navContainer, navTree, onFileClick, (dir) => {
-    // 点击目录时，清空现有内容
-    markdownContainer.innerHTML = ''; // 清空 Markdown 内容
-    overviewContainer.innerHTML = ''; // 清空一级目录概览内容
-    overviewContainer.classList.add('show'); // 显示一级目录概览
-
-    // 隐藏上一次的页内导航
-    hidePageNavigation();
-
-    // 渲染一级目录概览，只传入当前目录的子元素
-    renderOverView(dir.children);
-    
-  });
+  navRender(navContainer, navTree, onFileClick, showRootOverview);
 
   // 加载链接
   await initSidebarLinks();

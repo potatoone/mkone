@@ -72,7 +72,7 @@ export async function renderMarkdown(file: string): Promise<RenderMarkdownResult
 
     // Mermaid 需在 codeCopy 之前处理（避免给 mermaid 代码块加复制按钮）
     await setupMermaid();
-    setupFoldableHeadings();
+    setupFoldableHeadings(file); // 折叠状态按文档持久化
     setupCodeCopy();
 
     return result;

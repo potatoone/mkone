@@ -71,7 +71,8 @@
 .overview-item:hover { background: var(--bg-secondary); }
 
 .doc-title {
-  width: 100px;
+  flex: none; /* 固定宽度，不被描述列挤压 */
+  width: 240px;
   font-weight: 600;
   color: var(--text-tertiary);
   text-decoration: none;

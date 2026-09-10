@@ -35,7 +35,10 @@
 .admonition {
   position: relative;
   border-left: 6px solid var(--color-note);
-  padding: 0.5em 1em 0.5em 3em; /* 左侧给图标留位置 */
+  /* 几何尺寸固定为原像素值，避免继承正文阅读基准后图标/内边距被放大而变形 */
+  --icon-size: 15px;
+  --icon-left: 6px;
+  padding: 5px 10px 5px 30px; /* 左侧给图标留位置 */
   margin: 1rem 0;
   border-radius: 1px;
 }

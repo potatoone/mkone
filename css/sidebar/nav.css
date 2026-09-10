@@ -6,7 +6,7 @@
 
 /* 根级文件（一级文件）样式 */
 .root-file {
-  font-size: 15px;
+  font-size: 16px;
   margin: 0 0 0 20px;
   padding: 5px 0;
   font-weight: 600;
@@ -20,7 +20,7 @@
 .root-sub-file {
   margin: 0;
   padding-left: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary); /* 使用主文字色 */
   cursor: pointer;
@@ -42,18 +42,18 @@
 /* 深层嵌套目录（三级及以下）：仅降级字号与颜色，不改变缩进基准 */
 .group-dir .group-dir .group-header,
 .group-dir .group-dir .root-header {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
 .group-dir .group-dir .inner-file {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* 最内层文件（三级及以下）样式 */
 .inner-file {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-secondary); /* 使用次文字色 */
   cursor: pointer;
@@ -70,6 +70,12 @@
 */
 .depth-1 > .group-header,
 .nav-file.depth-1 { padding-left: 12px; }
+
+/* 二级条目（目录标题与文件）统一加一点纵向呼吸感，避免整列过于密实 */
+.depth-1 > .group-header,
+.nav-file.depth-1 {
+  margin: 3px 0;
+}
 
 .depth-2 > .group-header,
 .nav-file.depth-2 { padding-left: 24px; }
@@ -91,7 +97,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary); /* 使用主文字色 */
   line-height: 30px;
@@ -109,7 +115,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary); /* 使用主文字色 */
   line-height: 30px;

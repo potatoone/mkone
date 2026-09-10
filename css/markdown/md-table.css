@@ -1,21 +1,36 @@
-
 /* ==============================================
    表格
 ============================================== */
 #markdown-container table {
   display: block;
-  width: 100%;
-  overflow: auto;
+  /* 宽度贴合内容：短表格不再被拉满整行；超过正文宽度时再横向滚动 */
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto; /* 宽表格独立横向滚动，不撑破正文 */
   margin: 0 0 1.25em 0;
   border-collapse: collapse;
   border: 1px solid var(--border-m); /* 外框使用中等边框色 */
-  font-size: 1.15rem;
+  font-size: 1.3rem;
+  background-color: var(--bg-primary);
+  line-height: 1.6;
+}
+
+/* 表格自身滚动条：细一点，避免抢视线 */
+#markdown-container table::-webkit-scrollbar {
+  height: 8px;
+}
+
+#markdown-container table::-webkit-scrollbar-thumb {
+  background-color: var(--border-m);
+  border-radius: 0;
 }
 
 #markdown-container th,
 #markdown-container td {
-  padding: 8px 14px;
+  padding: 10px 16px; /* 加大呼吸感 */
   border: 1px solid var(--border-s); /* 内部网格线使用浅边框色，降低压迫感 */
+  overflow-wrap: anywhere; /* 长链接/长单词不撑破单元格 */
+  vertical-align: top;
 }
 
 #markdown-container th {
@@ -25,12 +40,71 @@
   color: var(--text-primary); /* 使用主文字色 */
 }
 
-#markdown-container tr {
-  color: var(--text-primary);
-  background-color: var(--bg-primary); /* 使用主背景色 */
-  border-top: 1px solid var(--border-m); /* 使用中等边框色 */
+/* 单元格内段落/列表收紧，避免表格被撑高 */
+#markdown-container th > p,
+#markdown-container td > p {
+  margin: 0 0 0.35em 0;
 }
 
-#markdown-container tr:nth-child(even) {
+#markdown-container th > p:last-child,
+#markdown-container td > p:last-child,
+#markdown-container td > ul:last-child,
+#markdown-container td > ol:last-child {
+  margin-bottom: 0;
+}
+
+/* Markdown 对齐语法（marked 输出 align 属性）：需显式声明，否则被上面的 text-align 覆盖 */
+#markdown-container th[align="left"],
+#markdown-container td[align="left"] {
+  text-align: left;
+}
+
+#markdown-container th[align="center"],
+#markdown-container td[align="center"] {
+  text-align: center;
+}
+
+#markdown-container th[align="right"],
+#markdown-container td[align="right"] {
+  text-align: right;
+}
+
+#markdown-container tbody tr {
+  color: var(--text-primary);
+  background-color: var(--bg-primary); /* 使用主背景色 */
+  transition: background-color 0.15s ease;
+}
+
+/* 斑马纹（仅 tbody，避免影响表头） */
+#markdown-container tbody tr:nth-child(even) {
   background-color: var(--bg-secondary); /* 使用次背景色 */
+}
+
+/* 鼠标所在行高亮，便于横向读取 */
+#markdown-container tbody tr:hover {
+  background-color: var(--hover-s);
+}
+
+/* 窄屏：压缩内边距与字号，尽量少滚动 */
+@media (max-width: 768px) {
+  #markdown-container table {
+    font-size: 1.2rem;
+  }
+
+  #markdown-container th,
+  #markdown-container td {
+    padding: 7px 10px;
+  }
+}
+
+/* 打印：保证表头底色与边框可见 */
+@media print {
+  #markdown-container table {
+    font-size: 0.95em;
+  }
+
+  #markdown-container th {
+    background-color: #f2f2f2 !important;
+    color: #000 !important;
+  }
 }
