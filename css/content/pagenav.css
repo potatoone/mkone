@@ -13,12 +13,19 @@
   box-sizing: border-box;
 }
 
-/* 导航标题样式 */
+/* 导航标题样式（点击可展开/收起全部折叠标题） */
 .nav-title {
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--text-tertiary);
   margin-bottom: 5px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.nav-title:hover {
+  color: var(--text-primary);
 }
 
 #pageNav::-webkit-scrollbar { width: 4px; }
@@ -44,16 +51,16 @@
 .nav-item {
   font-size: 1.4rem;
   margin: 5px 5px 5px 0;
-  color: #333;
+  color: var(--text-muted); /* 基色用主题变量，避免写死颜色在夜间模式下突兀 */
   text-decoration: none;
   transition: all 0.2s;
   cursor: pointer;
   font-weight: 400;
   padding-left: 8px;
-  position: relative; 
+  position: relative;
 }
 
-.level-1 { font-size: 1.35rem;color: var(--text-muted); } 
+.level-1 { font-size: 1.35rem;color: var(--text-muted); }
 .level-2 { font-size: 1.3rem;color: var(--text-muted); }
 .level-3 { font-size: 1.3rem;color: var(--text-muted); }
 

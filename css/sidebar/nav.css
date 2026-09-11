@@ -107,7 +107,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative; /* 为伪元素定位 */
-  padding-right: 16px; /* 留出箭头空间 */
+  padding-right: 28px; /* 留出箭头空间：文字不得越过箭头（箭头占距右缘约19~27px） */
 }
 
 /* 子级目录标题 */
@@ -124,7 +124,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative; /* 为伪元素定位 */
-  padding-right: 16px; /* 留出箭头空间 */
+  padding-right: 28px; /* 留出箭头空间：文字不得越过箭头（箭头占距右缘约19~27px） */
 }
 
 /* 最内层文件激活状态 */
@@ -198,5 +198,5 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 10px; /* 避免省略号贴边 */
+  padding-right: 28px; /* 避免省略号贴边，且不得超出父级菜单箭头的位置 */
 }

@@ -1,20 +1,44 @@
-/* 5. 搜索区域样式保持不变（流式元素，随整体滚动） */
+/* ==============================================
+   搜索悬浮层（fixed 遮罩 + 对话框，不占文档流空间）
+   动画仿 mkdocs-material：遮罩淡入 + 对话框上浮缩放
+============================================== */
 #search-area {
-  display: none;
-  width: 100%;
-  flex-direction: column;
-  background-color: var(--bg-primary); /* 使用主背景色变量 */
+  position: fixed;
+  inset: 0;
+  z-index: 100; /* 高于侧栏/顶栏（最高 20） */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh 16px 0;
+  background: rgba(0, 0, 0, 0.35); /* 遮罩暗化 */
   opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity 0.2s, transform 0.2s;
+  visibility: hidden; /* 用 visibility 而非 display，保证过渡动画可播放 */
+  /* 关闭时延迟隐藏到淡出结束后，打开时立即可见 */
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
   user-select: none; /* 禁用文本选择 */
-  padding: 0; margin-bottom: 10px;
 }
 
 #search-area.show {
-  display: flex; /* 显示时使用flex布局 */
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
+  transition: opacity 0.2s ease, visibility 0s;
+}
+
+/* 对话框：输入框 + 结果列表 */
+.search-dialog {
+  width: min(680px, 100%);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-s);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 10px 12px 8px;
+  opacity: 0;
+  transform: translateY(-14px) scale(0.98);
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.18s ease;
+}
+
+#search-area.show .search-dialog {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .search-bar {
@@ -24,21 +48,7 @@
   padding: 5px 5px 5px 10px;
   background: var(--bg-secondary); /* 使用次背景色变量 */
   border: 1px solid var(--border-s); /* 使用小尺寸边框色变量 */
-  border-radius: 2px; /* 硬朗直角 */
-}
-
-.search-bar button {
-  all: unset; /* 重置所有默认样式 */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px; height: 30px;
-  border-radius: 2px; /* 硬朗直角 */
-  color: var(--text-primary); /* 使用主文字色变量 */
-  background: transparent;
-  transition: background 0.2s, color 0.2s;
-  font-size: 20px; /* 图标略缩小 */
+  border-radius: 0;
 }
 
 .search-bar #searchInput {
@@ -57,12 +67,70 @@
   color: var(--text-muted); /* 使用柔和文字色变量 */
 }
 
-#searchResultInfo {
-  display: block;
-  margin-top: 6px; /* 减小垂直间距 */
-  font-size: 14px; font-weight: 700;
-  color: var(--text-tertiary); /* 使用第三级文字色变量 */
+/* 搜索结果列表 */
+.search-results {
+  margin-top: 8px;
+  max-height: 46vh;
+  overflow-y: auto;
+  user-select: text;
+}
+
+/* 结果列表滚动条更细 */
+.search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-result-info {
+  padding: 8px 4px;
+  font-size: 13px;
+  color: var(--text-tertiary);
   white-space: nowrap;
+}
+
+.search-result-item {
+  padding: 7px 10px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.search-result-item:hover,
+.search-result-item.active {
+  background: var(--bg-secondary);
+  border-left-color: var(--accent-m);
+}
+
+.search-result-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.search-result-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-result-count {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.search-result-snippet {
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* 搜索高亮 */

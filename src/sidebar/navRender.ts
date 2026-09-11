@@ -50,6 +50,21 @@ export function navRender(
     }
   });
 
+  // 文字被截断（出现省略号）的条目，悬停时提供完整标题的 tooltip
+  // 在悬停瞬间检测，拖拽调整侧栏宽度后依然准确；由全局 tooltip 负责展示
+  navContainer.addEventListener('mouseover', (e) => {
+    const target = (e.target as Element).closest<HTMLElement>(
+      '.root-header, .group-header, .root-file, .root-sub-file, .group-file, .inner-file'
+    );
+    if (!target) return;
+
+    if (target.scrollWidth > target.clientWidth) {
+      target.title = (target.textContent || '').trim();
+    } else {
+      target.removeAttribute('title');
+    }
+  });
+
   // 渲染一级文件（无箭头）
   function renderRootFile(root: NavRoot): HTMLParagraphElement {
     const el = document.createElement('p');

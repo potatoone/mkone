@@ -88,13 +88,15 @@
   /* 改变箭头颜色（可以是任何颜色） */
 }
 
-/* 自定义提示框 */
+/* 自定义提示框（保持原有实现与位置，不使用全局 tooltip） */
 .arrow-btn:hover::after {
   content: attr(data-tooltip);
   position: relative;
   transform: translateX(-50%);
   background-color: var(--bg-tertiary); /* 使用三级背景色 */
   color: var(--text-primary); /* 使用主文字色 */
+  font-size: 1.2rem; /* 与全局 tooltip 统一字号 */
+  line-height: 1.5;
   padding: 5px 10px;
   border-radius: 2px;
   white-space: nowrap;

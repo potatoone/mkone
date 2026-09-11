@@ -82,6 +82,13 @@ function ensureHeader(container: HTMLElement, dirDesc: string): void {
       </div>
     `;
 
+    // 点击条目整行任意位置跳转文档（转发给行内的 internal-link）
+    container.querySelector('.list-content')?.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) return; // 命中链接本身，走原有逻辑
+      const item = (e.target as HTMLElement).closest<HTMLElement>('.overview-item');
+      item?.querySelector<HTMLAnchorElement>('a.internal-link')?.click();
+    });
+
   // 绑定菜单事件（使用事件委托）
   container.querySelector('.overview-menu')?.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLElement>('.menu-btn');

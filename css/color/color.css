@@ -8,9 +8,9 @@
 :root[data-theme="classic"] {
   /* 背景色：纯白打底，中性灰阶分层 */
   --bg-primary: #ffffff;
-  --bg-secondary: #f7f7f8;
-  --bg-tertiary: #ececef;
-  --bg-muted: #fafafa;
+  --bg-secondary: #f4f4f6; /* 侧栏与正文拉开层次 */
+  --bg-tertiary: #e9e9ee;
+  --bg-muted: #f6f6f7; /* 在白底上可见（引用块/badge） */
 
   /* 文字色：近黑墨色，对比柔和、层次清晰 */
   --text-primary: #18181b;
@@ -29,8 +29,8 @@
   --active-l: #2554e0;
 
   /* 边框色 */
-  --border-s: #ededf0;
-  --border-m: #dcdce0;
+  --border-s: #e6e6ea;
+  --border-m: #d6d6db;
   --border-l: #00000014;
 
   /* 强调色：与激活色统一 */
@@ -43,9 +43,9 @@
 :root[data-theme="gray"] {
   /* 背景色 */
   --bg-primary: #f5f5f7;
-  --bg-secondary: #ebebee;
-  --bg-tertiary: #d8d8dd;
-  --bg-muted: #d8d8dd;
+  --bg-secondary: color-mix(in srgb, #ebebee 55%, #ffffff);
+  --bg-tertiary: color-mix(in srgb, #d8d8dd 60%, #ffffff);
+  --bg-muted: color-mix(in srgb, #d8d8dd 55%, #ffffff);
 
   /* 文字色 */
   --text-primary: #0d0d0f;
@@ -78,9 +78,9 @@
 :root[data-theme="book"] {
   /* 背景色 */
   --bg-primary: #fffbf5;
-  --bg-secondary: #fff0e0;
-  --bg-tertiary: #fed7aa;
-  --bg-muted: #fed7aa;
+  --bg-secondary: color-mix(in srgb, #fff0e0 55%, #ffffff);
+  --bg-tertiary: color-mix(in srgb, #fed7aa 55%, #ffffff);
+  --bg-muted: color-mix(in srgb, #fed7aa 50%, #ffffff);
 
   /* 文字色 */
   --text-primary: #5c2e0a;
@@ -113,9 +113,9 @@
 :root[data-theme="green"] {
   /* 背景色 */
   --bg-primary: #f4fbf8;
-  --bg-secondary: #d8ebe5;
-  --bg-tertiary: #b8d4cb;
-  --bg-muted: #c5e0d8;
+  --bg-secondary: color-mix(in srgb, #d8ebe5 55%, #ffffff);
+  --bg-tertiary: color-mix(in srgb, #b8d4cb 55%, #ffffff);
+  --bg-muted: color-mix(in srgb, #c5e0d8 50%, #ffffff);
 
   /* 文字色 */
   --text-primary: #1e3835;
@@ -148,9 +148,9 @@
 :root[data-theme="purple"] {
   /* 背景色 */
   --bg-primary: #f8f2ff;
-  --bg-secondary: #e8d8ff;
-  --bg-tertiary: #d4bef0;
-  --bg-muted: #dcc8f5;
+  --bg-secondary: color-mix(in srgb, #e8d8ff 55%, #ffffff);
+  --bg-tertiary: color-mix(in srgb, #d4bef0 55%, #ffffff);
+  --bg-muted: color-mix(in srgb, #dcc8f5 50%, #ffffff);
 
   /* 文字色 */
   --text-primary: #4a1870;
@@ -183,9 +183,9 @@
 :root[data-theme="rose"] {
   /* 背景色 */
   --bg-primary: #fef0f2;
-  --bg-secondary: #ffd4d8;
-  --bg-tertiary: #f0b8be;
-  --bg-muted: #f0b8be;
+  --bg-secondary: color-mix(in srgb, #ffd4d8 55%, #ffffff);
+  --bg-tertiary: color-mix(in srgb, #f0b8be 55%, #ffffff);
+  --bg-muted: color-mix(in srgb, #f0b8be 50%, #ffffff);
 
   /* 文字色 */
   --text-primary: #6a0f2a;

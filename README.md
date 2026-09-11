@@ -1,8 +1,12 @@
 # MK ONE
-### 静态 Markdown 站点生成器
+
+**静态 Markdown 站点生成器**
+
 <img width="1910" height="896" alt="mkone" src="https://github.com/user-attachments/assets/7184c497-8657-495b-8316-9fb88486bb56" />
 
 轻量静态 Markdown 站点生成工具，无需复杂配置，快速将 Markdown 文档转换为可部署的纯静态 HTML 站点。
+
+## 特性
 
 - 使用 **数字_** 命名前缀（如 `01_指南/`、`02_快速开始.md`），自动按数字排序生成侧边栏与站点路由
 - 支持常用 Markdown 语法，提示块、代码块、标签等
@@ -12,9 +16,15 @@
 
 ## 使用教程
 
-建议使用 Vscode + Edge 浏览器环境
+> 建议使用 VSCode + Edge 浏览器环境
 
-安装 Node 22 版本，项目下终端执行
+### 环境准备
+
+安装 Node 22 版本。
+
+### 安装依赖
+
+在项目根目录终端依次执行：
 
 ```bash
 # 1. 全局安装 TypeScript\vite
@@ -32,13 +42,21 @@ npm install marked
 
 # 5. 安装 marked-highlight
 npm install marked-highlight
+```
 
-# 6. 运行开发环境
-npm run dev 或 npx vite --host 0.0.0.0
+### 运行与打包
 
-# 7. 打包项目
+```bash
+# 运行开发环境
+npm run dev
+# 或
+npx vite --host 0.0.0.0
+
+# 打包项目
 npm run build
 ```
 
-注意：
-若使用 pages 部署，将 github actions 配置为 static
+## 部署
+
+> [!NOTE]
+> 若使用 GitHub Pages 部署，需将 GitHub Actions 配置为 **static**。

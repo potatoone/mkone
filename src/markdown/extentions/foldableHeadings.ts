@@ -180,6 +180,25 @@ export function expandHeadingChain(id: string): boolean {
 }
 
 /**
+ * 一键展开 / 收起全部折叠区块（供页内导航「On This Page」标题点击调用）
+ * 存在收起区块时全部展开，否则全部收起
+ * @returns 切换后是否为全部展开
+ */
+export function toggleAllFoldSections(): boolean {
+  const container = document.getElementById(CONTAINER_ID);
+  if (!container) return true;
+
+  const sections = Array.from(container.querySelectorAll<HTMLElement>('.fold-section'));
+  if (!sections.length) return true;
+
+  const expand = sections.some(section => section.classList.contains('collapsed'));
+  // setCollapsed 的参数是「是否收起」，与 expand 相反
+  sections.forEach(section => setCollapsed(section, !expand));
+  persistState(); // 与手动折叠一致，写入持久化状态
+  return expand;
+}
+
+/**
  * 初始化标题折叠（在 Markdown 渲染完成后调用）
  * @param file 当前文档路径，用于读写该文档的折叠状态
  */

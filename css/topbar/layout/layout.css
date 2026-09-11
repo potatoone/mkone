@@ -22,7 +22,7 @@
 
 /* 面板内分区标题 */
 .layout-panel .section-title {
-  color: var(--text-primary);
+  color: var(--text-secondary); /* 分区标题用次文字色，不与内容抢重 */
   margin-right: 20px;
   font-size: 14px;
   font-weight: 500;
@@ -61,11 +61,13 @@
 .layout-panel .font-size-btn {
   width: 28px; height: 28px;
   padding: 0;
-  border-radius: 1px;
-  background: var(--active-s);
-  color: var(--text-primary);
+  border-radius: 2px;
+  border: 1px solid var(--border-m);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   cursor: pointer;
   position: relative;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 /* 字体按钮图标（保留核心伪元素样式） */
@@ -94,11 +96,15 @@
   height: 12px;
 }
 
-/* 按钮交互状态（合并重复 hover/active） */
-.layout-panel .font-size-btn:hover,
+/* 按钮交互状态（合并重复 hover/active）：中性悬浮，不强灌强调色 */
+.layout-panel .font-size-btn:hover {
+  background: var(--hover-s);
+  color: var(--text-primary);
+  border-color: var(--border-m);
+}
+
 .layout-panel .dropdown-trigger:hover {
-  background: var(--active-m);
-  border-color: var(--border-l);
+  background: var(--hover-s);
 }
 
 .layout-panel .font-size-btn:active {
@@ -109,7 +115,8 @@
   min-width: 40px;
   text-align: center;
   font-size: 15px;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 /* 下拉容器与触发器 */
@@ -126,11 +133,13 @@
   height: 36px;
   padding: 0 14px;
   margin-top: 6px;
-  border-radius: 1px;
+  border-radius: 2px;
+  border: 1px solid var(--border-m);
   font-size: 14px;
   color: var(--text-primary);
-  background: var(--active-s);
+  background: var(--bg-secondary);
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .layout-panel .selected-text {
@@ -203,7 +212,8 @@
 }
 
 .layout-panel .dropdown-item.selected {
-  background: var(--active-s);
+  background: var(--hover-s);
+  color: var(--accent-m); /* 选中项才使用强调色 */
   font-weight: 500;
 }
 
@@ -233,14 +243,18 @@
   height: 14px;
   border: none;
   border-radius: 50%;
-  background: var(--active-s);
+  background: var(--border-m); /* 未选中为中性圆点 */
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
 }
 
+.layout-panel .padding-btn:hover {
+  background: var(--text-muted);
+}
+
 .layout-panel .padding-btn.active {
-  background: var(--active-l);
+  background: var(--accent-m); /* 选中才使用强调色 */
   transform: scale(1.3);
   box-shadow: 0 0 0 4px var(--shadow-1);
 }
@@ -249,9 +263,9 @@
 .cdn-badge {
   font-size: 0.9em;
   padding: 1px 4px;
-  background: var(--accent-l);
-  color: var(--bg-primary);
-  border-radius: 1px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-radius: 2px;
   margin-left: 10px;
 }
 

@@ -81,26 +81,6 @@
   border-color: transparent;
 }
 
-/* 语言标记（相对于包裹容器定位，位于右下角） */
-.code-lang-badge {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  padding: 3px 8px;
-  font-family: 'Cascadia Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-s);
-  border-radius: 1px;
-  pointer-events: none; /* 不阻挡代码区交互 */
-  user-select: none;
-}
-
 /* 悬浮包裹容器时显示按钮（逻辑更简洁） */
 #markdown-container .code-block-wrapper:hover .code-copy-btn {
   opacity: 1;

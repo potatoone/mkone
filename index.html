@@ -114,13 +114,6 @@
 
         <main class="content">
           <div class="content-wrapper"> <!-- 文档内容与页内导航的容器 -->
-            <div id="search-area">
-              <div class="search-bar">
-                <input id="searchInput" type="text" placeholder="Search in this document ...">
-                <button id="searchCloseBtn"></button>
-              </div>
-              <span id="searchResultInfo"></span>
-            </div>
             <div id="status" class="status"></div> <!-- 加载、错误状态容器 -->
             <div id="overview"></div> <!-- 文件夹总览容器 -->
             <div id="markdown-container"></div>
@@ -133,6 +126,17 @@
 
       </div>
 
+    </div>
+
+    <!-- 搜索悬浮层：fixed 遮罩 + 对话框，不占文档流空间 -->
+    <div id="search-area">
+      <div class="search-dialog">
+        <div class="search-bar">
+          <input id="searchInput" type="text" placeholder="搜索全部文档…">
+          <button id="searchCloseBtn"></button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+      </div>
     </div>
 
     <script type="module" src="./src/main.ts"></script> <!-- 主脚本 -->

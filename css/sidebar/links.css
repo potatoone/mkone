@@ -6,7 +6,7 @@
 
 /* 链接区分隔线 */
 .sidebar-links-sep {
-  width: 100%;
+  width: calc(100% - 12px); /* 右侧略收一点，不顶到边缘 */
   border: none;
   border-top: 2px solid var(--border-m); /* 使用中等边框色 */
   margin-bottom: 10px;

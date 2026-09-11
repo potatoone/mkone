@@ -14,7 +14,7 @@ import { detectLanguage } from './highlight'; // 代码块自动检测语言（�
 export const setupCodeCopy = () => {
   const config = {
     containerSelector: '#markdown-container pre',
-    buttonText: 'COPY',
+    buttonText: 'copy',
     successText: 'COPIED',
     successDuration: 1500,
   };
@@ -38,24 +38,17 @@ export const setupCodeCopy = () => {
     block.parentNode?.insertBefore(wrapper, block);
     wrapper.appendChild(block);
 
-    // 3. 创建复制按钮
-    const button = document.createElement('button');
-    button.className = 'code-copy-btn';
-    button.type = 'button';
-    button.textContent = config.buttonText;
-    button.title = config.buttonText;
-
-    // 3.5 添加语言标记（显式标注的语言类名优先，未标注时用高亮阶段的自动检测结果）
+    // 3. 创建复制按钮：有语言标注时直接以语言名作为按钮文本，否则显示 copy
+    //    （显式标注的语言类名优先，未标注时用高亮阶段的自动检测结果）
     const codeEl = block.querySelector('code');
     const codeText = codeEl?.textContent ?? '';
     const lang = codeEl?.className.match(/language-([\w-]+)/)?.[1]
       ?? detectLanguage(codeText);
-    if (lang) {
-      const badge = document.createElement('span');
-      badge.className = 'code-lang-badge';
-      badge.textContent = lang;
-      wrapper.appendChild(badge);
-    }
+
+    const button = document.createElement('button');
+    button.className = 'code-copy-btn';
+    button.type = 'button';
+    button.textContent = lang || config.buttonText;
 
     // 4. 按钮点击事件
     button.addEventListener('click', async () => {
@@ -105,12 +98,10 @@ export const setupCodeCopy = () => {
     const originalText = button.textContent;
     button.textContent = config.successText;
     button.classList.add('success');
-    button.title = config.successText;
 
     setTimeout(() => {
       button.textContent = originalText;
       button.classList.remove('success');
-      button.title = config.buttonText;
     }, config.successDuration);
   };
 

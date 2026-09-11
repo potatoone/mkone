@@ -1,0 +1,32 @@
+/* ==============================================
+   全局自定义 tooltip（由 src/utils/tooltip.ts 控制）
+   样式沿用原顶栏「上一页/下一页」按钮的提示框：
+   三级背景 + 主文字色 + 2px 圆角，显示在目标下方
+============================================== */
+#global-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  padding: 5px 10px;
+  background-color: var(--bg-tertiary); /* 使用三级背景色 */
+  color: var(--text-primary); /* 使用主文字色 */
+  font-size: 1.2rem;
+  line-height: 1.5;
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none; /* 不挡鼠标，避免闪烁 */
+}
+
+#global-tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 打印时不输出 tooltip */
+@media print {
+  #global-tooltip { display: none; }
+}

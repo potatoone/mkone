@@ -22,6 +22,7 @@
 @import url('./base/resize.css');                 /* 侧栏拖拽调宽 */
 @import url('./base/loading.css');                /* 加载动画 */
 @import url('./base/toast.css');                  /* 提示框样式 */
+@import url('./base/tooltip.css');                /* 全局tooltip样式 */
 @import url('./base/print.css');                  /* 打印样式 */
 
 @import url('./color/color.css');                 /* 颜色浅色 */

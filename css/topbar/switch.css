@@ -13,11 +13,11 @@
   height: 0;
 }
 
-/* 开关轨道 */
+/* 开关轨道（未选中为中性灰，选中为主题激活色） */
 .switch-track {
   position: absolute;
   inset: 0;
-  background-color: var(--text-secondary); /* 使用次要文字色 */
+  background-color: var(--hover-m);
   border-radius: 1px;
   transition: .3s;
 }

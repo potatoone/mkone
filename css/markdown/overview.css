@@ -3,6 +3,7 @@
   display: none;
   height: calc(100vh - 100px);
   padding-top: 20px;
+  box-sizing: border-box; /* 防止 padding-top 把总高度顶出外层导致多滚 */
   overflow: hidden;
 }
 #overview.show { display: block; }
@@ -56,9 +57,15 @@
 .overview-scroll {
   height: 100%;
   overflow-y: auto;
+  scrollbar-width: none; /* Firefox：隐藏滚动条（保留滚动能力） */
+  -ms-overflow-style: none; /* 旧版 Edge */
 }
 
-/* 文档条目 */
+.overview-scroll::-webkit-scrollbar {
+  display: none; /* Chrome / Edge / Safari */
+}
+
+/* 文档条目（整行可点击跳转文档） */
 .overview-item {
   display: flex;
   font-size: 1.5rem;
@@ -66,13 +73,14 @@
   padding: 14px 20px;
   background: var(--bg-primary);
   border-radius: 4px;
+  cursor: pointer;
   transition: background 0.25s ease;
 }
 .overview-item:hover { background: var(--bg-secondary); }
 
 .doc-title {
   flex: none; /* 固定宽度，不被描述列挤压 */
-  width: 240px;
+  width: 160px;
   font-weight: 600;
   color: var(--text-tertiary);
   text-decoration: none;
@@ -107,19 +115,55 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-/* 响应式 */
+/* 响应式（移动端适配） */
 @media (max-width: 768px) {
-  #overview { padding: 20px 10px; }
+  #overview {
+    padding: 16px 0; /* 左右间距交给外层 .content-wrapper，不再叠加 */
+    margin: 0 -10px; /* 仅 Outline 比文档再向外扩 10px，不影响文档页 */
+    height: calc(100vh - 100px); /* 与桌面端一致，确保不超出外层 .content-wrapper */
+    box-sizing: border-box; /* 防止 padding 把总高度顶出外层 */
+  }
+
   .overview-header { margin-bottom: 10px; }
+  .overview-title-header {
+    font-size: 2em; /* 缩小大标题 */
+    margin-bottom: 10px;
+  }
+  .overview-menu {
+    gap: 20px; /* 收窄菜单间距并允许换行 */
+    flex-wrap: wrap;
+  }
+
   .overview-item {
     flex-wrap: wrap;
-    gap: 5px;
-    padding: 10px 0;
+    gap: 4px 12px;
+    padding: 10px 12px;
   }
+
+  /* 时间变为badge，与文档名同行右侧；描述独占第二行 */
+  .doc-title {
+    order: 1;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+
   .doc-time {
-    width: 5%;
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
+    order: 2;
+    margin-left: auto;
+    padding: 2px 8px;
+    font-size: 1.1rem;
+    color: var(--text-muted); /* 减淡 */
+    background: var(--bg-muted);
+    border-radius: 0; /* 无圆角 */
   }
+
+  .doc-desc {
+    order: 3;
+    flex: 1 1 100%;
+    min-width: 0;
+    color: var(--text-muted); /* 减淡描述 */
+  }
+
   .overview-item:hover { background: var(--bg-primary); }
 }

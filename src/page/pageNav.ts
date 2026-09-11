@@ -2,7 +2,7 @@
 
 import type { Heading, RenderMarkdownResult } from '../markdown/markdown';
 import type { MarkdownMetadata } from '../markdown/overview/viewParser';
-import { expandHeadingChain } from '../markdown/extentions/foldableHeadings'; // 标题折叠
+import { expandHeadingChain, toggleAllFoldSections } from '../markdown/extentions/foldableHeadings'; // 标题折叠
 // 引入scrolltotop.ts中的核心方法和工具函数
 import { 
   getScrollContainer, 
@@ -24,8 +24,11 @@ const getEl = <T extends HTMLElement>(id: string) => document.getElementById(id)
 // 初始化页面导航（对外暴露的核心方法）
 // renderResult 由调用方传入（loadPage 已渲染过），避免同一页面渲染两次
 export async function initPageNavigation(renderResult: RenderMarkdownResult) {
-  const { headings, metadata } = renderResult;
-  
+  const { metadata } = renderResult;
+
+  // 页内导航只收录一~三级标题：四级及以下会让目录冗长，滚动跟随也仅覆盖一~三级
+  const headings = renderResult.headings.filter(h => h.level <= 3);
+
   if (!headings.length) return;
 
   generateNavigation(headings, metadata);
@@ -125,7 +128,7 @@ function generateNavigation(headings: Heading[], metadata: MarkdownMetadata) {
 
   nav.innerHTML = `
     <div class="nav-items-container">
-      <div class="nav-title">On This Page</div>
+      <div class="nav-title" data-tooltip="点击展开 / 收起全部标题">On This Page</div>
       <div class="nav-indicator"></div>
       ${headings.map(h =>
         `<a href="#${h.id}" class="nav-item level-${h.level}" style="padding-left:${(h.level - 1) * 12}px">
@@ -139,6 +142,13 @@ function generateNavigation(headings: Heading[], metadata: MarkdownMetadata) {
       <div class="nav-timemark" id="navTimeMark">${marktime()}</div>
     </div>
   `;
+
+  // 点击「On This Page」标题：一键展开 / 收起正文的全部折叠标题
+  nav.querySelector('.nav-title')?.addEventListener('click', () => {
+    const expanded = toggleAllFoldSections();
+    const title = nav.querySelector<HTMLElement>('.nav-title');
+    if (title) title.dataset.tooltip = expanded ? '点击收起全部标题' : '点击展开全部标题';
+  });
 
   // 调用scrolltotop.ts中的方法：绑定回顶按钮事件
   bindScrollToTopEvent();

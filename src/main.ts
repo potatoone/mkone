@@ -4,6 +4,7 @@ import { PageManager } from './page/pageManager';
 import { initSidebar, restoreOutlineByTitle } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';
 import { initResizeHandles } from './utils/resize';
+import { initGlobalTooltip } from './utils/tooltip';
 import { getOutlineState } from './page/outlineState';
 
 class MkoneApp {
@@ -18,6 +19,17 @@ class MkoneApp {
     this.init();
     this.handlePopState = this.handlePopState.bind(this);
     window.addEventListener('popstate', this.handlePopState);
+    // 全局搜索结果跳转（search.ts 广播 mkone:navigate）
+    document.addEventListener('mkone:navigate', (e) => {
+      const file = (e as CustomEvent<{ file: string }>).detail?.file;
+      if (!file) return;
+      this.pageManager.loadPage(file)
+        .then(() => document.dispatchEvent(new CustomEvent('mkone:navigated', { detail: { file } })))
+        .catch(err => {
+          console.error('搜索跳转失败:', err);
+          showError(`加载页面失败: ${file}`);
+        });
+    });
   }
 
   private async init(): Promise<void> {
@@ -26,6 +38,7 @@ class MkoneApp {
       this.elements = getDOMElements() as DOMElements;
       if (!this.elements) throw new Error('无法获取必需的DOM元素');
 
+      initGlobalTooltip(); // 全局自定义 tooltip（替代原生 title 提示）
       await this.initSidebar();
       this.initTopbar();
       await this.loadInitialPage();

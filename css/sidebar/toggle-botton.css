@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--border-m); /* 使用中等边框色 */
-  z-index: 10;
+  z-index: 30; /* 高于拖拽手柄(z-index:20)：按钮骑在侧栏边缘，避免手柄拦截其悬停与点击 */
 }
 
 /* 移动端适配 */
