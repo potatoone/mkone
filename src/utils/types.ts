@@ -1,5 +1,7 @@
 // 全局通用类型定义
 
+import type { LocalizedText } from './i18n';
+
 // 导出历史记录项类型
 export interface HistoryEntry {
   fileName: string;
@@ -35,7 +37,8 @@ export interface DOMElements {
 
 // 导出顶栏字体配置类型
 export interface FontConfig {
-  displayName: string; // 显示名称
+  /** 显示名称：支持多语言（{ zh, en }）或直接字符串 */
+  displayName: LocalizedText;
   cssName: string;     // CSS字体名
   url?: string;        // 可选CDN资源地址
 }

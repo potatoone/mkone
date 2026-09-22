@@ -22,7 +22,7 @@
         </div>
         <div class="resize-handle resize-handle-left" id="sidebar-resize-handle" role="separator"
           aria-orientation="vertical" aria-label="拖拽调整侧边栏宽度" tabindex="0"
-          title="拖拽调整宽度（双击复位）"></div>
+          data-i18n-title="resize.sidebar"></div>
       </aside>
 
       <div class="main-panel">
@@ -32,17 +32,17 @@
           <div class="left">
             <button id="backBtn" data-tooltip class="arrow-btn left-arrow"></button> <!-- 上一页按钮 -->
             <button id="forwardBtn" data-tooltip class="arrow-btn right-arrow"></button> <!-- 下一页按钮 -->
-            <button id="searchBtn" class="search-btn" title="搜索"></button> <!-- 搜索按钮 -->
+            <button id="searchBtn" class="search-btn" data-i18n-title="topbar.search"></button> <!-- 搜索按钮 -->
           </div>
 
           <div class="right">
 
-            <button id="layoutBtn" class="layout-btn" title="布局"><i></i></button> <!-- 布局按钮 -->
+            <button id="layoutBtn" class="layout-btn" data-i18n-title="topbar.layout"><i></i></button> <!-- 布局按钮 -->
             <div id="layoutPanel" class="layout-panel"> <!-- 布局面板 -->
 
               <div class="font-size-section"> <!-- 字体大小调节区域 -->
                 <div class="font-size-controls">
-                  <span class="section-title">字体大小</span>
+                  <span class="section-title" data-i18n="layout.fontSize"></span>
                   <button id="decreaseFontSize" class="font-size-btn decrease"></button> <!-- 减小字体按钮 -->
                   <span id="currentFontSize" class="current-font-size">10</span> <!-- 字体大小显示 -->
                   <button id="increaseFontSize" class="font-size-btn increase"></button> <!-- 增大字体按钮 -->
@@ -50,10 +50,10 @@
               </div>
 
               <div class="font-select-section"> <!-- 字体选择区域 -->
-                <span class="section-title">选择字体</span>
+                <span class="section-title" data-i18n="layout.selectFont"></span>
                 <div id="fontSelect" class="font-select"> <!-- 自定义下拉容器 -->
                   <div class="dropdown-trigger"> <!-- 下拉触发器 -->
-                    <span class="selected-text">系统默认</span> <!-- 选中字体显示 -->
+                    <span class="selected-text"></span> <!-- 选中字体显示（由字体列表填充） -->
                     <i class="dropdown-arrow"></i> <!-- 下拉箭头 -->
                   </div>
                   <div class="dropdown-menu"></div> <!-- 下拉菜单（动态填充） -->
@@ -61,15 +61,23 @@
               </div>
 
               <div class="nav-toggle-section"> <!-- 页内导航开关区域 -->
-                <span class="section-title">隐藏页内导航</span>
+                <span class="section-title" data-i18n="layout.hidePageNav"></span>
                 <label class="android-switch">
                   <input type="checkbox" id="navToggleSwitch" />
                   <span class="switch-track"></span>
                 </label>
               </div>
+
+              <div class="language-section"> <!-- 语言切换区域 -->
+                <span class="section-title" data-i18n="layout.language"></span>
+                <div class="language-controls">
+                  <button type="button" class="lang-btn" data-locale="zh">中文</button>
+                  <button type="button" class="lang-btn" data-locale="en">English</button>
+                </div>
+              </div>
               
               <div class="padding-section"> <!-- 边距调节区域 -->
-                <span class="section-title">内容边距</span>
+                <span class="section-title" data-i18n="layout.contentPadding"></span>
                 <div class="padding-controls"> <!-- 边距控制按钮组 -->
                   <button class="padding-btn active" data-padding="small"></button>
                   <button class="padding-btn" data-padding="medium"></button>
@@ -79,19 +87,19 @@
 
             </div>
 
-            <button id="exportBtn" class="export-btn" title="导出"><i></i></button> <!-- 导出按钮 -->
+            <button id="exportBtn" class="export-btn" data-i18n-title="topbar.export"><i></i></button> <!-- 导出按钮 -->
             <div id="exportPanel" class="export-panel"> <!-- 导出面板 -->
-              <button id="copyMarkdownBtn" class="menu-item">复制 Markdown</button> <!-- 复制Markdown按钮 -->
-              <button id="exportHtmlBtn" class="menu-item">导出 HTML</button> <!-- 导出HTML按钮 -->
-              <button id="printBtn" class="menu-item">打印</button> <!-- 打印按钮 -->
+              <button id="copyMarkdownBtn" class="menu-item" data-i18n="export.copyMarkdown"></button> <!-- 复制Markdown按钮 -->
+              <button id="exportHtmlBtn" class="menu-item" data-i18n="export.html"></button> <!-- 导出HTML按钮 -->
+              <button id="printBtn" class="menu-item" data-i18n="export.print"></button> <!-- 打印按钮 -->
             </div>
 
-            <button class="theme-btn" id="themeBtn" title="切换主题">
+            <button class="theme-btn" id="themeBtn" data-i18n-title="topbar.theme">
               <span></span><span></span><span></span>
             </button><!-- 主题按钮 -->
             <div class="theme-panel" id="themePanel"> <!-- 主题面板 -->
               <div class="theme-option"> <!-- 夜间模式选项 -->
-                <span>夜间模式</span>
+                <span data-i18n="theme.nightMode"></span>
                 <label class="auto-toggle">
                   <input type="checkbox" id="autoModeSwitch" checked />
                   <span>AUTO</span>
@@ -102,7 +110,7 @@
                 </label>
               </div>
               <div class="theme-colors"> <!-- 主题颜色选择 -->
-                <span class="colors-title">主题颜色</span>
+                <span class="colors-title" data-i18n="theme.themeColors"></span>
                 <div class="color-palette" id="colorOptions"></div>
                 <!-- 颜色选项 -->
               </div>
@@ -120,7 +128,7 @@
           </div>
           <div class="resize-handle resize-handle-right" id="pagenav-resize-handle" role="separator"
             aria-orientation="vertical" aria-label="拖拽调整页内导航宽度" tabindex="0"
-            title="拖拽调整宽度（双击复位）"></div>
+            data-i18n-title="resize.pageNav"></div>
           <nav id="pageNav"></nav> <!-- 页内导航栏 -->
         </main>
 
@@ -132,7 +140,7 @@
     <div id="search-area">
       <div class="search-dialog">
         <div class="search-bar">
-          <input id="searchInput" type="text" placeholder="搜索全部文档…">
+          <input id="searchInput" type="text" data-i18n-placeholder="search.placeholder">
           <button id="searchCloseBtn"></button>
         </div>
         <div id="searchResults" class="search-results"></div>

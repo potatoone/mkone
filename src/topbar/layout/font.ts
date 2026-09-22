@@ -75,8 +75,9 @@ export class FontConfigManager {
         try {
             const res = await fetch('./config/fonts.json');
             const remote: FontConfig[] = await res.json();
-            // 合并本地与远程并去重
-            this.fontList = Array.from(new Map([...remote, ...this.getStoredFonts()].map(f => [f.cssName, f])).values());
+            // 合并缓存与远程配置并去重：远程（配置文件）优先，缓存仅作离线兜底，
+            // 否则 config/fonts.json 的改动会被旧缓存盖住
+            this.fontList = Array.from(new Map([...this.getStoredFonts(), ...remote].map(f => [f.cssName, f])).values());
             localStorage.setItem(FONT_STORAGE_KEYS.fontOptions, JSON.stringify(this.fontList));
         } catch {
             this.fontList = this.getStoredFonts();

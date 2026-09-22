@@ -3,6 +3,7 @@ import { showError, storage, STORAGE_KEYS } from '../utils/utils';
 
 import { initPageNavigation, showPageNavigation } from './pageNav';
 import { setOutlineDir } from './outlineState'; // Outline 打开状态
+import { t } from '../utils/i18n'; // 多语言
 import { cleanTitle } from '../utils/docsParser';
 import { expandHeadingChain } from '../markdown/extentions/foldableHeadings'; // 标题折叠
 import {
@@ -73,7 +74,7 @@ export class PageManager {
     if (index === -1) {
       // 目标文档不存在（例如源文件已被删除/重命名）：提示但不破坏当前页面
       console.warn('页面不存在:', fileNameOrHref);
-      showError('目标文档不存在（可能已被删除或重命名）');
+      showError(t('msg.docNotFound'));
       return false;
     }
 
@@ -117,7 +118,7 @@ export class PageManager {
     } catch (error) {
       // 渲染失败时回滚页码，避免上一篇/下一篇错位
       this.currentIndex = prevIndex;
-      showError(`加载失败: ${error instanceof Error ? error.message : '未知错误'}`);
+      showError(t('msg.loadFailed', [error instanceof Error ? error.message : 'unknown error']));
       return false;
     }
   }
@@ -209,7 +210,7 @@ export class PageManager {
       // 先解析目标文档：不存在则提示，避免带着无效路径进入渲染流程
       if (!this.resolvePage(href)) {
         console.warn('文档链接无效:', href);
-        showError('目标文档不存在（可能已被删除或重命名）');
+        showError(t('msg.docNotFound'));
         link.classList.add('link-broken');
         return;
       }
@@ -249,12 +250,12 @@ export class PageManager {
 
   // 加载上一页
   public loadPrevPage(): void {
-    this.loadPageByOffset(-1, '已经是第一页');
+    this.loadPageByOffset(-1, t('msg.firstPage'));
   }
 
   // 加载下一页
   public loadNextPage(): void {
-    this.loadPageByOffset(1, '已经是最后一页');
+    this.loadPageByOffset(1, t('msg.lastPage'));
   }
 
   // 获取当前页面
@@ -271,23 +272,23 @@ export class PageManager {
   public async reloadCurrentPage(): Promise<void> {
     const currentPage = this.getCurrentPage();
     if (currentPage) await this.loadPage(currentPage);
-    else showError('没有可重新加载的页面');
+    else showError(t('msg.noReloadPage'));
   }
 
   // 获取上一页标题
   public getPrevPageTitle(): string {
-    return this.currentIndex > 0 ? cleanTitle(this.pages[this.currentIndex - 1]) : '没有上一页';
+    return this.currentIndex > 0 ? cleanTitle(this.pages[this.currentIndex - 1]) : t('topbar.noPrev');
   }
 
   // 获取下一页标题
   public getNextPageTitle(): string {
-    return this.currentIndex < this.pages.length - 1 ? cleanTitle(this.pages[this.currentIndex + 1]) : '没有下一页';
+    return this.currentIndex < this.pages.length - 1 ? cleanTitle(this.pages[this.currentIndex + 1]) : t('topbar.noNext');
   }
 
   // 更新按钮标题
   public updateButtonTitles(backBtn: HTMLButtonElement, forwardBtn: HTMLButtonElement): void {
-    backBtn.dataset.tooltip = `上一页: ${this.getPrevPageTitle()}`;
-    forwardBtn.dataset.tooltip = `下一页: ${this.getNextPageTitle()}`;
+    backBtn.dataset.tooltip = t('topbar.prevTip', [this.getPrevPageTitle()]);
+    forwardBtn.dataset.tooltip = t('topbar.nextTip', [this.getNextPageTitle()]);
   }
 
   // 获取当前页面的文件名（不包含路径和扩展名）

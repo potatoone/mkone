@@ -108,6 +108,34 @@ export function showSuccess(message: string, duration: number = 2000): void {
   showToast('success', message, duration);
 }
 
+/**
+ * 复制文本到剪贴板
+ * 优先使用现代 Clipboard API；不可用或失败时降级到 execCommand，
+ * 以兼容 http://局域网IP 这类非安全上下文（Clipboard API 在其中被禁用）
+ */
+export async function copyText(text: string): Promise<void> {
+  if (window.isSecureContext && navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // 继续走降级方案
+    }
+  }
+
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.opacity = '0';
+  textArea.style.pointerEvents = 'none';
+  document.body.appendChild(textArea);
+  textArea.select();
+  const ok = document.execCommand('copy');
+  document.body.removeChild(textArea);
+
+  if (!ok) throw new Error('复制失败');
+}
+
 // 全局存储 key（避免多处硬编码字符串）
 export const STORAGE_KEYS = {
   currentPage: 'mkoneCurrentPage'

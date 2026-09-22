@@ -1,4 +1,5 @@
 import { getElement, showSuccess, showError } from '../utils/utils';
+import { t } from '../utils/i18n';
 
 export class ExportManager {
   private exportPanel: HTMLElement;
@@ -31,11 +32,11 @@ export class ExportManager {
     try {
       const text = this.extractMarkdownText();
       await navigator.clipboard.writeText(text);
-      showSuccess('Markdown 内容已复制到剪贴板');
+      showSuccess(t('export.copiedMarkdown'));
       this.closePanel();
     } catch (err) {
       console.error('复制失败:', err);
-      showError('复制失败，请手动复制');
+      showError(t('export.copyFailed'));
     }
   }
 
@@ -53,11 +54,11 @@ export class ExportManager {
       document.body.removeChild(link);
       
       URL.revokeObjectURL(url);
-      showSuccess('HTML 文件已导出');
+      showSuccess(t('export.htmlExported'));
       this.closePanel();
     } catch (err) {
       console.error('导出失败:', err);
-      showError('导出失败，请重试');
+      showError(t('export.exportFailed'));
     }
   }
 
@@ -84,7 +85,7 @@ export class ExportManager {
       this.closePanel();
     } catch (err) {
       console.error('打印失败:', err);
-      showError('打印失败，请重试');
+      showError(t('export.printFailed'));
     }
   }
 

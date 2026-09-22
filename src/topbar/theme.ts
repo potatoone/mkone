@@ -1,7 +1,10 @@
+import { onLocaleChange, t, type MessageKey } from '../utils/i18n';
+
 interface Theme {
   name: string;
   color: string;
-  title: string;
+  /** 多语言标题在词典中的 key */
+  titleKey: MessageKey;
 }
 
 const STORAGE_KEYS = {
@@ -19,12 +22,12 @@ export function setupTheme(
 ) {
   // 调整顺序后的主题配置
   const baseThemes: Theme[] = [
-    { name: 'classic', color: '#2563eb', title: '经典主题' },
-    { name: 'gray', color: '#3d3d45', title: '灰色主题' },
-    { name: 'book', color: '#ea580c', title: '书本主题' },
-    { name: 'green', color: '#2d8a78', title: '绿色主题' },
-    { name: 'purple', color: '#8040c0', title: '紫色主题' },
-    { name: 'rose', color: '#b04068', title: '玫红主题' }
+    { name: 'classic', color: '#2563eb', titleKey: 'theme.classic' },
+    { name: 'gray', color: '#3d3d45', titleKey: 'theme.gray' },
+    { name: 'book', color: '#ea580c', titleKey: 'theme.book' },
+    { name: 'green', color: '#2d8a78', titleKey: 'theme.green' },
+    { name: 'purple', color: '#8040c0', titleKey: 'theme.purple' },
+    { name: 'rose', color: '#b04068', titleKey: 'theme.rose' }
   ];
 
   // DOM 与状态初始化
@@ -58,7 +61,7 @@ export function setupTheme(
     colorPalette.innerHTML = baseThemes.map(theme => `
       <button class="color-item ${theme.name === currentTheme ? 'active' : ''}" 
               style="background-color: ${theme.color}" 
-              title="${theme.title}"
+              data-tooltip="${t(theme.titleKey)}"
               data-theme="${theme.name}">
       </button>
     `).join('');
@@ -111,6 +114,9 @@ export function setupTheme(
   // 初始化
   generateColorButtons();
   applyTheme();
+
+  // 语言切换后重渲染主题色块（提示文案跟随语言）
+  onLocaleChange(generateColorButtons);
 
   // 暴露公共方法
   return {

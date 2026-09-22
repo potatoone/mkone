@@ -4,7 +4,7 @@
 import { buildNavTree, getAllPages, getNavTree } from '../utils/navTree';
 import { navRender } from './navRender';
 import { initSidebarLinks } from './links';
-import type { NavRoot } from './navTypes';
+import type { NavDir, NavRoot } from './navTypes';
 import { renderOverView } from '../markdown/overview/overview';
 import { hidePageNavigation } from '../page/pageNav';
 import { setOutlineDir } from '../page/outlineState';
@@ -84,7 +84,7 @@ function restoreSidebarState() {
  * 显示某个一级目录的 Outline（概览页）
  * 同时记录「当前停留在 Outline」，以便刷新后恢复
  */
-function showRootOverview(dir: NavRoot): void {
+function showRootOverview(dir: NavDir): void {
   const markdownContainer = document.getElementById('markdown-container') as HTMLElement | null;
   const overviewContainer = document.getElementById('overview') as HTMLElement | null;
   if (!markdownContainer || !overviewContainer) return;
@@ -104,7 +104,7 @@ function showRootOverview(dir: NavRoot): void {
  * @returns 是否成功恢复
  */
 export function restoreOutlineByTitle(title: string): boolean {
-  const root = getNavTree().find(item => item.type === 'dir' && item.title === title);
+  const root = getNavTree().find(item => item.type === 'dir' && item.title === title) as NavDir | undefined;
   if (!root) return false;
   showRootOverview(root);
   return true;

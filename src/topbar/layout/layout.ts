@@ -2,6 +2,7 @@
 import { togglePageNavigation } from '../../page/pageNav';
 import { FontConfigManager } from './font'; // 导入字体相关工具和类型
 import { FontConfig } from '../../utils/types'; // 导入配置类型
+import { applyI18n, getLocale, localize, setLocale, type Locale } from '../../utils/i18n'; // 多语言
 
 type PaddingPreset = 'small' | 'medium' | 'large';
 
@@ -79,12 +80,13 @@ export function setupLayout(
   // ---------------------- 字体选择器DOM渲染（仅DOM操作，无业务逻辑） ----------------------
   function renderFontOptions(fontList: FontConfig[]) {
     fontMenu.innerHTML = '';
-    const currentFont = fontConfigManager.getCurrentFont();
+    // 未选过字体时，视为选中列表首项（系统默认）
+    const activeCssName = fontConfigManager.getCurrentFont()?.cssName ?? fontList[0]?.cssName;
 
     fontList.forEach(font => {
       const item = document.createElement('div');
-      item.className = `dropdown-item ${currentFont?.cssName === font.cssName ? 'selected' : ''}`;
-      item.textContent = font.displayName;
+      item.className = `dropdown-item ${activeCssName === font.cssName ? 'selected' : ''}`;
+      item.textContent = localize(font.displayName);
       item.dataset.cssName = font.cssName;
 
       if (font.url) {
@@ -108,14 +110,44 @@ export function setupLayout(
   // 更新字体选择器显示文本
   function updateFontSelectorDisplay() {
     const currentFont = fontConfigManager.getCurrentFont();
+    // 未选过字体时回退到列表首项（系统默认），保证触发器不出现空白
+    const activeCssName = currentFont?.cssName ?? fontConfigManager.getFontList()[0]?.cssName;
+
     if (currentFont) {
-      fontSelectedText.textContent = currentFont.displayName;
-      // 更新选中项样式
-      fontMenu.querySelectorAll('.dropdown-item').forEach(item => {
-        const el = item as HTMLElement;
-        el.classList.toggle('selected', el.dataset.cssName === currentFont?.cssName);
-      });
+      fontSelectedText.textContent = localize(currentFont.displayName);
+    } else {
+      const fallback = fontConfigManager.getFontList()[0];
+      fontSelectedText.textContent = fallback ? localize(fallback.displayName) : '';
     }
+
+    // 更新选中项样式
+    fontMenu.querySelectorAll('.dropdown-item').forEach(item => {
+      const el = item as HTMLElement;
+      el.classList.toggle('selected', el.dataset.cssName === activeCssName);
+    });
+  }
+
+  // ---------------------- 语言切换 ----------------------
+  const langBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.lang-btn'));
+
+  function updateLangButtons() {
+    const locale = getLocale();
+    langBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.locale === locale));
+  }
+
+  function bindLanguage() {
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const locale = btn.dataset.locale as Locale;
+        if (!locale || locale === getLocale()) return;
+
+        setLocale(locale); // 持久化偏好 + 应用静态文案 + 通知其它模块重渲染
+        applyI18n();
+        updateLangButtons();
+        renderFontOptions(fontConfigManager.getFontList()); // 字体名跟随语言
+        updateFontSelectorDisplay();
+      });
+    });
   }
 
   // ---------------------- 事件绑定 ----------------------
@@ -174,6 +206,8 @@ async function init() {
 
     // 4. 绑定事件
     bindEvents();
+    bindLanguage();
+    updateLangButtons();
 }
 
   return { init };

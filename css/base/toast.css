@@ -36,8 +36,8 @@
   font-size: 11px;
   border-radius: 2px;
   position: fixed;
-  bottom: 20px; 
-  right: 20px;
+  bottom: 12px; 
+  right: 12px;
   background: #ff5a68;
   color: white;
   padding: 10px 16px;
@@ -46,19 +46,19 @@
   max-width: 250px;
 }
 
-/* 成功提示框 */
+/* 成功提示框：底色跟随主题强调色；文字用主背景色，浅色主题=白字、深色主题=深字，自动保证对比 */
 .success-toast {
   font-size: 11px;
   border-radius: 2px;
   position: fixed;
-  bottom: 20px; 
-  right: 20px;
-  background: #2ed573;
-  color: white;
+  bottom: 12px; 
+  right: 12px;
+  max-width: 100px;
+  background: var(--accent-m);
+  color: var(--bg-primary);
   padding: 10px 16px;
   z-index: 10;
   animation: slideIn 0.3s ease;
-  max-width: 10rem;
 }
 
 /* 提示框显示动画 */

@@ -5,6 +5,7 @@ import { initSidebar, restoreOutlineByTitle } from './sidebar/sidebar';
 import { initTopbar } from './topbar/topbar';
 import { initResizeHandles } from './utils/resize';
 import { initGlobalTooltip } from './utils/tooltip';
+import { initI18n, t } from './utils/i18n';
 import { getOutlineState } from './page/outlineState';
 
 class MkoneApp {
@@ -27,7 +28,7 @@ class MkoneApp {
         .then(() => document.dispatchEvent(new CustomEvent('mkone:navigated', { detail: { file } })))
         .catch(err => {
           console.error('搜索跳转失败:', err);
-          showError(`加载页面失败: ${file}`);
+          showError(t('msg.sidebarLoadFailed', [file]));
         });
     });
   }
@@ -38,15 +39,16 @@ class MkoneApp {
       this.elements = getDOMElements() as DOMElements;
       if (!this.elements) throw new Error('无法获取必需的DOM元素');
 
+      initI18n(); // 多语言：读取浏览器存储的语言偏好并应用静态文案
       initGlobalTooltip(); // 全局自定义 tooltip（替代原生 title 提示）
       await this.initSidebar();
       this.initTopbar();
       await this.loadInitialPage();
 
-      showSuccess('Done');
+      showSuccess(t('msg.done'));
     } catch (error) {
       console.error('应用初始化失败:', error);
-      showError('应用初始化失败，请刷新页面重试');
+      showError(t('msg.appInitFailed'));
     }
   }
 
@@ -66,7 +68,7 @@ class MkoneApp {
     const allPages = await initSidebar(fileName => {
       this.pageManager.loadPage(fileName).catch(err => {
         console.error('侧边栏点击加载失败:', err);
-        showError(`加载页面失败: ${fileName}`);
+        showError(t('msg.sidebarLoadFailed', [fileName]));
       });
     });
 
@@ -100,7 +102,7 @@ class MkoneApp {
     if (event.state?.fileName) {
       this.pageManager.loadPage(event.state.fileName).catch(err => {
         console.error('历史记录加载失败:', err);
-        showError(`加载历史页面失败: ${event.state.fileName}`);
+        showError(t('msg.historyLoadFailed', [event.state.fileName]));
       });
     }
   }

@@ -9,7 +9,7 @@
   overflow-x: auto; /* 宽表格独立横向滚动，不撑破正文 */
   margin: 0 0 1.25em 0;
   border-collapse: collapse;
-  border: 1px solid var(--border-m); /* 外框使用中等边框色 */
+  border: 1px solid var(--border-s); /* 与代码块边框保持一致 */
   font-size: 1.3rem;
   background-color: var(--bg-primary);
   line-height: 1.6;
@@ -28,7 +28,7 @@
 #markdown-container th,
 #markdown-container td {
   padding: 10px 16px; /* 加大呼吸感 */
-  border: 1px solid var(--border-s); /* 内部网格线使用浅边框色，降低压迫感 */
+  border: 1px solid color-mix(in srgb, var(--border-s) 60%, var(--bg-primary)); /* 内部网格线比外框更淡 */
   overflow-wrap: anywhere; /* 长链接/长单词不撑破单元格 */
   vertical-align: top;
 }
@@ -39,6 +39,15 @@
   background-color: var(--bg-secondary); /* 使用次背景色 */
   color: var(--text-primary); /* 使用主文字色 */
 }
+
+/* 去掉边缘单元格的外侧边框：table 是 display:block，其外框与单元格边框不会折叠，
+   不处理的话最外圈会叠成 2px，比代码块的 1px 粗
+   注意末行要限定 tbody：表头行在 thead 里同时是首行和末行，否则会误删列名下的分隔线 */
+#markdown-container tr > *:first-child { border-left: none; }
+#markdown-container tr > *:last-child { border-right: none; }
+#markdown-container thead tr:first-child > *,
+#markdown-container tbody tr:first-child > * { border-top: none; }
+#markdown-container tbody tr:last-child > * { border-bottom: none; }
 
 /* 单元格内段落/列表收紧，避免表格被撑高 */
 #markdown-container th > p,
@@ -107,4 +116,49 @@
     background-color: #f2f2f2 !important;
     color: #000 !important;
   }
+}
+
+/* ==============================================
+   表格右键菜单（复制单元格/行/列/全表）
+============================================== */
+.table-context-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  display: none;
+  min-width: 126px;
+  padding: 4px 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-s);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px var(--shadow-2);
+}
+
+.table-context-menu.show {
+  display: block;
+}
+
+.table-context-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.table-context-menu button:hover {
+  background: var(--hover-s);
+  color: var(--accent-m);
+}
+
+/* 右键选中的单元格（菜单打开期间）高亮：仅底色，不加边框 */
+#markdown-container td.table-cell-menu-target,
+#markdown-container th.table-cell-menu-target {
+  background-color: color-mix(in srgb, var(--accent-m) 18%, var(--bg-primary));
 }

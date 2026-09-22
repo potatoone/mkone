@@ -4,11 +4,13 @@
   --color-warning: #ff9800;
   --color-danger: #f44336;
   --color-note: #2196f3;
+  --color-tip: #00b8d4;
 
   --bg-success: #4caf4f2b;
   --bg-warning: #ff99002b;
   --bg-danger: #f443362b;
   --bg-note: #2196f32b;
+  --bg-tip: #00b8d42b;
 
   --icon-size: 1.5em;
   --icon-left: 0.6em;
@@ -21,11 +23,13 @@
   --color-warning: #ff9800;
   --color-danger: #f44336;
   --color-note: #2196f3;
+  --color-tip: #00b8d4;
 
   --bg-success: #44b9486d;
   --bg-warning: #f6ac366d;
   --bg-danger: #f443366d;
   --bg-note: #2195f36d;
+  --bg-tip: #00b8d46d;
 
   --icon-size: 1.5em;
   --icon-left: 0.6em;
@@ -43,7 +47,13 @@
   border-radius: 1px;
 }
 
-/* 圆形背景 */
+/* 提示块内段落使用对称的上下边距：留出呼吸感且不影响垂直居中
+   （必须带 #markdown-container 前缀，否则特异性低于 #markdown-container p 而不生效） */
+#markdown-container .admonition p {
+  margin: 0.3em 0;
+}
+
+/* 圆形背景（默认按 note 处理，保证未定义的 kind 也有图标） */
 .admonition::before {
   content: "";
   position: absolute;
@@ -53,6 +63,7 @@
   width: var(--icon-size);
   height: var(--icon-size);
   border-radius: 5%;
+  background: var(--color-note);
 }
 
 /* 图标 */
@@ -68,6 +79,8 @@
   background-position: center;
   background-size: 75%;
   pointer-events: none;
+  /* 兜底图标：info（未定义的 kind 不会出现空白） */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='10' y='5' width='4' height='4' fill='white'/%3E%3Crect x='10' y='12' width='4' height='10' fill='white'/%3E%3C/svg%3E");
 }
 
 
@@ -99,6 +112,18 @@
 }
 .admonition.note::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='10' y='5' width='4' height='4' fill='white'/%3E%3Crect x='10' y='12' width='4' height='10' fill='white'/%3E%3C/svg%3E");
+}
+
+/* tip（小灯泡，青色） */
+.admonition.tip {
+  border-color: var(--color-tip);
+  background: var(--bg-tip);
+}
+.admonition.tip::before {
+  background: var(--color-tip);
+}
+.admonition.tip::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5a6.2 6.2 0 0 0-3.6 11.2c.5.4.8 1 .8 1.6v.6h5.6v-.6c0-.6.3-1.2.8-1.6A6.2 6.2 0 0 0 12 2.5z' fill='white'/%3E%3Crect x='9.5' y='17.2' width='5' height='1.8' fill='white'/%3E%3Crect x='10.3' y='19.8' width='3.4' height='1.6' fill='white'/%3E%3C/svg%3E");
 }
 
 /* warning */

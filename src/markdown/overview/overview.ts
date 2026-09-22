@@ -2,6 +2,7 @@ import { getMetadata } from '../parser';
 import { getElement } from '../../utils/utils';
 import type { NavDir, NavFile } from '../../sidebar/navTypes';
 import { hidePageTitle } from '../../page/pageTitle';
+import { onLocaleChange, t } from '../../utils/i18n';
 import { getOutlineState, setOutlineSort } from '../../page/outlineState';
 
 // 简化接口定义
@@ -45,18 +46,18 @@ const sortItems = (items: OverviewItem[], { type, asc }: SortState): OverviewIte
   });
 };
 
-const DEFAULT_DESC = '该目录包含文档列表，可通过菜单切换排序方式';
-
 /**
  * 模块级状态：菜单事件只绑定一次，必须复用「当前」数据，
  * 否则闭包会一直引用首次渲染的列表（切换目录后菜单会渲染上一个目录的内容）
  */
 let currentItems: OverviewItem[] = [];
 let currentSortState: SortState = { type: 'time', asc: false };
+let currentDirDesc = ''; // 当前目录描述（语言切换后重建头部时需要）
 
 /** 构建头部骨架并绑定菜单事件（已构建时只更新目录描述） */
 function ensureHeader(container: HTMLElement, dirDesc: string): void {
-  const text = dirDesc || DEFAULT_DESC;
+  const text = dirDesc || t('outline.defaultDesc');
+  currentDirDesc = dirDesc;
   const descEl = container.querySelector('.overview-desc p');
 
   if (descEl) {
@@ -66,11 +67,11 @@ function ensureHeader(container: HTMLElement, dirDesc: string): void {
 
   container.innerHTML = `
       <div class="overview-header">
-        <div class="overview-title-header">Outline</div>
+        <div class="overview-title-header">${t('outline.title')}</div>
         <div class="overview-menu">
-          <button class="menu-btn" data-type="overview"><span>概览</span></button>
-          <button class="menu-btn" data-type="time"><span>更新时间</span></button>
-          <button class="menu-btn" data-type="name"><span>A-Z</span></button>
+          <button class="menu-btn" data-type="overview"><span>${t('outline.viewOverview')}</span></button>
+          <button class="menu-btn" data-type="time"><span>${t('outline.viewTime')}</span></button>
+          <button class="menu-btn" data-type="name"><span>${t('outline.viewName')}</span></button>
           <div class="menu-underline"></div>
         </div>
       </div>
@@ -136,8 +137,8 @@ function paint(container: HTMLElement): void {
     listContent.innerHTML = sortItems(currentItems, currentSortState).map(item => `
         <div class="overview-item">
           <a href="${item.file}" class="internal-link doc-title" data-file="${item.file}">${item.title}</a>
-          <div class="doc-desc">${item.desc || 'No Description'}</div>
-          <div class="doc-time">${(item.time)}</div>
+          <div class="doc-desc">${item.desc || t('outline.noDesc')}</div>
+          <div class="doc-time">${item.time || t('outline.noTime')}</div>
         </div>
       `).join('');
   }
@@ -182,7 +183,8 @@ export const renderOverView = async (
   const overviewItems: OverviewItem[] = await Promise.all(
     allFiles.map(async ({ title, file }) => {
       const meta = await loadMetadata(file);
-      return { title, file, time: meta?.time ?? 'No Time Mark', desc: meta?.desc || null };
+      // 缺失值保持 null，渲染时再按当前语言取兜底文案
+      return { title, file, time: meta?.time ?? null, desc: meta?.desc || null };
     })
   );
 
@@ -191,3 +193,13 @@ export const renderOverView = async (
   renderOverview(overviewItems, isFirstLevel, { type: saved.sortType, asc: saved.sortAsc }, dirDesc);
   hidePageTitle(document.getElementById('pageTitle'));
 };
+
+// 语言切换后重建概览（标题、菜单、缺省文案；仅当当前正显示概览时）
+onLocaleChange(() => {
+  const container = getElement('#overview', HTMLElement);
+  if (!container || !container.querySelector('.overview-header')) return;
+
+  container.innerHTML = '';
+  ensureHeader(container, currentDirDesc);
+  paint(container);
+});

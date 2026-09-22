@@ -2,7 +2,7 @@
 .layout-panel {
   position: fixed;
   top: 50px; right: 10px;
-  width: 220px;
+  width: 240px; /* 容纳英文文案与语言切换区 */
   padding: 20px;
   background: var(--bg-primary);
   border: 1px solid var(--border-s);
@@ -31,10 +31,46 @@
 /* 合并重复的分区样式（核心精简点） */
 .layout-panel .font-size-section,
 .layout-panel .font-select-section,
-.layout-panel .nav-toggle-section {
+.layout-panel .nav-toggle-section,
+.layout-panel .language-section {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid var(--border-m);
+}
+
+/* 语言切换区域 */
+.layout-panel .language-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layout-panel .language-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.layout-panel .lang-btn {
+  padding: 3px 8px;
+  border: 1px solid var(--border-m);
+  border-radius: 2px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.layout-panel .lang-btn:hover {
+  background: var(--hover-s);
+  color: var(--text-primary);
+}
+
+/* 选中语言：实色强调底 + 主背景色文字，日/夜自动保证对比 */
+.layout-panel .lang-btn.active {
+  background: var(--accent-m);
+  color: var(--bg-primary);
+  border-color: var(--accent-m);
 }
 
 
@@ -182,16 +218,18 @@
   max-height: 0;
   overflow: hidden;
   background: var(--bg-primary);
-  border-radius: 1px;
-  box-shadow: 0 4px 12px var(--shadow-1);
+  border: 1px solid transparent; /* 收起时隐藏边框，避免面板上残留一条线 */
+  border-radius: 2px;
   z-index: 1;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.3s ease, border-color 0.3s ease;
   scrollbar-width: none;
 }
 
 .layout-panel .font-select.open .dropdown-menu {
   max-height: 240px;
   overflow-y: auto;
+  border-color: var(--border-m); /* 展开时显示边框，与触发器一致 */
+  box-shadow: 0 4px 12px var(--shadow-1);
 }
 
 .layout-panel .font-select.open .dropdown-arrow::before {

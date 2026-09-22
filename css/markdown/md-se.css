@@ -1,12 +1,12 @@
 
-/* 图片 */
+/* 图片（默认居左显示） */
 #markdown-container img {
   display: block;
   max-width: 100%;
   box-sizing: content-box;
   background-color: var(--bg-primary); /* 使用主背景色 */
   border-radius: 3px;
-  margin: 16px auto;
+  margin: 16px 0;
   box-shadow: 0 1px 4px var(--shadow-1);
 }
 

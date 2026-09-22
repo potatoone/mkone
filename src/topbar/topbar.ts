@@ -4,6 +4,7 @@ import { setupSearch } from './search';
 import { ExportManager } from './export';
 import { setupLayout } from './layout/layout';
 import { PageManager } from '../page/pageManager';
+import { onLocaleChange } from '../utils/i18n';
 // 导入 pageTitle.ts 中的函数
 import { createAndInsertPageTitle, initPageTitleUpdater, showPageTitle } from '../page/pageTitle';
 
@@ -61,6 +62,9 @@ export function initTopbar(
   if (backBtn && forwardBtn) {
     // 初始设置一次
     pageManager.updateButtonTitles(backBtn, forwardBtn);
+
+    // 语言切换后刷新翻页提示
+    onLocaleChange(() => pageManager.updateButtonTitles(backBtn!, forwardBtn!));
 
     // 监听页面切换事件（如果有），或在每次导航后手动调用更新
     // 这里假设页面切换后会执行回调，若没有可在loadPage后调用

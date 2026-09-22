@@ -16,12 +16,16 @@ import { setupCodeCopy } from './extentions/codeCopy';
 import { setupFoldableHeadings } from './extentions/foldableHeadings'; // 标题折叠插件
 import { setupMermaid } from './extentions/mermaidDiagram'; // Mermaid图表插件
 import { setupTabsInteraction } from './extentions/tabs'; // Tabs交互插件
+import { setupTableContextMenu } from './extentions/tableContextMenu'; // 表格右键菜单（复制单元格/行/列/全表）
 
 export type { Heading, RenderMarkdownResult };
 export { clearMarkdownCache };
 
 // 绑定 tab 切换交互（仅一次）
 setupTabsInteraction();
+
+// 绑定表格右键菜单（仅一次，事件委托到 document）
+setupTableContextMenu();
 
 // 渲染失败的 UI 呈现（解析层只抛错，这里决定错误长什么样）
 function renderLoadError(

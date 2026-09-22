@@ -3,6 +3,7 @@
 import type { Heading, RenderMarkdownResult } from '../markdown/markdown';
 import type { MarkdownMetadata } from '../markdown/overview/viewParser';
 import { expandHeadingChain, toggleAllFoldSections } from '../markdown/extentions/foldableHeadings'; // 标题折叠
+import { onLocaleChange, t } from '../utils/i18n'; // 多语言
 // 引入scrolltotop.ts中的核心方法和工具函数
 import { 
   getScrollContainer, 
@@ -20,6 +21,14 @@ const STORAGE_KEYS = {
 
 // 通用DOM获取工具函数
 const getEl = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+
+// 语言切换后刷新导航标题与折叠提示（不重新渲染整页）
+onLocaleChange(() => {
+  const title = document.querySelector<HTMLElement>('#pageNav .nav-title');
+  if (!title) return;
+  title.textContent = t('nav.title');
+  title.dataset.tooltip = t('nav.toggleTip');
+});
 
 // 初始化页面导航（对外暴露的核心方法）
 // renderResult 由调用方传入（loadPage 已渲染过），避免同一页面渲染两次
@@ -128,7 +137,7 @@ function generateNavigation(headings: Heading[], metadata: MarkdownMetadata) {
 
   nav.innerHTML = `
     <div class="nav-items-container">
-      <div class="nav-title" data-tooltip="点击展开 / 收起全部标题">On This Page</div>
+      <div class="nav-title" data-tooltip="${t('nav.toggleTip')}">${t('nav.title')}</div>
       <div class="nav-indicator"></div>
       ${headings.map(h =>
         `<a href="#${h.id}" class="nav-item level-${h.level}" style="padding-left:${(h.level - 1) * 12}px">
@@ -147,7 +156,7 @@ function generateNavigation(headings: Heading[], metadata: MarkdownMetadata) {
   nav.querySelector('.nav-title')?.addEventListener('click', () => {
     const expanded = toggleAllFoldSections();
     const title = nav.querySelector<HTMLElement>('.nav-title');
-    if (title) title.dataset.tooltip = expanded ? '点击收起全部标题' : '点击展开全部标题';
+    if (title) title.dataset.tooltip = expanded ? t('nav.collapseTip') : t('nav.expandTip');
   });
 
   // 调用scrolltotop.ts中的方法：绑定回顶按钮事件

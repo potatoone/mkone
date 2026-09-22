@@ -1,4 +1,5 @@
 import { debounce, getElement } from '../utils/utils';
+import { t } from '../utils/i18n';
 import { parseFrontMatter } from '../markdown/overview/viewParser';
 import { cleanTitle } from '../utils/docsParser';
 
@@ -127,6 +128,16 @@ export class MarkdownSearch {
         this.openResult(items[idx].dataset.file || '');
       }
     });
+
+    // 拦截浏览器原生 Ctrl+F / Cmd+F：改为打开应用内全局搜索
+    // 用捕获阶段绑定，先于页面其它快捷键处理
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.show();
+      }
+    }, true);
   }
 
   // ==================== 本地全局索引 ====================
@@ -182,7 +193,7 @@ export class MarkdownSearch {
   private performSearch(q: string): void {
     this.clearHighlights();
 
-    this.resultsBox.innerHTML = `<div class="search-result-info">正在搜索…</div>`;
+    this.resultsBox.innerHTML = `<div class="search-result-info">${t('search.searching')}</div>`;
 
     this.buildIndex()
       .then(() => this.searchDocs(q))
@@ -193,7 +204,7 @@ export class MarkdownSearch {
       })
       .catch(err => {
         console.error('全局搜索失败:', err);
-        this.resultsBox.innerHTML = `<div class="search-result-info">搜索失败，请重试</div>`;
+        this.resultsBox.innerHTML = `<div class="search-result-info">${t('search.failed')}</div>`;
       });
   }
 
@@ -258,7 +269,7 @@ export class MarkdownSearch {
     this.activeIndex = -1;
 
     if (!results.length) {
-      this.resultsBox.innerHTML = `<div class="search-result-info">未找到与「${escapeHtml(q)}」相关的文档</div>`;
+      this.resultsBox.innerHTML = `<div class="search-result-info">${t('search.noResults', [escapeHtml(q)])}</div>`;
       return;
     }
 
@@ -268,7 +279,7 @@ export class MarkdownSearch {
       <div class="search-result-item" data-file="${escapeHtml(r.doc.file)}">
         <div class="search-result-title">
           <span class="search-result-name">${escapeHtml(r.doc.title)}</span>
-          <span class="search-result-count">${r.count} 处</span>
+          <span class="search-result-count">${t('search.hitCount', [r.count])}</span>
         </div>
         <div class="search-result-snippet">${r.snippet}</div>
       </div>`
@@ -276,7 +287,7 @@ export class MarkdownSearch {
       .join('');
 
     this.resultsBox.innerHTML =
-      `<div class="search-result-info">共 ${results.length} 篇文档匹配「${escapeHtml(q)}」</div>` + items;
+      `<div class="search-result-info">${t('search.matched', [results.length, escapeHtml(q)])}</div>` + items;
   }
 
   // ==================== 结果选择与跳转 ====================
@@ -345,8 +356,18 @@ export class MarkdownSearch {
 
   private clearSearch(): void {
     this.clearHighlights();
-    this.resultsBox.innerHTML = '';
     this.activeIndex = -1;
+    // 清空搜索后还原为初始提示（已索引文档数），而不是留白或残留过期结果
+    this.resultsBox.innerHTML = `<div class="search-result-info">${t('search.indexed', [this.docs.length])}</div>`;
+
+    // 索引尚未构建完成时后台补建，完成后若仍是空搜索态则刷新提示
+    if (!this.docs.length && !this.indexTask) {
+      this.buildIndex().then(() => {
+        if (!this.searchInput.value.trim()) {
+          this.resultsBox.innerHTML = `<div class="search-result-info">${t('search.indexed', [this.docs.length])}</div>`;
+        }
+      });
+    }
   }
 
   private saveSearchState(q?: string): void {
@@ -370,7 +391,7 @@ export class MarkdownSearch {
     this.buildIndex().then(() => {
       if (!this.searchInput.value.trim() && this.searchArea.classList.contains('show')) {
         this.resultsBox.innerHTML =
-          `<div class="search-result-info">已索引 ${this.docs.length} 篇文档，输入关键词搜索</div>`;
+          `<div class="search-result-info">${t('search.indexed', [this.docs.length])}</div>`;
       }
     });
   }
